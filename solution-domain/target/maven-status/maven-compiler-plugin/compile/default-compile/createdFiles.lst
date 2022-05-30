@@ -1,0 +1,5 @@
+com/digitforce/aip/domain/Catalog.class
+com/digitforce/aip/service/cmd/CatalogCmdService.class
+com/digitforce/aip/repository/CatalogRepository.class
+com/digitforce/aip/po/CatalogPO.class
+com/digitforce/aip/service/qry/CatalogQryService.class

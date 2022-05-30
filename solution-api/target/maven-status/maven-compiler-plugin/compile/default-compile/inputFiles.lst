@@ -1,0 +1,17 @@
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/dto/cmd/CatalogRemoveCmd.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/consts/CommonConst.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/consts/CatalogErrorCode.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/dto/event/CatalogNameModifiedEvent.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/dto/data/CatalogDTO.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/dto/cmd/CatalogModifyCmd.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/dto/cmd/CatalogStatusCmd.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/dto/qry/CatalogListQry.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/consts/CommonStatus.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/dto/qry/CatalogPageQry.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/dto/cmd/CatalogAddCmd.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/consts/CatalogConst.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/facade/CatalogQryFacade.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/dto/event/CatalogOffEvent.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/facade/CatalogCmdFacade.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/consts/CatalogCode.java
+/Users/wangtonggui/Desktop/work_code/solution/solution-api/src/main/java/com/digitforce/aip/dto/qry/CatalogSearchQry.java

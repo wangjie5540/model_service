@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.digitforce.framework</groupId>
+        <artifactId>framework-parent</artifactId>
+        <version>1.0.1</version>
+    </parent>
+
+    <groupId>com.digitforce.aip</groupId>
+    <artifactId>solution</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <name>solution</name>
+
+    <modules>
+        <module>solution-api</module>
+        <module>solution-application</module>
+        <module>solution-domain</module>
+        <module>solution-infrastructure</module>
+        <module>solution-extension</module>
+        <module>solution-extension-impl</module>
+        <module>solution-start</module>
+    </modules>
+
+</project>
