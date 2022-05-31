@@ -1,7 +1,5 @@
 logging:
   config: classpath:log4j2-spring-@profileActive@.xml
-  file:
-    path: .
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -47,6 +45,7 @@ digitforce:
     title: ${rootArtifactId}
     description: ${rootArtifactId}开发文档
     #联系信息（选填）
-    contactName: czh
-    contactEmail: caozhihong@digitforce.com
-    contactUrl: https://www.digitforce.com
+    contactName: wangtonggui
+    contactEmail: wangtonggui@digitforce.com
+server:
+  port: 8080

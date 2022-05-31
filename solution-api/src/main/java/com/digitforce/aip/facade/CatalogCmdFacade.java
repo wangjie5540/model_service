@@ -1,9 +1,9 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.framework.api.dto.Result;
 import com.digitforce.aip.dto.cmd.CatalogAddCmd;
 import com.digitforce.aip.dto.cmd.CatalogModifyCmd;
 import com.digitforce.aip.dto.cmd.CatalogStatusCmd;
+import com.digitforce.framework.api.dto.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
