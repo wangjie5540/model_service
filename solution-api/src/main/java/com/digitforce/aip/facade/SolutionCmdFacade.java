@@ -2,6 +2,9 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
+import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
+import com.digitforce.aip.dto.cmd.SolutionOnlineCmd;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,17 +27,17 @@ public interface SolutionCmdFacade {
 
     @Operation(summary = "上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     @PostMapping("/solution/on")
-    Result on(@RequestBody SolutionAddCmd solutionAddCmd);
+    Result on(@RequestBody SolutionOnlineCmd solutionOnlineCmd);
 
     @Operation(summary = "下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     @PostMapping("/solution/off")
-    Result off(@RequestBody SolutionAddCmd solutionAddCmd);
+    Result off(@RequestBody SolutionOnlineCmd solutionOnlineCmd);
 
     @Operation(summary = "新增方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     @PostMapping("/solution/delete")
-    Result delete(@RequestBody SolutionAddCmd solutionAddCmd);
+    Result delete(@RequestBody SolutionDeleteCmd solutionDeleteCmd);
 
     @Operation(summary = "修改方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     @PostMapping("/solution/modify")
-    Result modify(@RequestBody SolutionAddCmd solutionAddCmd);
+    Result modify(@RequestBody SolutionModifyCmd solutionModifyCmd);
 }

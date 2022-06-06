@@ -1,5 +1,7 @@
 logging:
   config: classpath:log4j2-spring-@profileActive@.xml
+  file:
+    path: .
 spring:
   main:
     allow-bean-definition-overriding: true

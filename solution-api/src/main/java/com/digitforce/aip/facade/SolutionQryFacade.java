@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient("solution-service")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
 public interface SolutionQryFacade {
-    @PostMapping("/solution/get_by_id")
+    @PostMapping("/solution/getById")
     @Operation(summary = "通过id获取", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
     Result<SolutionDTO> getById(@RequestBody Long id);
 }

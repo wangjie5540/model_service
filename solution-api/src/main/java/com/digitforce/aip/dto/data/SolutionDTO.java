@@ -16,8 +16,16 @@ public class SolutionDTO {
     private String scene;
     private String description;
     private String pipelineId;
-    private String pipelineDescription;
     private List<PipelineParameterDTO> pipelineParameters;
+
+    public List<PipelineParameterDTO> getPipelineParameters() {
+        return pipelineParameters;
+    }
+
+    public void setPipelineParameters(List<PipelineParameterDTO> pipelineParameters) {
+        this.pipelineParameters = pipelineParameters;
+    }
+
 
     public long getId() {
         return id;
@@ -65,21 +73,5 @@ public class SolutionDTO {
 
     public void setPipelineId(String pipelineId) {
         this.pipelineId = pipelineId;
-    }
-
-    public String getPipelineDescription() {
-        return pipelineDescription;
-    }
-
-    public void setPipelineDescription(String pipelineDescription) {
-        this.pipelineDescription = pipelineDescription;
-    }
-
-    public List<PipelineParameterDTO> getPipelineParameters() {
-        return pipelineParameters;
-    }
-
-    public void setPipelineParameters(List<PipelineParameterDTO> pipelineParameters) {
-        this.pipelineParameters = pipelineParameters;
     }
 }
