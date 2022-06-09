@@ -4,7 +4,7 @@ import com.digitforce.framework.domain.TenantEntity;
 import lombok.Data;
 
 /**
- * TODO
+ * 方案持久化类
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -15,8 +15,9 @@ public class SolutionPO extends TenantEntity<Long> {
     private Long id;
     private String type;
     private String cname;
+    private String description;
     private String scene;
     private String pipelineId;
-    private Boolean online;
+    private Boolean status;
     private Boolean deleted;
 }

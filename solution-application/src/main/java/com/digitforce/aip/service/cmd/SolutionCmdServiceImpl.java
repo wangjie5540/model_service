@@ -37,7 +37,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     public void on(Long id) {
         Solution solution = new Solution();
         solution.setId(id);
-        solution.setOnline(true);
+        solution.setStatus(true);
         solutionRepository.modifyById(solution);
     }
 
@@ -45,7 +45,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     public void off(Long id) {
         Solution solution = new Solution();
         solution.setId(id);
-        solution.setOnline(false);
+        solution.setStatus(false);
         solutionRepository.modifyById(solution);
     }
 

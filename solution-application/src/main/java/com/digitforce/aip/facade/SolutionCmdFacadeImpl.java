@@ -19,8 +19,6 @@ import javax.annotation.Resource;
  */
 @RestController
 public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
-//    private final SolutionStructMapper solutionStructMapper = Mappers.getMapper(SolutionStructMapper.class);
-
     @Resource
     private SolutionCmdService solutionCmdService;
 

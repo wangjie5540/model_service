@@ -51,3 +51,5 @@ digitforce:
     contactEmail: wangtonggui@digitforce.com
 server:
   port: 8080
+  servlet:
+    context-path: ${rootArtifactId}

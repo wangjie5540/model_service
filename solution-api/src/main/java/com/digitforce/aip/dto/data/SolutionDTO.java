@@ -1,6 +1,7 @@
 package com.digitforce.aip.dto.data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 方案实体定义类
@@ -17,6 +18,7 @@ public class SolutionDTO {
     private String description;
     private String pipelineId;
     private List<PipelineParameterDTO> pipelineParameters;
+    private Map<String, Object> propertiesNeeded;
 
     public List<PipelineParameterDTO> getPipelineParameters() {
         return pipelineParameters;
@@ -26,6 +28,13 @@ public class SolutionDTO {
         this.pipelineParameters = pipelineParameters;
     }
 
+    public Map<String, Object> getPropertiesNeeded() {
+        return propertiesNeeded;
+    }
+
+    public void setPropertiesNeeded(Map<String, Object> propertiesNeeded) {
+        this.propertiesNeeded = propertiesNeeded;
+    }
 
     public long getId() {
         return id;

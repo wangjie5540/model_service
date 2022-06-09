@@ -21,23 +21,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient("solution-service")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
 public interface SolutionCmdFacade {
-    @PostMapping("/solution/add")
+    @PostMapping("/add")
     @Operation(summary = "新增方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result add(@RequestBody SolutionAddCmd solutionAddCmd);
 
     @Operation(summary = "上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    @PostMapping("/solution/on")
+    @PostMapping("/on")
     Result on(@RequestBody SolutionOnlineCmd solutionOnlineCmd);
 
     @Operation(summary = "下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    @PostMapping("/solution/off")
+    @PostMapping("/off")
     Result off(@RequestBody SolutionOnlineCmd solutionOnlineCmd);
 
     @Operation(summary = "新增方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    @PostMapping("/solution/delete")
+    @PostMapping("/delete")
     Result delete(@RequestBody SolutionDeleteCmd solutionDeleteCmd);
 
     @Operation(summary = "修改方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    @PostMapping("/solution/modify")
+    @PostMapping("/modify")
     Result modify(@RequestBody SolutionModifyCmd solutionModifyCmd);
 }

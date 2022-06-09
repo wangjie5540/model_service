@@ -13,7 +13,7 @@ CREATE TABLE `solution`
     `pipeline_id`         varchar(128) NOT NULL,
     `pipeline_parameters` text,
     `description`         text,
-    `online`              tinyint(1) NOT NULL DEFAULT '0',
+    `status`              tinyint(1) NOT NULL DEFAULT '1',
     `deleted`             tinyint(1) DEFAULT NULL,
     `create_time`         datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `update_time`         datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

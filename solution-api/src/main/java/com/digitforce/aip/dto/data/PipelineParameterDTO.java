@@ -9,4 +9,12 @@ package com.digitforce.aip.dto.data;
  */
 public class PipelineParameterDTO {
     private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

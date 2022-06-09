@@ -25,6 +25,64 @@
         <module>solution-extension</module>
         <module>solution-extension-impl</module>
         <module>solution-start</module>
+        <module>solution-common</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>digit-force-nexus-maven-releases</id>
+            <name>maven-releases</name>
+            <url>https://digit-force-maven.pkg.coding.net/repository/nexus/maven-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>digit-force-nexus-maven-snapshots</id>
+            <name>maven-snapshots</name>
+            <url>https://digit-force-maven.pkg.coding.net/repository/nexus/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <repository>
+            <!--必须与 settings.xml 的 id 一致-->
+            <id>digit-force-nexus-maven-releases</id>
+            <name>maven-releases</name>
+            <url>https://digit-force-maven.pkg.coding.net/repository/nexus/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <!--必须与 settings.xml 的 id 一致-->
+            <id>digit-force-nexus-maven-snapshots</id>
+            <name>maven-snapshots</name>
+            <url>https://digit-force-maven.pkg.coding.net/repository/nexus/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

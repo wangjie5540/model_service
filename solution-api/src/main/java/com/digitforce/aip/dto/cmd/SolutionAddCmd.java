@@ -23,6 +23,16 @@ public class SolutionAddCmd extends Command {
     }
 
     private String cname;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     private String pipelineId;
     private String type;
     private String scene;
