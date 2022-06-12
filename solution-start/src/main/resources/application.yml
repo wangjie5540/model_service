@@ -52,4 +52,4 @@ digitforce:
 server:
   port: 8080
   servlet:
-    context-path: ${rootArtifactId}
+    context-path: /${rootArtifactId}

@@ -16,7 +16,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import java.net.HttpCookie;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,15 +36,18 @@ public class KubeflowHelper {
         .create();
 
     /**
-     * 获取kubeflow登录的cookie
+     * kubeflow登录
      *
      * @param host kubeflow服务器的host
      * @param port kubeflow服务器的port
-     * @return cookie对象
      */
-    public HttpCookie getCookie(String host, int port) {
+    public void login(String host, int port) {
         String rep = HttpUtil.get(String.format("http://%s:%d", host, port));
         String query = getQuery(rep);
+        if (query == null) {
+            // already login
+            return;
+        }
         String state = getQueryParam(query, "state");
         rep = HttpUtil.get(String.format(
             "http://%s:%d/dex/auth?client_id=kubeflow-oidc-authservice&redirect_uri=/login/oidc&response_type=code&scope=profile+email+groups+openid&amp;state=%s",
@@ -63,16 +65,15 @@ public class KubeflowHelper {
         rep = HttpUtil.get(String.format("http://%s:%d/dex/approval?req=%s", host, port, req));
         query = getQuery(rep);
         String code = getQueryParam(query, "code");
-        return HttpRequest.get(
-            String.format("http://%s:%d/login/oidc?code=%s&state=%s", host, port, code, state)).execute().getCookie(
-            "authservice_session");
+        HttpRequest.get(
+            String.format("http://%s:%d/login/oidc?code=%s&state=%s", host, port, code, state)).execute();
     }
 
 
     public PipelineDTO getPipelineDetail(String host, int port, String pipelineId) {
-        HttpCookie cookie = getCookie(host, port);
+        login(host, port);
         String body = HttpRequest.get(String.format(
-            "http://%s:%d/pipeline/apis/v1beta1/pipelines/%s", host, port, pipelineId)).cookie(cookie).execute().body();
+            "http://%s:%d/pipeline/apis/v1beta1/pipelines/%s", host, port, pipelineId)).execute().body();
         return gson.fromJson(body, PipelineDTO.class);
     }
 
@@ -89,18 +90,16 @@ public class KubeflowHelper {
     private String getQuery(String html) {
         Document parse = Jsoup.parse(html);
         Elements a = parse.select("a");
-
         return URI.create(a.attr("href")).getQuery();
     }
 
-    public void triggerRun(String host, int port, String name, String experimentId, String pipelineId,
+    public String triggerRun(String host, int port, String name, String experimentId, String pipelineId,
         List<Map<String, Object>> pipelineParameters) {
-        HttpCookie cookie = getCookie(host, port);
-        System.out.println(cookie);
+        login(host, port);
         HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs", host, port))
-            .cookie(cookie)
             .body(generateBody(name, experimentId, pipelineId, pipelineParameters));
-        System.out.println(httpRequest.execute().body());
+        RunDetail runDetail = GsonUtil.gsonToBean(httpRequest.execute().body(), RunDetail.class);
+        return runDetail.run.getId();
     }
 
     public String generateBody(String name, String experimentId, String pipelineId,
@@ -128,9 +127,9 @@ public class KubeflowHelper {
     }
 
     public String getStatus(String host, int port, String jobId) {
+        login(host, port);
         HttpRequest request =
             HttpRequest.get(String.format("http://%s:%d/pipeline/apis/v1beta1/runs/%s", host, port, jobId))
-                .cookie(getCookie(host, port))
                 .header(Header.CONTENT_TYPE, "application/json");
         RunDetail runDetail = GsonUtil.gsonToBean(request.execute().body(), RunDetail.class);
         return runDetail.getRun().getStatus();
@@ -206,20 +205,20 @@ public class KubeflowHelper {
 //        System.out.println(body);
 //        System.out.println(GsonUtil.gsonToBean(body, PipelineDTO.class));
 
-//        List<Map<String, Object>> pipeParams = Lists.newArrayList();
-//        Map<String, Object> map = Maps.newHashMap();
-//        map.put("name", "url");
-//        map.put("value", "xxxxxxxxxxx");
-//        pipeParams.add(map);
-//        map = Maps.newHashMap();
-//        map.put("name", "d");
-//        map.put("value", "xxxxxxxxxxx");
-//        pipeParams.add(map);
-//        String my_test_name = KubeflowHelper.generateBody("my_test_name", "f56c9dfe-d57d-444a-bc61-01ff9fe03a5d",
-//            "83e8b077-827c-4db0-897d-9eb146313f95", pipeParams);
-//        System.out.println(my_test_name);
-//        triggerRun("172.21.32.143", 30000, "my_test_name", "f56c9dfe-d57d-444a-bc61-01ff9fe03a5d",
-//            "83e8b077-827c-4db0-897d-9eb146313f95", pipeParams);
-        System.out.println(getStatus("172.21.32.143", 30000, "b31c5ae5-28bb-432d-bb03-47b922521ef5"));
+        List<Map<String, Object>> pipeParams = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "url");
+        map.put("value", "https://storage.googleapis.com/ml-pipeline-playground/iris-csv-files.tar.gz");
+        pipeParams.add(map);
+        map = new HashMap<>();
+        map.put("name", "d");
+        map.put("value", "xxxxxxxxxxx");
+        pipeParams.add(map);
+        String my_test_name = KubeflowHelper.generateBody("my_test_name", "f56c9dfe-d57d-444a-bc61-01ff9fe03a5d",
+            "83e8b077-827c-4db0-897d-9eb146313f95", pipeParams);
+
+        System.out.println(triggerRun("172.21.32.143", 30000, "run_name_1231", "f56c9dfe-d57d-444a-bc61-01ff9fe03a5d",
+            "83e8b077-827c-4db0-897d-9eb146313f95", pipeParams));
+        System.out.println(getStatus("172.21.32.143", 30000, "fbbfd47a-4fa3-4701-878f-94a451f7c4d0"));
     }
 }
