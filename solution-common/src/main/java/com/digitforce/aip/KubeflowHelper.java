@@ -189,14 +189,6 @@ public class KubeflowHelper {
         }
     }
 
-
-    @Data
-    @AllArgsConstructor
-    private static class Parameter {
-        private String name;
-        private String value;
-    }
-
     public static void main(String[] args) {
 //        HttpCookie cookie = getCookie("172.21.32.143", 30000);
 //        String body = HttpRequest.get(
@@ -207,18 +199,15 @@ public class KubeflowHelper {
 
         List<Map<String, Object>> pipeParams = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
-        map.put("name", "url");
-        map.put("value", "https://storage.googleapis.com/ml-pipeline-playground/iris-csv-files.tar.gz");
+        map.put("name", "data_path");
+        map.put("value", "dataset_fugou_test.csv");
         pipeParams.add(map);
         map = new HashMap<>();
-        map.put("name", "d");
-        map.put("value", "xxxxxxxxxxx");
+        map.put("name", "model_path");
+        map.put("value", "52");
         pipeParams.add(map);
-        String my_test_name = KubeflowHelper.generateBody("my_test_name", "f56c9dfe-d57d-444a-bc61-01ff9fe03a5d",
-            "83e8b077-827c-4db0-897d-9eb146313f95", pipeParams);
-
         System.out.println(triggerRun("172.21.32.143", 30000, "run_name_1231", "f56c9dfe-d57d-444a-bc61-01ff9fe03a5d",
-            "83e8b077-827c-4db0-897d-9eb146313f95", pipeParams));
-        System.out.println(getStatus("172.21.32.143", 30000, "fbbfd47a-4fa3-4701-878f-94a451f7c4d0"));
+            "3034e332-e403-4236-8f7b-f193d3be9db4", pipeParams));
+//        System.out.println(getStatus("172.21.32.143", 30000, "fbbfd47a-4fa3-4701-878f-94a451f7c4d0"));
     }
 }

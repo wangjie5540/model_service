@@ -1,5 +1,6 @@
 package com.digitforce.aip.dto.data;
 
+
 import java.util.List;
 
 /**
@@ -15,6 +16,15 @@ public class PipelineDTO {
     private String name;
     private List<PipelineParameterDTO> parameters;
     private String description;
+    private DefaultVersion defaultVersion;
+
+    public DefaultVersion getDefaultVersion() {
+        return defaultVersion;
+    }
+
+    public void setDefaultVersion(DefaultVersion defaultVersion) {
+        this.defaultVersion = defaultVersion;
+    }
 
     public String getId() {
         return id;
@@ -61,7 +71,7 @@ public class PipelineDTO {
         private String id;
         private String createdAt;
         private String name;
-        private String parameters;
+        private List<PipelineParameterDTO> parameters;
         private String description;
 
         public String getId() {
@@ -70,6 +80,14 @@ public class PipelineDTO {
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        public List<PipelineParameterDTO> getParameters() {
+            return parameters;
+        }
+
+        public void setParameters(List<PipelineParameterDTO> parameters) {
+            this.parameters = parameters;
         }
 
         public String getCreatedAt() {
@@ -86,14 +104,6 @@ public class PipelineDTO {
 
         public void setName(String name) {
             this.name = name;
-        }
-
-        public String getParameters() {
-            return parameters;
-        }
-
-        public void setParameters(String parameters) {
-            this.parameters = parameters;
         }
 
         public String getDescription() {

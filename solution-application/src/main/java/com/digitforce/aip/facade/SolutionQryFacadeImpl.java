@@ -43,7 +43,7 @@ public class SolutionQryFacadeImpl implements SolutionQryFacade {
             KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(), kubeflowProperties.getPort(),
                 solutionDTO.getPipelineId());
 
-        solutionDTO.setPipelineParameters(pipelineDetail.getParameters());
+        solutionDTO.setPipelineParameters(pipelineDetail.getDefaultVersion().getParameters());
         solutionDTO.setPropertiesNeeded(gson.fromJson(pipelineDetail.getDescription(), HashMap.class));
         return Result.success(solutionDTO);
     }
