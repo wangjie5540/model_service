@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * TODO
+ * kubeflow参数配置类
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -17,4 +17,5 @@ public class KubeflowProperties {
 
     private String host;
     private Integer port;
+    private String experimentId;
 }

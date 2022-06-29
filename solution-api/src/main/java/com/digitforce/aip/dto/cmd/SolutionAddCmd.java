@@ -11,9 +11,32 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @since 2022/05/31 15:41
  */
 @Schema(
-    description = "新增方案实体类"
+        description = "新增方案实体类"
 )
 public class SolutionAddCmd extends Command {
+    private String cname;
+    private String description;
+    private String pipelineId;
+    private String pipelineName;
+    private String scene;
+    private String principal;
+
+    public String getPipelineName() {
+        return pipelineName;
+    }
+
+    public void setPipelineName(String pipelineName) {
+        this.pipelineName = pipelineName;
+    }
+
+    public String getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(String principal) {
+        this.principal = principal;
+    }
+
     public String getCname() {
         return cname;
     }
@@ -22,8 +45,6 @@ public class SolutionAddCmd extends Command {
         this.cname = cname;
     }
 
-    private String cname;
-    private String description;
 
     public String getDescription() {
         return description;
@@ -33,9 +54,6 @@ public class SolutionAddCmd extends Command {
         this.description = description;
     }
 
-    private String pipelineId;
-    private String type;
-    private String scene;
 
     public String getPipelineId() {
         return pipelineId;
@@ -43,14 +61,6 @@ public class SolutionAddCmd extends Command {
 
     public void setPipelineId(String pipelineId) {
         this.pipelineId = pipelineId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getScene() {

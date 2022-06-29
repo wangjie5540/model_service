@@ -50,6 +50,4 @@ digitforce:
     contactName: wangtonggui
     contactEmail: wangtonggui@digitforce.com
 server:
-  port: 8080
-  servlet:
-    context-path: /${rootArtifactId}
+  port: 7030

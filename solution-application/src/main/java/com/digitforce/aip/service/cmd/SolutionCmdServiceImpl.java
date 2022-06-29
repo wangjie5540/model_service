@@ -27,7 +27,6 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
 
     @Override
     public void add(SolutionAddCmd solutionAddCmd) {
-        // TODO
 //        solutionValidator.validate(null);
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
         solutionRepository.save(solution);

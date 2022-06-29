@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 方案服务命令接口类
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @FeignClient("solution-service")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+@RequestMapping(path = "/solution")
 public interface SolutionCmdFacade {
     @PostMapping("/add")
     @Operation(summary = "新增方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
@@ -33,7 +35,7 @@ public interface SolutionCmdFacade {
     @PostMapping("/off")
     Result off(@RequestBody SolutionOnlineCmd solutionOnlineCmd);
 
-    @Operation(summary = "新增方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    @Operation(summary = "删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     @PostMapping("/delete")
     Result delete(@RequestBody SolutionDeleteCmd solutionDeleteCmd);
 

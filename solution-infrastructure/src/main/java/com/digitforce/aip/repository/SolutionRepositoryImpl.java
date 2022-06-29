@@ -21,7 +21,8 @@ public class SolutionRepositoryImpl extends DefaultDBRepository<Solution> implem
 
     @Override
     public boolean isExist(Solution solution) {
-        return false;
+        solution = solutionMapper.selectById(solution.getId());
+        return solution != null;
     }
 
     @Override

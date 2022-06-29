@@ -1,8 +1,5 @@
 package com.digitforce.aip.dto.data;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * 方案实体定义类
  *
@@ -12,28 +9,36 @@ import java.util.Map;
  */
 public class SolutionDTO {
     private long id;
-    private String type;
     private String cname;
     private String scene;
     private String description;
     private String pipelineId;
-    private List<PipelineParameterDTO> pipelineParameters;
-    private Map<String, Object> propertiesNeeded;
+    private Integer browseCount;
+    private Integer implementCount;
+    private PipelineParameterDTO pipelineParameter;
 
-    public List<PipelineParameterDTO> getPipelineParameters() {
-        return pipelineParameters;
+    public Integer getBrowseCount() {
+        return browseCount;
     }
 
-    public void setPipelineParameters(List<PipelineParameterDTO> pipelineParameters) {
-        this.pipelineParameters = pipelineParameters;
+    public void setBrowseCount(Integer browseCount) {
+        this.browseCount = browseCount;
     }
 
-    public Map<String, Object> getPropertiesNeeded() {
-        return propertiesNeeded;
+    public Integer getImplementCount() {
+        return implementCount;
     }
 
-    public void setPropertiesNeeded(Map<String, Object> propertiesNeeded) {
-        this.propertiesNeeded = propertiesNeeded;
+    public void setImplementCount(Integer implementCount) {
+        this.implementCount = implementCount;
+    }
+
+    public PipelineParameterDTO getPipelineParameter() {
+        return pipelineParameter;
+    }
+
+    public void setPipelineParameter(PipelineParameterDTO pipelineParameter) {
+        this.pipelineParameter = pipelineParameter;
     }
 
     public long getId() {
@@ -42,14 +47,6 @@ public class SolutionDTO {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getCname() {

@@ -1,8 +1,6 @@
 package com.digitforce.aip.dto.data;
 
 
-import java.util.List;
-
 /**
  * kubeflow-pipeline实体定义类
  *
@@ -14,7 +12,7 @@ public class PipelineDTO {
     private String id;
     private String createdAt;
     private String name;
-    private List<PipelineParameterDTO> parameters;
+    private PipelineParameterDTO pipelineParameterDTO;
     private String description;
     private DefaultVersion defaultVersion;
 
@@ -50,12 +48,12 @@ public class PipelineDTO {
         this.name = name;
     }
 
-    public List<PipelineParameterDTO> getParameters() {
-        return parameters;
+    public PipelineParameterDTO getPipelineParameterDTO() {
+        return pipelineParameterDTO;
     }
 
-    public void setParameters(List<PipelineParameterDTO> parameters) {
-        this.parameters = parameters;
+    public void setPipelineParameterDTO(PipelineParameterDTO pipelineParameterDTO) {
+        this.pipelineParameterDTO = pipelineParameterDTO;
     }
 
     public String getDescription() {
@@ -71,7 +69,7 @@ public class PipelineDTO {
         private String id;
         private String createdAt;
         private String name;
-        private List<PipelineParameterDTO> parameters;
+        private PipelineParameterDTO pipelineParameter;
         private String description;
 
         public String getId() {
@@ -82,12 +80,12 @@ public class PipelineDTO {
             this.id = id;
         }
 
-        public List<PipelineParameterDTO> getParameters() {
-            return parameters;
+        public PipelineParameterDTO getPipelineParameter() {
+            return pipelineParameter;
         }
 
-        public void setParameters(List<PipelineParameterDTO> parameters) {
-            this.parameters = parameters;
+        public void setPipelineParameter(PipelineParameterDTO pipelineParameter) {
+            this.pipelineParameter = pipelineParameter;
         }
 
         public String getCreatedAt() {
@@ -117,23 +115,23 @@ public class PipelineDTO {
         @Override
         public String toString() {
             return "DefaultVersion{" +
-                "id='" + id + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", name='" + name + '\'' +
-                ", parameters='" + parameters + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+                    "id='" + id + '\'' +
+                    ", createdAt='" + createdAt + '\'' +
+                    ", name='" + name + '\'' +
+                    ", parameters='" + pipelineParameter + '\'' +
+                    ", description='" + description + '\'' +
+                    '}';
         }
     }
 
     @Override
     public String toString() {
         return "PipelineDTO{" +
-            "id='" + id + '\'' +
-            ", createdAt='" + createdAt + '\'' +
-            ", name='" + name + '\'' +
-            ", parameters=" + parameters +
-            ", description='" + description + '\'' +
-            '}';
+                "id='" + id + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", name='" + name + '\'' +
+                ", parameters=" + pipelineParameterDTO +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
