@@ -10,5 +10,5 @@ import com.digitforce.framework.api.dto.PageQuery;
  * @version 1.0.0
  * @since 2022/06/06 14:39
  */
-public class SolutionPageByQry extends PageQuery {
+public class SolutionTemplatePageByQry extends PageQuery {
 }

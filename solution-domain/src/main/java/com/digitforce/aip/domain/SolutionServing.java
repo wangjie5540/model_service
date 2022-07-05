@@ -1,7 +1,7 @@
 package com.digitforce.aip.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.digitforce.aip.po.ImplementationPO;
+import com.digitforce.aip.po.SolutionServingPO;
 import lombok.Data;
 
 /**
@@ -12,6 +12,6 @@ import lombok.Data;
  * @since 2022/06/05 13:55
  */
 @Data
-@TableName("implementation")
-public class Implementation extends ImplementationPO {
+@TableName("solution_serving")
+public class SolutionServing extends SolutionServingPO {
 }

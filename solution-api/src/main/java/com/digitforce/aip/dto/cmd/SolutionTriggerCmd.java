@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(
         description = "触发执行"
 )
-public class ImplementationTriggerCmd extends Command {
+public class SolutionTriggerCmd extends Command {
     private Long implementationId;
 
     public Long getImplementationId() {

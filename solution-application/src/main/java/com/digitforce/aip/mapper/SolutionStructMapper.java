@@ -1,8 +1,8 @@
 package com.digitforce.aip.mapper;
 
 
-import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.data.SolutionDTO;
+import com.digitforce.aip.dto.cmd.SolutionTemplateAddCmd;
+import com.digitforce.aip.dto.data.SolutionTemplateDTO;
 import org.mapstruct.Mapper;
 
 /**
@@ -14,5 +14,5 @@ import org.mapstruct.Mapper;
  */
 @Mapper
 public interface SolutionStructMapper {
-    SolutionDTO addCmd2DTO(SolutionAddCmd solutionAddCmd);
+    SolutionTemplateDTO addCmd2DTO(SolutionTemplateAddCmd solutionAddCmd);
 }

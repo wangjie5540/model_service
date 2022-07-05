@@ -1,7 +1,7 @@
 package com.digitforce.aip.service.qry;
 
-import com.digitforce.aip.domain.Solution;
-import com.digitforce.aip.repository.SolutionRepository;
+import com.digitforce.aip.domain.SolutionTemplate;
+import com.digitforce.aip.repository.SolutionTemplateRepository;
 import com.digitforce.framework.operation.DefaultService;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +15,12 @@ import javax.annotation.Resource;
  * @since 2022/06/05 13:59
  */
 @Service
-public class SolutionQryServiceImpl extends DefaultService<Solution> implements SolutionQryService {
+public class SolutionTemplateQryServiceImpl extends DefaultService<SolutionTemplate> implements SolutionTemplateQryService {
     @Resource
-    private SolutionRepository solutionRepository;
+    private SolutionTemplateRepository solutionRepository;
 
     @Override
-    public SolutionRepository getRepository() {
+    public SolutionTemplateRepository getRepository() {
         return solutionRepository;
     }
 }

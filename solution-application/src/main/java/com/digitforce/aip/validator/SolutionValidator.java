@@ -1,6 +1,6 @@
 package com.digitforce.aip.validator;
 
-import com.digitforce.aip.dto.data.SolutionDTO;
+import com.digitforce.aip.dto.data.SolutionTemplateDTO;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SolutionValidator {
-    public void validate(SolutionDTO solutionDTO) {
+    public void validate(SolutionTemplateDTO solutionDTO) {
 //        throw new BizException("");
     }
 

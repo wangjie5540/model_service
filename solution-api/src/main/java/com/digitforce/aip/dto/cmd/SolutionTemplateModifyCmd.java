@@ -7,7 +7,7 @@ package com.digitforce.aip.dto.cmd;
  * @version 1.0.0
  * @since 2022/06/06 11:33
  */
-public class SolutionModifyCmd {
+public class SolutionTemplateModifyCmd {
     private Long id;
     private String cname;
     private String pipelineId;

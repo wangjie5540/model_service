@@ -1,7 +1,7 @@
 package com.digitforce.aip.repository;
 
 import com.digitforce.aip.domain.Solution;
-import com.digitforce.aip.mapper.SolutionMapper;
+import com.digitforce.aip.mapper.ImplementationMapper;
 import com.digitforce.framework.repository.DefaultDBRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,16 +17,15 @@ import javax.annotation.Resource;
 @Repository
 public class SolutionRepositoryImpl extends DefaultDBRepository<Solution> implements SolutionRepository {
     @Resource
-    private SolutionMapper solutionMapper;
+    private ImplementationMapper implementationMapper;
 
     @Override
-    public boolean isExist(Solution solution) {
-        solution = solutionMapper.selectById(solution.getId());
-        return solution != null;
+    public ImplementationMapper getMapper() {
+        return implementationMapper;
     }
 
     @Override
-    public SolutionMapper getMapper() {
-        return solutionMapper;
+    public boolean isExist(Solution implementation) {
+        return false;
     }
 }

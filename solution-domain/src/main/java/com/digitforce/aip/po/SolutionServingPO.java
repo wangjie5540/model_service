@@ -11,10 +11,9 @@ import lombok.Data;
  * @since 2022/06/05 13:55
  */
 @Data
-public class ImplementationPO extends TenantEntity<Long> {
+public class SolutionServingPO extends TenantEntity<Long> {
     private Long id;
     private Long solutionId;
-    private Long taskId;
-    private String cname;
+    private Long templateId;
     private String selection;
 }

@@ -1,10 +1,7 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
-import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
-import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
-import com.digitforce.aip.dto.cmd.SolutionOnlineCmd;
+import com.digitforce.aip.dto.cmd.*;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 方案服务命令接口类
+ * 策略命令接口类
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -24,22 +21,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/solution")
 public interface SolutionCmdFacade {
     @PostMapping("/add")
-    @Operation(summary = "新增方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result add(@RequestBody SolutionAddCmd solutionAddCmd);
+    @Operation(summary = "根据模板创建方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result add(@RequestBody SolutionAddCmd implementAddCmd);
 
-    @Operation(summary = "上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     @PostMapping("/on")
-    Result on(@RequestBody SolutionOnlineCmd solutionOnlineCmd);
+    @Operation(summary = "上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result on(@RequestBody SolutionAddCmd implementAddCmd);
 
-    @Operation(summary = "下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     @PostMapping("/off")
-    Result off(@RequestBody SolutionOnlineCmd solutionOnlineCmd);
+    @Operation(summary = "下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result off(@RequestBody SolutionOnOffCmd solutionOnOffCmd);
 
-    @Operation(summary = "删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    @PostMapping("/delete")
-    Result delete(@RequestBody SolutionDeleteCmd solutionDeleteCmd);
+    @PostMapping("/addCron")
+    @Operation(summary = "添加调度", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result addCron(@RequestBody SolutionAddCronCmd solutionAddCronCmd);
 
-    @Operation(summary = "修改方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    @PostMapping("/modify")
-    Result modify(@RequestBody SolutionModifyCmd solutionModifyCmd);
+    @PostMapping("/clearCron")
+    @Operation(summary = "清除调度", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result clearCron(@RequestBody SolutionClearCronCmd solutionClearCronCmd);
+
+    @PostMapping("/trigger_run")
+    @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result triggerRun(@RequestBody SolutionTriggerCmd implementationTriggerCmd);
 }

@@ -3,9 +3,7 @@ package com.digitforce.aip.facade;
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.data.SolutionDTO;
 import com.digitforce.aip.dto.qry.SolutionGetByIdQry;
-import com.digitforce.aip.dto.qry.SolutionPageByQry;
-import com.digitforce.framework.api.dto.PageQuery;
-import com.digitforce.framework.api.dto.PageView;
+import com.digitforce.aip.dto.qry.SolutionListBySolutionQry;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 /**
- * 方案服务查询接口类
+ * 策略查询接口类
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -27,14 +25,10 @@ import java.util.List;
 @RequestMapping(path = "/solution")
 public interface SolutionQryFacade {
     @PostMapping("/getById")
-    @Operation(summary = "通过id获取", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
-    Result<SolutionDTO> getById(@RequestBody SolutionGetByIdQry solutionGetByIdQry);
+    @Operation(summary = "通过id获取实施详情", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
+    Result<SolutionDTO> getById(@RequestBody SolutionGetByIdQry strategyGetByIdQry);
 
-    @PostMapping("/listBy")
-    @Operation(summary = "通过id获取", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
-    Result<List<SolutionDTO>> listBy(@RequestBody SolutionGetByIdQry solutionGetByIdQry);
-
-    @PostMapping("/pageBy")
-    @Operation(summary = "通过id获取", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
-    Result<PageView<SolutionDTO>> pageBy(@RequestBody PageQuery<SolutionPageByQry> solutionGetByIdQry);
+    @PostMapping("/listByTemplateId")
+    @Operation(summary = "通过方案id获取实施列表", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
+    Result<List<SolutionDTO>> listBySolutionId(@RequestBody SolutionListBySolutionQry implementationListBySolutionQry);
 }

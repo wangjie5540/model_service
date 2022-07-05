@@ -3,13 +3,13 @@ package com.digitforce.aip.dto.cmd;
 import com.digitforce.framework.api.dto.Command;
 
 /**
- * online和offline使用的实体类
+ * 方案删除实体类
  *
  * @author wangtonggui
  * @version 1.0.0
- * @since 2022/06/06 10:30
+ * @since 2022/06/06 11:29
  */
-public class SolutionOnlineCmd extends Command {
+public class SolutionTemplateDeleteCmd extends Command {
     private Long id;
 
     public Long getId() {

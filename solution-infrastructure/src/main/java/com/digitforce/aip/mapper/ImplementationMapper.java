@@ -1,7 +1,7 @@
 package com.digitforce.aip.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.digitforce.aip.domain.Implementation;
+import com.digitforce.aip.domain.Solution;
 
 /**
  * 方案mybatis plus mapper类
@@ -10,5 +10,5 @@ import com.digitforce.aip.domain.Implementation;
  * @version 1.0.0
  * @since 2022/06/05 15:47
  */
-public interface ImplementationMapper extends BaseMapper<Implementation> {
+public interface ImplementationMapper extends BaseMapper<Solution> {
 }

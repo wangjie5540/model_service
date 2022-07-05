@@ -1,6 +1,6 @@
 package com.digitforce.aip.service.qry;
 
-import com.digitforce.aip.domain.Solution;
+import com.digitforce.aip.domain.SolutionTemplate;
 import com.digitforce.framework.operation.CrudOperation;
 
 /**
@@ -10,5 +10,5 @@ import com.digitforce.framework.operation.CrudOperation;
  * @version 1.0.0
  * @since 2022/06/06 14:33
  */
-public interface SolutionQryService extends CrudOperation<Solution> {
+public interface SolutionTemplateQryService extends CrudOperation<SolutionTemplate> {
 }

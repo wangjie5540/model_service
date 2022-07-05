@@ -10,7 +10,7 @@ import com.digitforce.framework.api.dto.Query;
  * @version 1.0.0
  * @since 2022/06/06 14:39
  */
-public class ImplementationListBySolutionQry extends Query {
+public class SolutionListBySolutionQry extends Query {
     private Long solutionId;
 
     public Long getSolutionId() {
