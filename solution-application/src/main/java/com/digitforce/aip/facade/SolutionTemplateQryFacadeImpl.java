@@ -38,11 +38,12 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
     @Override
     public Result<SolutionTemplateDTO> getById(SolutionTemplateGetByIdQry solutionGetByIdQry) {
         SolutionTemplate solution = solutionTemplateQryService.getById(solutionGetByIdQry.getId());
+        if (solution == null) {
+            return Result.success(null);
+        }
         SolutionTemplateDTO solutionTemplateDTO = ConvertTool.convert(solution, SolutionTemplateDTO.class);
-        Pipeline pipeline =
-                KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(), kubeflowProperties.getPort(),
-                        solutionTemplateDTO.getPipelineId());
-
+        Pipeline pipeline = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
+                kubeflowProperties.getPort(), solutionTemplateDTO.getPipelineId());
         solutionTemplateDTO.setPipelineParameter(GsonUtil.gsonToBean(pipeline.getDescription(),
                 PipelineParameterDTO.class));
         return Result.success(solutionTemplateDTO);

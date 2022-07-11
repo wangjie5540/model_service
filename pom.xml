@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.digitforce.framework</groupId>
         <artifactId>framework-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
 
     <groupId>com.digitforce.aip</groupId>

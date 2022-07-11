@@ -1,7 +1,7 @@
 package com.digitforce.aip.repository;
 
 import com.digitforce.aip.domain.SolutionTemplate;
-import com.digitforce.aip.mapper.SolutionMapper;
+import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.framework.repository.DefaultDBRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,16 +17,16 @@ import javax.annotation.Resource;
 @Repository
 public class SolutionTemplateRepositoryImpl extends DefaultDBRepository<SolutionTemplate> implements SolutionTemplateRepository {
     @Resource
-    private SolutionMapper solutionMapper;
+    private SolutionTemplateMapper solutionTemplateMapper;
 
     @Override
     public boolean isExist(SolutionTemplate solution) {
-        solution = solutionMapper.selectById(solution.getId());
+        solution = solutionTemplateMapper.selectById(solution.getId());
         return solution != null;
     }
 
     @Override
-    public SolutionMapper getMapper() {
-        return solutionMapper;
+    public SolutionTemplateMapper getMapper() {
+        return solutionTemplateMapper;
     }
 }

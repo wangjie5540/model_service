@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
- * 方案命令服务实现类
+ * 方案模板命令接口类实现类
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -23,13 +23,13 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
     @Resource
     private SolutionValidator solutionValidator;
     @Resource
-    private SolutionTemplateRepository solutionRepository;
+    private SolutionTemplateRepository solutionTemplateRepository;
 
     @Override
     public void add(SolutionTemplateAddCmd solutionAddCmd) {
 //        solutionValidator.validate(null);
         SolutionTemplate solutionTemplate = ConvertTool.convert(solutionAddCmd, SolutionTemplate.class);
-        solutionRepository.save(solutionTemplate);
+        solutionTemplateRepository.save(solutionTemplate);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
         SolutionTemplate solution = new SolutionTemplate();
         solution.setId(id);
         solution.setStatus(true);
-        solutionRepository.modifyById(solution);
+        solutionTemplateRepository.modifyById(solution);
     }
 
     @Override
@@ -45,25 +45,22 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
         SolutionTemplate solution = new SolutionTemplate();
         solution.setId(id);
         solution.setStatus(false);
-        solutionRepository.modifyById(solution);
+        solutionTemplateRepository.modifyById(solution);
     }
 
     @Override
     public void delete(Long id) {
-        SolutionTemplate solution = new SolutionTemplate();
-        solution.setId(id);
-        solution.setDeleted(false);
-        solutionRepository.modifyById(solution);
+        solutionTemplateRepository.removeById(id);
     }
 
     @Override
     public void modify(SolutionTemplateModifyCmd solutionModifyCmd) {
         SolutionTemplate solution = ConvertTool.convert(solutionModifyCmd, SolutionTemplate.class);
-        solutionRepository.modifyById(solution);
+        solutionTemplateRepository.modifyById(solution);
     }
 
     @Override
     public SolutionTemplateRepository getRepository() {
-        return solutionRepository;
+        return solutionTemplateRepository;
     }
 }

@@ -3,7 +3,7 @@ package com.digitforce.aip.dto.cmd;
 import com.digitforce.framework.api.dto.Command;
 
 /**
- * 方案删除实体类
+ * 方案模板删除实体类
  *
  * @author wangtonggui
  * @version 1.0.0
