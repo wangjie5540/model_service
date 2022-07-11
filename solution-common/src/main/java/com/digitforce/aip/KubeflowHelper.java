@@ -3,14 +3,11 @@ package com.digitforce.aip;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
-import com.digitforce.aip.consts.CommonConst;
-import com.digitforce.aip.dto.data.PipelineDTO;
+import com.digitforce.aip.model.PageByPipelineVO;
+import com.digitforce.aip.model.Pipeline;
+import com.digitforce.aip.utils.CommonUtils;
 import com.digitforce.framework.util.GsonUtil;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.experimental.UtilityClass;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,9 +28,10 @@ import java.util.Map;
  */
 @UtilityClass
 public class KubeflowHelper {
-    private static final Gson gson = new GsonBuilder()
-        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        .create();
+    private static final Gson gson = CommonUtils.getGson();
+    // https://digit-force.coding.net/p/ai-platform/km/spaces/73/pages/K-259
+    public static final String KUBEFLOW_LOGIN_USER = "admin@example.com";
+    public static final String KUBEFLOW_LOGIN_PASSWORD = "password";
 
     /**
      * kubeflow登录
@@ -50,31 +48,32 @@ public class KubeflowHelper {
         }
         String state = getQueryParam(query, "state");
         rep = HttpUtil.get(String.format(
-            "http://%s:%d/dex/auth?client_id=kubeflow-oidc-authservice&redirect_uri=/login/oidc&response_type=code&scope=profile+email+groups+openid&amp;state=%s",
-            host, port, state));
+                "http://%s:%d/dex/auth?client_id=kubeflow-oidc-authservice&redirect_uri=/login/oidc&response_type" +
+                        "=code&scope=profile+email+groups+openid&amp;state=%s",
+                host, port, state));
         query = getQuery(rep);
         Map<String, Object> loginData = new HashMap<>();
-        loginData.put("login", CommonConst.KUBEFLOW_LOGIN_USER);
-        loginData.put("password", CommonConst.KUBEFLOW_LOGIN_PASSWORD);
+        loginData.put("login", KUBEFLOW_LOGIN_USER);
+        loginData.put("password", KUBEFLOW_LOGIN_PASSWORD);
         String req = getQueryParam(query, "req");
         HttpRequest request = HttpRequest.post(
-            String.format("http://%s:%d/dex/auth/local?req=%s", host, port, req))
-            .header(Header.CONTENT_TYPE, "application/x-www-form-urlencoded")
-            .form(loginData);
+                        String.format("http://%s:%d/dex/auth/local?req=%s", host, port, req))
+                .header(Header.CONTENT_TYPE, "application/x-www-form-urlencoded")
+                .form(loginData);
         request.execute();
         rep = HttpUtil.get(String.format("http://%s:%d/dex/approval?req=%s", host, port, req));
         query = getQuery(rep);
         String code = getQueryParam(query, "code");
         HttpRequest.get(
-            String.format("http://%s:%d/login/oidc?code=%s&state=%s", host, port, code, state)).execute();
+                String.format("http://%s:%d/login/oidc?code=%s&state=%s", host, port, code, state)).execute();
     }
 
 
-    public PipelineDTO getPipelineDetail(String host, int port, String pipelineId) {
+    public Pipeline getPipelineDetail(String host, int port, String pipelineId) {
         login(host, port);
         String body = HttpRequest.get(String.format(
-            "http://%s:%d/pipeline/apis/v1beta1/pipelines/%s", host, port, pipelineId)).execute().body();
-        return gson.fromJson(body, PipelineDTO.class);
+                "http://%s:%d/pipeline/apis/v1beta1/pipelines/%s", host, port, pipelineId)).execute().body();
+        return gson.fromJson(body, Pipeline.class);
     }
 
 
@@ -94,16 +93,16 @@ public class KubeflowHelper {
     }
 
     public String triggerRun(String host, int port, String name, String experimentId, String pipelineId,
-        List<Map<String, Object>> pipelineParameters) {
+                             List<Map<String, Object>> pipelineParameters) {
         login(host, port);
         HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs", host, port))
-            .body(generateBody(name, experimentId, pipelineId, pipelineParameters));
+                .body(generateBody(name, experimentId, pipelineId, pipelineParameters));
         RunDetail runDetail = GsonUtil.gsonToBean(httpRequest.execute().body(), RunDetail.class);
         return runDetail.run.getId();
     }
 
     public String generateBody(String name, String experimentId, String pipelineId,
-        List<Map<String, Object>> pipelineParameters) {
+                               List<Map<String, Object>> pipelineParameters) {
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("name", name);
         paramsMap.put("description", "");
@@ -129,10 +128,19 @@ public class KubeflowHelper {
     public String getStatus(String host, int port, String jobId) {
         login(host, port);
         HttpRequest request =
-            HttpRequest.get(String.format("http://%s:%d/pipeline/apis/v1beta1/runs/%s", host, port, jobId))
-                .header(Header.CONTENT_TYPE, "application/json");
+                HttpRequest.get(String.format("http://%s:%d/pipeline/apis/v1beta1/runs/%s", host, port, jobId))
+                        .header(Header.CONTENT_TYPE, "application/json");
         RunDetail runDetail = GsonUtil.gsonToBean(request.execute().body(), RunDetail.class);
         return runDetail.getRun().getStatus();
+    }
+
+    public PageByPipelineVO pageByPipeline(String host, int port, int pageSize) {
+        login(host, port);
+        HttpRequest request =
+                HttpRequest.get(String.format("http://%s:%d/pipeline/apis/v1beta1/pipelines?page_size=%d&sort_by" +
+                                "=created_at desc", host, port, pageSize))
+                        .header(Header.CONTENT_TYPE, "application/json");
+        return gson.fromJson(request.execute().body(), PageByPipelineVO.class);
     }
 
     private static class RunDetail {
@@ -207,7 +215,7 @@ public class KubeflowHelper {
         map.put("value", "52");
         pipeParams.add(map);
         System.out.println(triggerRun("172.21.32.143", 30000, "run_name_1231", "f56c9dfe-d57d-444a-bc61-01ff9fe03a5d",
-            "3034e332-e403-4236-8f7b-f193d3be9db4", pipeParams));
+                "3034e332-e403-4236-8f7b-f193d3be9db4", pipeParams));
 //        System.out.println(getStatus("172.21.32.143", 30000, "fbbfd47a-4fa3-4701-878f-94a451f7c4d0"));
     }
 }

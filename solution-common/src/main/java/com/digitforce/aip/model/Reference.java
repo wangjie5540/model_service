@@ -3,7 +3,7 @@ package com.digitforce.aip.model;
 import lombok.Data;
 
 /**
- * TODO
+ * kubeflow请求响应reference
  *
  * @author wangtonggui
  * @version 1.0.0

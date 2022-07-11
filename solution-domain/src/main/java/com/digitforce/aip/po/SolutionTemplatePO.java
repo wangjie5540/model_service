@@ -4,7 +4,7 @@ import com.digitforce.framework.domain.TenantEntity;
 import lombok.Data;
 
 /**
- * 方案持久化类
+ * 方案模板持久化类
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -18,6 +18,6 @@ public class SolutionTemplatePO extends TenantEntity<Long> {
     private String pipelineName;
     private String description;
     private Integer browseCount;
-    private Integer implementCount;
+    private Integer applyCount;
     private Boolean status;
 }
