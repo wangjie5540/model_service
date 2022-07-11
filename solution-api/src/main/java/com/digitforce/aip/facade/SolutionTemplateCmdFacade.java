@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/solutionTemplate")
 public interface SolutionTemplateCmdFacade {
     @PostMapping("/add")
-    @Operation(summary = "新增模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
+    @Operation(summary = "创建模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
     Result add(@RequestBody SolutionTemplateAddCmd solutionAddCmd);
 
     @Operation(summary = "上线模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)

@@ -9,10 +9,17 @@ package com.digitforce.aip.dto.cmd;
  */
 public class SolutionTemplateModifyCmd {
     private Long id;
-    private String cname;
-    private String pipelineId;
-    private String type;
+    private String name;
     private String scene;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Long getId() {
         return id;
@@ -22,28 +29,12 @@ public class SolutionTemplateModifyCmd {
         this.id = id;
     }
 
-    public String getCname() {
-        return cname;
+    public String getName() {
+        return name;
     }
 
-    public void setCname(String cname) {
-        this.cname = cname;
-    }
-
-    public String getPipelineId() {
-        return pipelineId;
-    }
-
-    public void setPipelineId(String pipelineId) {
-        this.pipelineId = pipelineId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getScene() {
