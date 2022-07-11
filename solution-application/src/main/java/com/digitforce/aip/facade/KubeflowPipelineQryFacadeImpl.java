@@ -32,8 +32,9 @@ public class KubeflowPipelineQryFacadeImpl implements KubeflowPipelineQryFacade 
 
     @Override
     public Result<List<Pipeline>> listBy() {
+        // TODO kubeflow使用pageToken进行分页，后续需要进行兼容性开发
         PageByPipelineVO pageByPipelineVO = KubeflowHelper.pageByPipeline(kubeflowProperties.getHost(),
-                kubeflowProperties.getPort(), 100);
+                kubeflowProperties.getPort(), 1000);
         return Result.success(pageByPipelineVO.getPipelines());
     }
 }

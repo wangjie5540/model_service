@@ -6,7 +6,7 @@ import com.digitforce.aip.dto.cmd.SolutionTemplateModifyCmd;
 import com.digitforce.framework.operation.CrudOperation;
 
 /**
- * 方案命令服务接口类
+ * 方案模板命令接口类
  *
  * @author wangtonggui
  * @version 1.0.0

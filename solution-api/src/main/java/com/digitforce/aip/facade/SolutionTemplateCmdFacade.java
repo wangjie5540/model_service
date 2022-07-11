@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 方案服务命令接口类
+ * 方案模板命令接口类
  *
  * @author wangtonggui
  * @version 1.0.0

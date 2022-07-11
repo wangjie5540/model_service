@@ -20,35 +20,35 @@ import javax.annotation.Resource;
 @RestController
 public class SolutionTemplateCmdFacadeImpl implements SolutionTemplateCmdFacade {
     @Resource
-    private SolutionTemplateCmdService solutionCmdService;
+    private SolutionTemplateCmdService solutionTemplateCmdService;
 
     @Override
     public Result add(SolutionTemplateAddCmd solutionAddCmd) {
-        solutionCmdService.add(solutionAddCmd);
+        solutionTemplateCmdService.add(solutionAddCmd);
         return Result.success();
     }
 
     @Override
     public Result on(SolutionTemplateOnlineCmd solutionOnlineCmd) {
-        solutionCmdService.on(solutionOnlineCmd.getId());
+        solutionTemplateCmdService.on(solutionOnlineCmd.getId());
         return Result.success();
     }
 
     @Override
     public Result off(SolutionTemplateOnlineCmd solutionOnlineCmd) {
-        solutionCmdService.off(solutionOnlineCmd.getId());
+        solutionTemplateCmdService.off(solutionOnlineCmd.getId());
         return Result.success();
     }
 
     @Override
     public Result delete(SolutionTemplateDeleteCmd solutionDeleteCmd) {
-        solutionCmdService.delete(solutionDeleteCmd.getId());
+        solutionTemplateCmdService.delete(solutionDeleteCmd.getId());
         return Result.success();
     }
 
     @Override
     public Result modify(SolutionTemplateModifyCmd solutionModifyCmd) {
-        solutionCmdService.modify(solutionModifyCmd);
+        solutionTemplateCmdService.modify(solutionModifyCmd);
         return Result.success();
     }
 }

@@ -19,7 +19,6 @@ public class SolutionTemplateAddCmd extends Command {
     private String pipelineId;
     private String pipelineName;
     private String description;
-    private String principal;
 
     public String getPipelineName() {
         return pipelineName;
@@ -27,14 +26,6 @@ public class SolutionTemplateAddCmd extends Command {
 
     public void setPipelineName(String pipelineName) {
         this.pipelineName = pipelineName;
-    }
-
-    public String getPrincipal() {
-        return principal;
-    }
-
-    public void setPrincipal(String principal) {
-        this.principal = principal;
     }
 
     public String getName() {
