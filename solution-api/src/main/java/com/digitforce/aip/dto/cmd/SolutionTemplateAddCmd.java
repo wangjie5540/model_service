@@ -11,14 +11,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @since 2022/05/31 15:41
  */
 @Schema(
-        description = "新增方案实体类"
+        description = "新增方案模板入参类"
 )
 public class SolutionTemplateAddCmd extends Command {
-    private String cname;
-    private String description;
+    private String name;
+    private String scene;
     private String pipelineId;
     private String pipelineName;
-    private String scene;
+    private String description;
     private String principal;
 
     public String getPipelineName() {
@@ -37,12 +37,12 @@ public class SolutionTemplateAddCmd extends Command {
         this.principal = principal;
     }
 
-    public String getCname() {
-        return cname;
+    public String getName() {
+        return name;
     }
 
-    public void setCname(String cname) {
-        this.cname = cname;
+    public void setName(String name) {
+        this.name = name;
     }
 
 

@@ -12,11 +12,12 @@ import lombok.Data;
  */
 @Data
 public class SolutionTemplatePO extends TenantEntity<Long> {
-    private String cname;
-    private String description;
+    private String name;
     private String scene;
     private String pipelineId;
-    private Boolean status;
+    private String pipelineName;
+    private String description;
     private Integer browseCount;
     private Integer implementCount;
+    private Boolean status;
 }
