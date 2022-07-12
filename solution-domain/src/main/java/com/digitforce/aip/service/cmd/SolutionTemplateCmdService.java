@@ -5,6 +5,8 @@ import com.digitforce.aip.dto.cmd.SolutionTemplateAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionTemplateModifyCmd;
 import com.digitforce.framework.operation.CrudOperation;
 
+import java.util.List;
+
 /**
  * 方案模板命令接口类
  *
@@ -17,9 +19,21 @@ public interface SolutionTemplateCmdService extends CrudOperation<SolutionTempla
 
     void on(Long id);
 
+    void batchOn(List<Long> ids);
+
     void off(Long id);
+
+    void batchOff(List<Long> id);
 
     void delete(Long id);
 
+    void batchDelete(List<Long> ids);
+
     void modify(SolutionTemplateModifyCmd solutionModifyCmd);
+
+    void batchModify(List<SolutionTemplateModifyCmd> solutionModifyCmd);
+
+    void browseCountInc(Long id);
+
+    void applyCountInc(Long id);
 }

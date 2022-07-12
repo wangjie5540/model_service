@@ -26,6 +26,17 @@ public class SolutionTemplateRepositoryImpl extends DefaultDBRepository<Solution
     }
 
     @Override
+    public int browseCountIncById(Long id) {
+
+        return 0;
+    }
+
+    @Override
+    public int applyCountIncById(Long id) {
+        return 0;
+    }
+
+    @Override
     public SolutionTemplateMapper getMapper() {
         return solutionTemplateMapper;
     }

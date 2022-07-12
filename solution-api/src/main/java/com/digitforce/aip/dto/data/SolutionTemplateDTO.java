@@ -1,5 +1,7 @@
 package com.digitforce.aip.dto.data;
 
+import java.time.LocalDateTime;
+
 /**
  * 方案实体定义类
  *
@@ -8,8 +10,8 @@ package com.digitforce.aip.dto.data;
  * @since 2022/05/31 15:35
  */
 public class SolutionTemplateDTO {
-    private long id;
-    private String cname;
+    private Long id;
+    private String name;
     private String scene;
     private String description;
     private String pipelineId;
@@ -17,6 +19,8 @@ public class SolutionTemplateDTO {
     private Integer applyCount;
     private PipelineDataSource dataSource;
     private PipelineParameterDTO pipelineParameter;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 
     public PipelineDataSource getDataSource() {
         return dataSource;
@@ -50,20 +54,20 @@ public class SolutionTemplateDTO {
         this.pipelineParameter = pipelineParameter;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getCname() {
-        return cname;
+    public String getName() {
+        return name;
     }
 
-    public void setCname(String cname) {
-        this.cname = cname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getScene() {
@@ -88,5 +92,21 @@ public class SolutionTemplateDTO {
 
     public void setPipelineId(String pipelineId) {
         this.pipelineId = pipelineId;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
     }
 }

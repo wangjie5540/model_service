@@ -7,9 +7,9 @@ import com.digitforce.aip.dto.data.PipelineParameterDTO;
 import com.digitforce.aip.dto.data.SolutionTemplateDTO;
 import com.digitforce.aip.dto.qry.SolutionTemplateGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionTemplatePageByQry;
+import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.aip.model.Pipeline;
 import com.digitforce.aip.service.qry.SolutionTemplateQryService;
-import com.digitforce.framework.api.dto.PageQuery;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 方案查询接口实现类
@@ -34,35 +33,28 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
     private SolutionTemplateQryService solutionTemplateQryService;
     @Resource
     private KubeflowProperties kubeflowProperties;
+    @Resource
+    private SolutionTemplateMapper solutionTemplateMapper;
 
     @Override
     public Result<SolutionTemplateDTO> getById(SolutionTemplateGetByIdQry solutionGetByIdQry) {
-        SolutionTemplate solution = solutionTemplateQryService.getById(solutionGetByIdQry.getId());
-        if (solution == null) {
+        SolutionTemplate solutionTemplate = solutionTemplateQryService.getById(solutionGetByIdQry.getId());
+        if (solutionTemplate == null) {
             return Result.success(null);
         }
-        SolutionTemplateDTO solutionTemplateDTO = ConvertTool.convert(solution, SolutionTemplateDTO.class);
+        SolutionTemplateDTO solutionTemplateDTO = ConvertTool.convert(solutionTemplate, SolutionTemplateDTO.class);
         Pipeline pipeline = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), solutionTemplateDTO.getPipelineId());
         solutionTemplateDTO.setPipelineParameter(GsonUtil.gsonToBean(pipeline.getDescription(),
                 PipelineParameterDTO.class));
+        solutionTemplateMapper.browseCountInc(solutionGetByIdQry.getId());
         return Result.success(solutionTemplateDTO);
     }
 
     @Override
-    public Result<List<SolutionTemplateDTO>> listBy(@RequestBody SolutionTemplateGetByIdQry solutionGetByIdQry) {
-        SolutionTemplate solution = ConvertTool.convert(solutionGetByIdQry, SolutionTemplate.class);
-        List<SolutionTemplate> solutionList = solutionTemplateQryService.listBy(solution);
-        List<SolutionTemplateDTO> solutions = ConvertTool.convert(solutionList, SolutionTemplateDTO.class);
-        return Result.success(solutions);
-    }
-
-    @Override
-    public Result<PageView<SolutionTemplateDTO>> pageBy(@RequestBody PageQuery<SolutionTemplatePageByQry> solutionPageByQry) {
-        PageQuery<SolutionTemplate> pageQuery = solutionPageByQry.build(d -> ConvertTool.convert(d,
-                SolutionTemplate.class));
-        PageView<SolutionTemplate> solutionPageView = solutionTemplateQryService.pageBy(pageQuery);
-        PageView<SolutionTemplateDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
+    public Result<PageView<SolutionTemplateDTO>> pageBy(@RequestBody SolutionTemplatePageByQry solutionPageByQry) {
+        PageView<SolutionTemplate> templatePageView = solutionTemplateQryService.pageBy(solutionPageByQry);
+        PageView<SolutionTemplateDTO> solutionDTOPageView = PageTool.pageView(templatePageView,
                 SolutionTemplateDTO.class);
         return Result.success(solutionDTOPageView);
     }

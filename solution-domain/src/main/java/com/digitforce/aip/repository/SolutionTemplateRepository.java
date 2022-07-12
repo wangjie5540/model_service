@@ -12,4 +12,8 @@ import com.digitforce.framework.operation.CrudOperation;
  */
 public interface SolutionTemplateRepository extends CrudOperation<SolutionTemplate> {
     boolean isExist(SolutionTemplate solutionTemplate);
+
+    int browseCountIncById(Long id);
+
+    int applyCountIncById(Long id);
 }
