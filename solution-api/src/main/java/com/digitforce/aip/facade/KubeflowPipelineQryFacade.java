@@ -20,14 +20,14 @@ import java.util.List;
  * @version 1.0.0
  */
 @FeignClient("solution-service")
-@Tag(name = CommonConst.SWAGGER_TAG_PIPELINE_TEMPLATE_QRY)
+@Tag(name = CommonConst.SWAGGER_TAG_PIPELINE_QRY)
 @RequestMapping(path = "/pipeline")
 public interface KubeflowPipelineQryFacade {
     @PostMapping("/getById")
-    @Operation(summary = "通过id获取pipeline", tags = CommonConst.SWAGGER_TAG_PIPELINE_TEMPLATE_QRY)
+    @Operation(summary = "通过id获取pipeline", tags = CommonConst.SWAGGER_TAG_PIPELINE_QRY)
     Result<Pipeline> getById(@RequestBody PipelineGetByIdQry pipelineGetByIdQry);
 
     @PostMapping("/listBy")
-    @Operation(summary = "获取pipeline列表", tags = CommonConst.SWAGGER_TAG_PIPELINE_TEMPLATE_QRY)
+    @Operation(summary = "获取pipeline列表", tags = CommonConst.SWAGGER_TAG_PIPELINE_QRY)
     Result<List<Pipeline>> listBy();
 }
