@@ -1,9 +1,6 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.aip.dto.cmd.SolutionTemplateAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionTemplateDeleteCmd;
-import com.digitforce.aip.dto.cmd.SolutionTemplateModifyCmd;
-import com.digitforce.aip.dto.cmd.SolutionTemplateOnlineCmd;
+import com.digitforce.aip.dto.cmd.*;
 import com.digitforce.aip.service.cmd.SolutionTemplateCmdService;
 import com.digitforce.framework.api.dto.Result;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,15 +26,25 @@ public class SolutionTemplateCmdFacadeImpl implements SolutionTemplateCmdFacade 
     }
 
     @Override
-    public Result on(SolutionTemplateOnlineCmd solutionOnlineCmd) {
+    public Result on(SolutionTemplateStatusCmd solutionOnlineCmd) {
         solutionTemplateCmdService.on(solutionOnlineCmd.getId());
         return Result.success();
     }
 
     @Override
-    public Result off(SolutionTemplateOnlineCmd solutionOnlineCmd) {
+    public Result batchOn(SolutionTemplateBatchStatusCmd solutionTemplateBatchStatusCmd) {
+        return null;
+    }
+
+    @Override
+    public Result off(SolutionTemplateStatusCmd solutionOnlineCmd) {
         solutionTemplateCmdService.off(solutionOnlineCmd.getId());
         return Result.success();
+    }
+
+    @Override
+    public Result batchOff(SolutionTemplateBatchStatusCmd solutionTemplateBatchStatusCmd) {
+        return null;
     }
 
     @Override
@@ -47,8 +54,18 @@ public class SolutionTemplateCmdFacadeImpl implements SolutionTemplateCmdFacade 
     }
 
     @Override
+    public Result batchDelete(SolutionTemplateBatchDeleteCmd solutionTemplateBatchDeleteCmd) {
+        return null;
+    }
+
+    @Override
     public Result modify(SolutionTemplateModifyCmd solutionModifyCmd) {
         solutionTemplateCmdService.modify(solutionModifyCmd);
         return Result.success();
+    }
+
+    @Override
+    public Result batchModify(SolutionTemplateBatchModifyCmd solutionTemplateBatchModifyCmd) {
+        return null;
     }
 }
