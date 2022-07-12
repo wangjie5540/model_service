@@ -23,7 +23,7 @@ public interface SolutionTemplateCmdService extends CrudOperation<SolutionTempla
 
     void off(Long id);
 
-    void batchOff(List<Long> id);
+    void batchOff(List<Long> ids);
 
     void delete(Long id);
 
@@ -31,7 +31,7 @@ public interface SolutionTemplateCmdService extends CrudOperation<SolutionTempla
 
     void modify(SolutionTemplateModifyCmd solutionModifyCmd);
 
-    void batchModify(List<SolutionTemplateModifyCmd> solutionModifyCmd);
+    void batchModify(List<SolutionTemplate> solutionTemplateList);
 
     void browseCountInc(Long id);
 

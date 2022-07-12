@@ -2,6 +2,8 @@ package com.digitforce.aip.dto.cmd;
 
 import com.digitforce.framework.api.dto.Command;
 
+import java.util.List;
+
 /**
  * 方案模板批量删除实体类
  *
@@ -10,13 +12,13 @@ import com.digitforce.framework.api.dto.Command;
  * @since 2022/06/06 11:29
  */
 public class SolutionTemplateBatchDeleteCmd extends Command {
-    private Long id;
+    private List<Long> ids;
 
-    public Long getId() {
-        return id;
+    public List<Long> getIds() {
+        return ids;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIds(List<Long> ids) {
+        this.ids = ids;
     }
 }

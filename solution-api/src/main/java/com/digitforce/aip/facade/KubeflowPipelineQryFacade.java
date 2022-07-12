@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping(path = "/pipeline")
 public interface KubeflowPipelineQryFacade {
     @PostMapping("/getById")
-    @Operation(summary = "通过id获取", tags = CommonConst.SWAGGER_TAG_PIPELINE_TEMPLATE_QRY)
+    @Operation(summary = "通过id获取pipeline", tags = CommonConst.SWAGGER_TAG_PIPELINE_TEMPLATE_QRY)
     Result<Pipeline> getById(@RequestBody PipelineGetByIdQry pipelineGetByIdQry);
 
     @PostMapping("/listBy")

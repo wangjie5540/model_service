@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 方案模板命令接口类实现类
@@ -38,15 +39,21 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
 
     @Override
     public void on(Long id) {
-        SolutionTemplate solution = new SolutionTemplate();
-        solution.setId(id);
-        solution.setStatus(true);
-        solutionTemplateRepository.modifyById(solution);
+        SolutionTemplate solutionTemplate = new SolutionTemplate();
+        solutionTemplate.setId(id);
+        solutionTemplate.setStatus(true);
+        solutionTemplateRepository.modifyById(solutionTemplate);
     }
 
     @Override
     public void batchOn(List<Long> ids) {
-
+        List<SolutionTemplate> solutionTemplateList = ids.stream().map(id -> {
+            SolutionTemplate solutionTemplate = new SolutionTemplate();
+            solutionTemplate.setId(id);
+            solutionTemplate.setStatus(true);
+            return solutionTemplate;
+        }).collect(Collectors.toList());
+        solutionTemplateRepository.modifyBatchById(solutionTemplateList);
     }
 
     @Override
@@ -58,8 +65,14 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
     }
 
     @Override
-    public void batchOff(List<Long> id) {
-
+    public void batchOff(List<Long> ids) {
+        List<SolutionTemplate> solutionTemplateList = ids.stream().map(id -> {
+            SolutionTemplate solutionTemplate = new SolutionTemplate();
+            solutionTemplate.setId(id);
+            solutionTemplate.setStatus(false);
+            return solutionTemplate;
+        }).collect(Collectors.toList());
+        solutionTemplateRepository.modifyBatchById(solutionTemplateList);
     }
 
     @Override
@@ -69,7 +82,7 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
 
     @Override
     public void batchDelete(List<Long> ids) {
-
+        solutionTemplateRepository.removeByIds(ids);
     }
 
     @Override
@@ -79,8 +92,8 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
     }
 
     @Override
-    public void batchModify(List<SolutionTemplateModifyCmd> solutionModifyCmd) {
-
+    public void batchModify(List<SolutionTemplate> solutionTemplateList) {
+        solutionTemplateRepository.modifyBatchById(solutionTemplateList);
     }
 
     @Override

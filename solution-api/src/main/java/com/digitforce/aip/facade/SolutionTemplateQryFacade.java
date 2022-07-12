@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/solutionTemplate")
 public interface SolutionTemplateQryFacade {
     @PostMapping("/getById")
-    @Operation(summary = "通过id获取方案详情", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
+    @Operation(summary = "通过id获取方案模板详情", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
     Result<SolutionTemplateDTO> getById(@RequestBody SolutionTemplateGetByIdQry solutionGetByIdQry);
 
     @PostMapping("/pageBy")
-    @Operation(summary = "分页查询", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
+    @Operation(summary = "分页查询方案模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
     Result<PageView<SolutionTemplateDTO>> pageBy(@RequestBody SolutionTemplatePageByQry solutionTemplatePageByQry);
 }
