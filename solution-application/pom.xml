@@ -18,11 +18,11 @@
             <artifactId>solution-api</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>com.digitforce.ums</groupId>-->
-        <!--            <artifactId>ums-api</artifactId>-->
-        <!--            <version>1.0.1-SNAPSHOT</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>com.digitforce.component.dict</groupId>
+            <artifactId>component-dict-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.digitforce.aip</groupId>
             <artifactId>solution-extension</artifactId>
