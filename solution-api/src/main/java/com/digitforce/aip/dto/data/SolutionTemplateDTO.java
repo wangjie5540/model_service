@@ -3,7 +3,7 @@ package com.digitforce.aip.dto.data;
 import java.time.LocalDateTime;
 
 /**
- * 方案实体定义类
+ * 方案模板实体定义类
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -19,6 +19,7 @@ public class SolutionTemplateDTO {
     private Integer applyCount;
     private PipelineDataSource dataSource;
     private PipelineParameterDTO pipelineParameter;
+    private Integer status;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
@@ -92,6 +93,14 @@ public class SolutionTemplateDTO {
 
     public void setPipelineId(String pipelineId) {
         this.pipelineId = pipelineId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public LocalDateTime getCreateTime() {
