@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author wangtonggui
  * @version 1.0.0
  */
-@FeignClient("solution-service")
+@FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_CMD)
 @RequestMapping(path = "/solutionServing")
 public interface SolutionServingCmdFacade {

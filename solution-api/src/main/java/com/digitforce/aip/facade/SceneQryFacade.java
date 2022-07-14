@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author wangtonggui
  * @version 1.0.0
  */
-@FeignClient("solution-service")
+@FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SCENE_QRY)
 @RequestMapping(path = "/scene")
 public interface SceneQryFacade {

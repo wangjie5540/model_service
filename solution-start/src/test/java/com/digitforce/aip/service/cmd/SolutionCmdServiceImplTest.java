@@ -1,7 +1,6 @@
 package com.digitforce.aip.service.cmd;
 
 import com.digitforce.aip.GlobalConstant;
-import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineCmdFacade;
 import com.digitforce.bdp.operatex.core.consts.FailureStrategy;
@@ -14,35 +13,14 @@ import com.digitforce.framework.util.GsonUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@ActiveProfiles("dev")
-public class SolutionTemplateCmdServiceTest {
-    @Resource
-    private SolutionTemplateMapper solutionTemplateMapper;
+public class SolutionCmdServiceImplTest {
     @Resource
     private TaskDefineCmdFacade taskDefineCmdFacade;
-
-    @Test
-    public void browseCountInc() {
-        int i = solutionTemplateMapper.browseCountInc(1546473725500678146L);
-        System.out.println(i);
-    }
-
-    @Test
-    public void applyCountInc() {
-    }
 
     @Test
     public void taskAdd() {

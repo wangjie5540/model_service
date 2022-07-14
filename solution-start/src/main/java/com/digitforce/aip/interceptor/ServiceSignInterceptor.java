@@ -23,5 +23,8 @@ public class ServiceSignInterceptor implements RequestInterceptor {
 //            log.error("【Feign调用】- 未获取ServiceSignContext服务标识信息,无法传递");
 //        }
         template.header("SERVICE_SIGN", "solution");
+        // TODO 测试用，后续删除
+        template.header("X_TENANT",
+                "eyJkZXBsb3lNb2RlIjoiU0hBUkUiLCJuYW1lc3BhY2UiOiJERUZBVUxUIiwidGVuYW50SWQiOjEwMDAwLCJ1c2VyQWNjb3VudCI6InN1cGVyYWRtaW4ifQ==");
     }
 }

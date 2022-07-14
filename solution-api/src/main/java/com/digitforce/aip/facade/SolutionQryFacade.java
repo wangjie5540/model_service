@@ -20,7 +20,7 @@ import java.util.List;
  * @author wangtonggui
  * @version 1.0.0
  */
-@FeignClient("solution-service")
+@FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
 @RequestMapping(path = "/solution")
 public interface SolutionQryFacade {

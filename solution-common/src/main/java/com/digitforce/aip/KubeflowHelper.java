@@ -8,6 +8,7 @@ import com.digitforce.aip.model.Pipeline;
 import com.digitforce.aip.utils.CommonUtils;
 import com.digitforce.framework.util.GsonUtil;
 import com.google.gson.Gson;
+import lombok.Data;
 import lombok.experimental.UtilityClass;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,6 +31,7 @@ import java.util.Map;
 public class KubeflowHelper {
     private static final Gson gson = CommonUtils.getGson();
     // https://digit-force.coding.net/p/ai-platform/km/spaces/73/pages/K-259
+    // TODO 后续将优化kubeflow的账户系统，此处先写死
     public static final String KUBEFLOW_LOGIN_USER = "admin@example.com";
     public static final String KUBEFLOW_LOGIN_PASSWORD = "password";
 
@@ -143,54 +145,25 @@ public class KubeflowHelper {
         return gson.fromJson(request.execute().body(), PageByPipelineVO.class);
     }
 
+    @Data
     private static class RunDetail {
         private Run run;
 
-        public Run getRun() {
-            return run;
-        }
-
-        public void setRun(Run run) {
-            this.run = run;
-        }
-
+        @Data
         private static class Run {
             private String id;
             private String name;
             private String status;
-
-            public String getId() {
-                return id;
-            }
-
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public String getStatus() {
-                return status;
-            }
-
-            public void setStatus(String status) {
-                this.status = status;
-            }
         }
     }
 
 
+    @Data
     private static class Reference {
         private Key key = new Key();
         private String relationship;
 
-
+        @Data
         private static class Key {
             private String id;
             private String type;
@@ -215,7 +188,7 @@ public class KubeflowHelper {
         map.put("value", "52");
         pipeParams.add(map);
         System.out.println(triggerRun("172.21.32.143", 30000, "run_name_1231", "f56c9dfe-d57d-444a-bc61-01ff9fe03a5d",
-                "3034e332-e403-4236-8f7b-f193d3be9db4", pipeParams));
+                "2792c130-173d-47f7-b04e-50ece0c127b4", pipeParams));
 //        System.out.println(getStatus("172.21.32.143", 30000, "fbbfd47a-4fa3-4701-878f-94a451f7c4d0"));
     }
 }

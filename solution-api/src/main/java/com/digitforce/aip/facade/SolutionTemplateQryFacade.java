@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author wangtonggui
  * @version 1.0.0
  */
-@FeignClient("solution-service")
+@FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
 @RequestMapping(path = "/solutionTemplate")
 public interface SolutionTemplateQryFacade {

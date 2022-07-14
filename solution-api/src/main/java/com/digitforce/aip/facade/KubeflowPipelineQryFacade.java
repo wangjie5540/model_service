@@ -19,7 +19,7 @@ import java.util.List;
  * @author wangtonggui
  * @version 1.0.0
  */
-@FeignClient("solution-service")
+@FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_PIPELINE_QRY)
 @RequestMapping(path = "/pipeline")
 public interface KubeflowPipelineQryFacade {
