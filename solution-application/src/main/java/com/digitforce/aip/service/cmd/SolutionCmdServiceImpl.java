@@ -27,7 +27,7 @@ import javax.annotation.Resource;
 @Service
 public class SolutionCmdServiceImpl extends DefaultService<Solution> implements SolutionCmdService {
     @Resource
-    private SolutionRepository implementationRepository;
+    private SolutionRepository solutionRepository;
     @Resource
     private TaskDefineCmdFacade taskDefineCmdFacade;
 
@@ -36,7 +36,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         // TODO 参数校验
 //        solutionValidator.validate(null);
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
-        implementationRepository.save(solution);
+        solutionRepository.save(solution);
         // TODO 需要任务服务新增对应的任务类型定义
         TaskDefineDTO taskDefineDTO = new AlgorithmTaskDefineDTO();
         taskDefineDTO.setCategory(TaskCategory.BATCH);
@@ -59,13 +59,13 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Override
     public void triggerRun(SolutionTriggerCmd implementationTriggerCmd) {
         Solution implementation = ConvertTool.convert(implementationTriggerCmd, Solution.class);
-        implementationRepository.save(implementation);
+        solutionRepository.save(implementation);
         taskDefineCmdFacade.execute(implementation.getTaskId());
     }
 
 
     @Override
     public SolutionRepository getRepository() {
-        return implementationRepository;
+        return solutionRepository;
     }
 }
