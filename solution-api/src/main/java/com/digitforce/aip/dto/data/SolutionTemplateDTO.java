@@ -1,5 +1,7 @@
 package com.digitforce.aip.dto.data;
 
+import com.digitforce.aip.GlobalConstant;
+
 import java.time.LocalDateTime;
 
 /**
@@ -18,6 +20,8 @@ public class SolutionTemplateDTO {
     private Integer browseCount;
     private Integer applyCount;
     private PipelineDataSource dataSource;
+    // TODO 后续将迭代调度机制
+    private String schedule = GlobalConstant.DEFAULT_CRON;
     private PipelineParameterDTO pipelineParameter;
     private Integer status;
     private LocalDateTime createTime;
@@ -117,5 +121,13 @@ public class SolutionTemplateDTO {
 
     public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 }

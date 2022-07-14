@@ -32,20 +32,20 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     private TaskDefineCmdFacade taskDefineCmdFacade;
 
     @Override
-    public void add(SolutionAddCmd implementationAddCmd) {
+    public void add(SolutionAddCmd solutionAddCmd) {
         // TODO 参数校验
 //        solutionValidator.validate(null);
-        Solution implementation = ConvertTool.convert(implementationAddCmd, Solution.class);
-        implementationRepository.save(implementation);
+        Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
+        implementationRepository.save(solution);
         // TODO 需要任务服务新增对应的任务类型定义
         TaskDefineDTO taskDefineDTO = new AlgorithmTaskDefineDTO();
         taskDefineDTO.setCategory(TaskCategory.BATCH);
         // TODO 后续将进行权限与用户对接
         taskDefineDTO.setCreateUserId(0L);
         taskDefineDTO.setCreateUserName("admin");
-        taskDefineDTO.setDescription(implementationAddCmd.getDescription());
+        taskDefineDTO.setDescription(solutionAddCmd.getDescription());
         taskDefineDTO.setFailureStrategy(FailureStrategy.END);
-        taskDefineDTO.setName(implementationAddCmd.getName());
+        taskDefineDTO.setName(solutionAddCmd.getName());
         // TODO 平台选择？
         taskDefineDTO.setPlatform(PlatformEnum.ALGOX);
         // TODO 多租户对接

@@ -1,6 +1,9 @@
 package com.digitforce.aip.dto.cmd;
 
+import com.digitforce.aip.dto.data.PipelineDataSource;
+import com.digitforce.aip.enums.TimeUnitEnum;
 import com.digitforce.framework.api.dto.Command;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
@@ -13,18 +16,24 @@ import java.time.LocalDateTime;
  * @since 2022/05/31 15:41
  */
 @Schema(
-        description = "新增方案实施实体类"
+        description = "新增方案实体类"
 )
 public class SolutionAddCmd extends Command {
-
-    private String solutionId;
-    private String taskId;
+    private Long templateId;
+    @Parameter(required = true)
     private String name;
-    private String description;
+    @Parameter(required = true)
     private String scene;
+    private String description;
     private String schedule;
     private LocalDateTime expireAt;
-    private String selection;
+    private Integer dataRangeValue;
+    private TimeUnitEnum timeUnit;
+    private Object selection;
+    private Boolean needExecute = false;
+    private String pipelineId;
+    private String pipelineName;
+    private PipelineDataSource dataSource;
 
     public String getDescription() {
         return description;
@@ -66,27 +75,67 @@ public class SolutionAddCmd extends Command {
         this.name = name;
     }
 
-    public String getSolutionId() {
-        return solutionId;
+    public Long getTemplateId() {
+        return templateId;
     }
 
-    public void setSolutionId(String solutionId) {
-        this.solutionId = solutionId;
+    public void setTemplateId(Long templateId) {
+        this.templateId = templateId;
     }
 
-    public String getTaskId() {
-        return taskId;
+    public void setSelection(Object selection) {
+        this.selection = selection;
     }
 
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public Integer getDataRangeValue() {
+        return dataRangeValue;
     }
 
-    public String getSelection() {
+    public void setDataRangeValue(Integer dataRangeValue) {
+        this.dataRangeValue = dataRangeValue;
+    }
+
+    public TimeUnitEnum getTimeUnit() {
+        return timeUnit;
+    }
+
+    public void setTimeUnit(TimeUnitEnum timeUnit) {
+        this.timeUnit = timeUnit;
+    }
+
+    public Object getSelection() {
         return selection;
     }
 
-    public void setSelection(String selection) {
-        this.selection = selection;
+    public Boolean getNeedExecute() {
+        return needExecute;
+    }
+
+    public void setNeedExecute(Boolean needExecute) {
+        this.needExecute = needExecute;
+    }
+
+    public PipelineDataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(PipelineDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public String getPipelineId() {
+        return pipelineId;
+    }
+
+    public void setPipelineId(String pipelineId) {
+        this.pipelineId = pipelineId;
+    }
+
+    public String getPipelineName() {
+        return pipelineName;
+    }
+
+    public void setPipelineName(String pipelineName) {
+        this.pipelineName = pipelineName;
     }
 }

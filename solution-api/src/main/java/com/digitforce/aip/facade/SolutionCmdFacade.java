@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 策略命令接口类
+ * 方案命令接口类
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface SolutionCmdFacade {
     @PostMapping("/add")
     @Operation(summary = "根据模板创建方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result add(@RequestBody SolutionAddCmd implementAddCmd);
+    Result add(@RequestBody SolutionAddCmd solutionAddCmd);
 
     @PostMapping("/on")
     @Operation(summary = "上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result on(@RequestBody SolutionAddCmd implementAddCmd);
+    Result on(@RequestBody SolutionAddCmd solutionAddCmd);
 
     @PostMapping("/off")
     @Operation(summary = "下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)

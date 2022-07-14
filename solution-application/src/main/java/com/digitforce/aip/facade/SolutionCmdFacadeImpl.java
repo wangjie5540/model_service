@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * 策略命令接口实现类
+ * 方案命令接口实现类
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -17,16 +17,16 @@ import javax.annotation.Resource;
 @RestController
 public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Resource
-    private SolutionCmdService implementationCmdService;
+    private SolutionCmdService solutionCmdService;
 
     @Override
-    public Result add(SolutionAddCmd implementAddCmd) {
-        implementationCmdService.add(implementAddCmd);
+    public Result add(SolutionAddCmd solutionAddCmd) {
+        solutionCmdService.add(solutionAddCmd);
         return Result.success();
     }
 
     @Override
-    public Result on(SolutionAddCmd implementAddCmd) {
+    public Result on(SolutionAddCmd solutionAddCmd) {
         return null;
     }
 
@@ -48,7 +48,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Override
     public Result triggerRun(SolutionTriggerCmd implementationTriggerCmd) {
         // TODO 依赖任务服务新增接口定义
-        implementationCmdService.triggerRun(implementationTriggerCmd);
+        solutionCmdService.triggerRun(implementationTriggerCmd);
         return null;
     }
 }
