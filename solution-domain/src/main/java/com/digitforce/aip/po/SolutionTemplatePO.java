@@ -13,6 +13,7 @@ import lombok.Data;
  */
 @Data
 public class SolutionTemplatePO extends TenantEntity<Long> {
+    private Long id;
     private String name;
     private String scene;
     private String pipelineId;
