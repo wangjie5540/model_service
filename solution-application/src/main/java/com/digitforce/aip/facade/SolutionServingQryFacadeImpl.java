@@ -1,7 +1,9 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.aip.dto.data.SolutionDTO;
+import com.digitforce.aip.dto.data.SolutionServingDTO;
 import com.digitforce.aip.dto.qry.SolutionServingGetByIdQry;
+import com.digitforce.aip.dto.qry.SolutionServingPageByQry;
+import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
     @Override
-    public Result<SolutionDTO> getById(SolutionServingGetByIdQry solutionServingGetByIdQry) {
+    public Result<SolutionServingDTO> getById(SolutionServingGetByIdQry solutionServingGetByIdQry) {
+        return null;
+    }
+
+    @Override
+    public Result<PageView<SolutionServingDTO>> pageBy(SolutionServingPageByQry solutionServingPageByQry) {
         return null;
     }
 }

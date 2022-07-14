@@ -1,5 +1,6 @@
 package com.digitforce.aip.po;
 
+import com.digitforce.aip.enums.ServingTypeEnum;
 import com.digitforce.framework.domain.TenantEntity;
 import lombok.Data;
 
@@ -15,5 +16,6 @@ public class SolutionServingPO extends TenantEntity<Long> {
     private Long id;
     private Long solutionId;
     private Long templateId;
-    private String selection;
+    private String config;
+    private ServingTypeEnum servingType;
 }

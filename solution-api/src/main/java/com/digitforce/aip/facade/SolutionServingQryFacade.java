@@ -1,8 +1,10 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
-import com.digitforce.aip.dto.data.SolutionDTO;
+import com.digitforce.aip.dto.data.SolutionServingDTO;
 import com.digitforce.aip.dto.qry.SolutionServingGetByIdQry;
+import com.digitforce.aip.dto.qry.SolutionServingPageByQry;
+import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,5 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface SolutionServingQryFacade {
     @PostMapping("/getById")
     @Operation(summary = "通过方案服务id获取详情", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_QRY)
-    Result<SolutionDTO> getById(@RequestBody SolutionServingGetByIdQry solutionServingGetByIdQry);
+    Result<SolutionServingDTO> getById(@RequestBody SolutionServingGetByIdQry solutionServingGetByIdQry);
+
+    @PostMapping("/pageBy")
+    @Operation(summary = "通过方案服务id获取详情", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_QRY)
+    Result<PageView<SolutionServingDTO>> pageBy(@RequestBody SolutionServingPageByQry solutionServingPageByQry);
 }
