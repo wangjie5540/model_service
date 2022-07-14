@@ -5,8 +5,10 @@ import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.SolutionTemplate;
 import com.digitforce.aip.dto.data.PipelineParameterDTO;
 import com.digitforce.aip.dto.data.SolutionTemplateDTO;
+import com.digitforce.aip.dto.data.TemplateStatusListDTO;
 import com.digitforce.aip.dto.qry.SolutionTemplateGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionTemplatePageByQry;
+import com.digitforce.aip.enums.TemplateStatusEnum;
 import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.aip.model.Pipeline;
 import com.digitforce.aip.service.qry.SolutionTemplateQryService;
@@ -15,10 +17,12 @@ import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
 import com.digitforce.framework.util.GsonUtil;
+import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 方案查询接口实现类
@@ -57,5 +61,13 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         PageView<SolutionTemplateDTO> solutionDTOPageView = PageTool.pageView(templatePageView,
                 SolutionTemplateDTO.class);
         return Result.success(solutionDTOPageView);
+    }
+
+    @Override
+    public Result<TemplateStatusListDTO> statusListBy() {
+        List<TemplateStatusEnum> status = Lists.newArrayList(TemplateStatusEnum.ONLINE, TemplateStatusEnum.OFFLINE);
+        TemplateStatusListDTO templateStatusListDTO = new TemplateStatusListDTO();
+        templateStatusListDTO.setStatus(status);
+        return Result.success(templateStatusListDTO);
     }
 }

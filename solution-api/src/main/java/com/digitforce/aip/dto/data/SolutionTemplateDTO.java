@@ -1,6 +1,7 @@
 package com.digitforce.aip.dto.data;
 
 import com.digitforce.aip.GlobalConstant;
+import com.digitforce.aip.enums.TemplateStatusEnum;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +24,7 @@ public class SolutionTemplateDTO {
     // TODO 后续将迭代调度机制
     private String schedule = GlobalConstant.DEFAULT_CRON;
     private PipelineParameterDTO pipelineParameter;
-    private Integer status;
+    private TemplateStatusEnum status;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 
@@ -99,11 +100,11 @@ public class SolutionTemplateDTO {
         this.pipelineId = pipelineId;
     }
 
-    public Integer getStatus() {
+    public TemplateStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(TemplateStatusEnum status) {
         this.status = status;
     }
 

@@ -1,5 +1,6 @@
 package com.digitforce.aip.po;
 
+import com.digitforce.aip.enums.TemplateStatusEnum;
 import com.digitforce.framework.domain.TenantEntity;
 import lombok.Data;
 
@@ -19,5 +20,5 @@ public class SolutionTemplatePO extends TenantEntity<Long> {
     private String description;
     private Integer browseCount;
     private Integer applyCount;
-    private Boolean status;
+    private TemplateStatusEnum status;
 }

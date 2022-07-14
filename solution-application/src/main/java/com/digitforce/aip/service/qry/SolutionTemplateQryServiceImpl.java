@@ -39,10 +39,15 @@ public class SolutionTemplateQryServiceImpl extends DefaultService<SolutionTempl
         SolutionTemplate solutionTemplate = ConvertTool.convert(solutionTemplatePageByQry.getClause(),
                 SolutionTemplate.class);
         // 需要对name进行模糊查询
-        solutionTemplate.setName(null);
+        QueryWrapper<SolutionTemplate> queryWrapper;
+        if (solutionTemplate != null) {
+            solutionTemplate.setName(null);
+            queryWrapper = new QueryWrapper<>(solutionTemplate);
+        } else {
+            queryWrapper = new QueryWrapper<>();
+        }
         PageQuery<SolutionTemplate> pageQuery = solutionTemplatePageByQry.build(d -> ConvertTool.convert(d,
                 SolutionTemplate.class));
-        QueryWrapper<SolutionTemplate> queryWrapper = new QueryWrapper<>(solutionTemplate);
         if (solutionTemplatePageByQry.getNameLike() != null) {
             queryWrapper.like("name", solutionTemplatePageByQry.getNameLike());
         }

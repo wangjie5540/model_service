@@ -3,6 +3,7 @@ package com.digitforce.aip.service.cmd;
 import com.digitforce.aip.domain.SolutionTemplate;
 import com.digitforce.aip.dto.cmd.SolutionTemplateAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionTemplateModifyCmd;
+import com.digitforce.aip.enums.TemplateStatusEnum;
 import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.aip.repository.SolutionTemplateRepository;
 import com.digitforce.aip.validator.SolutionValidator;
@@ -41,7 +42,7 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
     public void on(Long id) {
         SolutionTemplate solutionTemplate = new SolutionTemplate();
         solutionTemplate.setId(id);
-        solutionTemplate.setStatus(true);
+        solutionTemplate.setStatus(TemplateStatusEnum.ONLINE);
         solutionTemplateRepository.modifyById(solutionTemplate);
     }
 
@@ -50,7 +51,7 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
         List<SolutionTemplate> solutionTemplateList = ids.stream().map(id -> {
             SolutionTemplate solutionTemplate = new SolutionTemplate();
             solutionTemplate.setId(id);
-            solutionTemplate.setStatus(true);
+            solutionTemplate.setStatus(TemplateStatusEnum.ONLINE);
             return solutionTemplate;
         }).collect(Collectors.toList());
         solutionTemplateRepository.modifyBatchById(solutionTemplateList);
@@ -60,7 +61,7 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
     public void off(Long id) {
         SolutionTemplate solution = new SolutionTemplate();
         solution.setId(id);
-        solution.setStatus(false);
+        solution.setStatus(TemplateStatusEnum.OFFLINE);
         solutionTemplateRepository.modifyById(solution);
     }
 
@@ -69,7 +70,7 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
         List<SolutionTemplate> solutionTemplateList = ids.stream().map(id -> {
             SolutionTemplate solutionTemplate = new SolutionTemplate();
             solutionTemplate.setId(id);
-            solutionTemplate.setStatus(false);
+            solutionTemplate.setStatus(TemplateStatusEnum.OFFLINE);
             return solutionTemplate;
         }).collect(Collectors.toList());
         solutionTemplateRepository.modifyBatchById(solutionTemplateList);
