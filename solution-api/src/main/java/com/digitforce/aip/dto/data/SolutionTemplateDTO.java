@@ -18,6 +18,7 @@ public class SolutionTemplateDTO {
     private String scene;
     private String description;
     private String pipelineId;
+    private String pipelineName;
     private Integer browseCount;
     private Integer applyCount;
     private PipelineDataSource dataSource;
@@ -94,6 +95,14 @@ public class SolutionTemplateDTO {
 
     public String getPipelineId() {
         return pipelineId;
+    }
+
+    public String getPipelineName() {
+        return pipelineName;
+    }
+
+    public void setPipelineName(String pipelineName) {
+        this.pipelineName = pipelineName;
     }
 
     public void setPipelineId(String pipelineId) {
