@@ -1,8 +1,12 @@
 package com.digitforce.aip.service.cmd;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.LocalDateTimeUtil;
+import com.digitforce.aip.GlobalConstant;
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionTriggerCmd;
+import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.aip.repository.SolutionRepository;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineCmdFacade;
 import com.digitforce.bdp.operatex.core.consts.FailureStrategy;
@@ -13,9 +17,17 @@ import com.digitforce.bdp.operatex.core.consts.algorithm.AlgorithmTaskDefineDTO;
 import com.digitforce.bdp.operatex.core.dto.TaskDefineDTO;
 import com.digitforce.framework.operation.DefaultService;
 import com.digitforce.framework.tool.ConvertTool;
+import com.digitforce.framework.util.GsonUtil;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 方案实施命令类
@@ -32,6 +44,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     private TaskDefineCmdFacade taskDefineCmdFacade;
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public void add(SolutionAddCmd solutionAddCmd) {
         // TODO 参数校验
 //        solutionValidator.validate(null);
@@ -48,12 +61,35 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setName(solutionAddCmd.getName());
         // TODO 平台选择？
         taskDefineDTO.setPlatform(PlatformEnum.ALGOX);
-        // TODO 多租户对接
-        taskDefineDTO.setProjectId(10L);
+        taskDefineDTO.setProjectId(GlobalConstant.DEFAULT_PROJECT_ID);
         taskDefineDTO.setType(TaskType.ALGORITHM);
-        // TODO 设置任务需要的参数，参数需要定义
-        taskDefineDTO.setExtra("");
+        TriggerRunCmd triggerRunCmd = constructTriggerCmd(solutionAddCmd);
+        taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
         taskDefineCmdFacade.addTask(taskDefineDTO);
+    }
+
+    private TriggerRunCmd constructTriggerCmd(SolutionAddCmd solutionAddCmd) {
+        TriggerRunCmd triggerRunCmd = new TriggerRunCmd();
+        triggerRunCmd.setName(solutionAddCmd.getPipelineName());
+        triggerRunCmd.setExperimentId(GlobalConstant.DEFAULT_EXPERIMENT_ID);
+        triggerRunCmd.setPipelineId(solutionAddCmd.getPipelineId());
+        String startDate = getStartDateStr(solutionAddCmd.getTimeRange(), solutionAddCmd.getTimeUnit());
+        String today = DateUtil.format(LocalDateTime.now(), "yyyy-MM-dd");
+        List<Map<String, Object>> parameters = Lists.newArrayList();
+        Map<String, Object> parameter = Maps.newHashMap();
+        parameter.put("name", "train_data_start_date_str");
+        parameter.put("value", startDate);
+        parameters.add(parameter);
+        parameter = Maps.newHashMap();
+        parameter.put("name", "train_data_end_date_str");
+        parameter.put("value", today);
+        parameters.add(parameter);
+        parameter = Maps.newHashMap();
+        parameter.put("name", "run_datetime_str");
+        parameter.put("value", today);
+        parameters.add(parameter);
+        triggerRunCmd.setPipelineParameters(parameters);
+        return triggerRunCmd;
     }
 
     @Override
@@ -67,5 +103,11 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Override
     public SolutionRepository getRepository() {
         return solutionRepository;
+    }
+
+    private String getStartDateStr(Integer offset, ChronoUnit chronoUnit) {
+        LocalDateTime localDateTime = LocalDateTimeUtil.offset(LocalDateTime.now(), -1L * offset, chronoUnit);
+        localDateTime = LocalDateTimeUtil.beginOfDay(localDateTime);
+        return DateUtil.format(localDateTime, "yyyy-MM-dd");
     }
 }

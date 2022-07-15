@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 /**
- * 策略查询接口类
+ * 方案查询接口类
  *
  * @author wangtonggui
  * @version 1.0.0

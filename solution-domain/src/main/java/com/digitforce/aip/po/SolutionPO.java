@@ -2,6 +2,7 @@ package com.digitforce.aip.po;
 
 import com.digitforce.framework.domain.TenantEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 方案实施持久化类
@@ -11,11 +12,12 @@ import lombok.Data;
  * @since 2022/06/05 13:55
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class SolutionPO extends TenantEntity<Long> {
     private Long id;
     private Long templateId;
     private Long taskId;
-    private String cname;
+    private String name;
     private String selection;
     private String dataSource;
     private String state;

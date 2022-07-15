@@ -1,12 +1,12 @@
 package com.digitforce.aip.dto.cmd;
 
 import com.digitforce.aip.dto.data.PipelineDataSource;
-import com.digitforce.aip.enums.TimeUnitEnum;
 import com.digitforce.framework.api.dto.Command;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * 新增方案实体类
@@ -27,8 +27,8 @@ public class SolutionAddCmd extends Command {
     private String description;
     private String schedule;
     private LocalDateTime expireAt;
-    private Integer dataRangeValue;
-    private TimeUnitEnum timeUnit;
+    private Integer timeRange;
+    private ChronoUnit timeUnit;
     private Object selection;
     private Boolean needExecute = false;
     private String pipelineId;
@@ -87,19 +87,19 @@ public class SolutionAddCmd extends Command {
         this.selection = selection;
     }
 
-    public Integer getDataRangeValue() {
-        return dataRangeValue;
+    public Integer getTimeRange() {
+        return timeRange;
     }
 
-    public void setDataRangeValue(Integer dataRangeValue) {
-        this.dataRangeValue = dataRangeValue;
+    public void setTimeRange(Integer timeRange) {
+        this.timeRange = timeRange;
     }
 
-    public TimeUnitEnum getTimeUnit() {
+    public ChronoUnit getTimeUnit() {
         return timeUnit;
     }
 
-    public void setTimeUnit(TimeUnitEnum timeUnit) {
+    public void setTimeUnit(ChronoUnit timeUnit) {
         this.timeUnit = timeUnit;
     }
 
