@@ -28,6 +28,6 @@ public interface SolutionServingQryFacade {
     Result<SolutionServingDTO> getById(@RequestBody SolutionServingGetByIdQry solutionServingGetByIdQry);
 
     @PostMapping("/pageBy")
-    @Operation(summary = "通过方案服务id获取详情", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_QRY)
+    @Operation(summary = "方案服务分页查询", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_QRY)
     Result<PageView<SolutionServingDTO>> pageBy(@RequestBody SolutionServingPageByQry solutionServingPageByQry);
 }
