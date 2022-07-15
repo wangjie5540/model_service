@@ -1,6 +1,7 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.dto.cmd.SolutionServingAddCmd;
+import com.digitforce.aip.dto.data.SolutionServingDTO;
 import com.digitforce.framework.api.dto.Result;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
     @Override
-    public Result add(SolutionServingAddCmd implementAddCmd) {
+    public Result<SolutionServingDTO> add(SolutionServingAddCmd implementAddCmd) {
         return null;
     }
 }
