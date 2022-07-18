@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 
 /**
- * 方案mybatis plus mapper类
+ * 方案模板mybatis plus mapper类
  *
  * @author wangtonggui
  * @version 1.0.0

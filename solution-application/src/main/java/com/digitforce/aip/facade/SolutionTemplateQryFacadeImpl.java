@@ -56,8 +56,8 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
     }
 
     @Override
-    public Result<PageView<SolutionTemplateDTO>> pageBy(@RequestBody SolutionTemplatePageByQry solutionPageByQry) {
-        PageView<SolutionTemplate> templatePageView = solutionTemplateQryService.pageBy(solutionPageByQry);
+    public Result<PageView<SolutionTemplateDTO>> pageBy(@RequestBody SolutionTemplatePageByQry templatePageByQry) {
+        PageView<SolutionTemplate> templatePageView = solutionTemplateQryService.pageBy(templatePageByQry);
         PageView<SolutionTemplateDTO> solutionDTOPageView = PageTool.pageView(templatePageView,
                 SolutionTemplateDTO.class);
         return Result.success(solutionDTOPageView);

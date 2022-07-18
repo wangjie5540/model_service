@@ -25,13 +25,13 @@ import javax.annotation.Resource;
 @Service
 public class SolutionTemplateQryServiceImpl extends DefaultService<SolutionTemplate> implements SolutionTemplateQryService {
     @Resource
-    private SolutionTemplateRepository solutionRepository;
+    private SolutionTemplateRepository solutionTemplateRepository;
     @Resource
     private SolutionTemplateMapper solutionTemplateMapper;
 
     @Override
     public SolutionTemplateRepository getRepository() {
-        return solutionRepository;
+        return solutionTemplateRepository;
     }
 
     @Override

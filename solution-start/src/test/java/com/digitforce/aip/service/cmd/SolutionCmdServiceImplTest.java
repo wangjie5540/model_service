@@ -13,11 +13,18 @@ import com.digitforce.framework.util.GsonUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ActiveProfiles("dev")
 public class SolutionCmdServiceImplTest {
     @Resource
     private TaskDefineCmdFacade taskDefineCmdFacade;
@@ -32,7 +39,7 @@ public class SolutionCmdServiceImplTest {
         taskDefineDTO.setCreateUserName("admin");
         taskDefineDTO.setDescription("测试任务描述");
         taskDefineDTO.setFailureStrategy(FailureStrategy.END);
-        taskDefineDTO.setName("算法测试任务5");
+        taskDefineDTO.setName("算法测试任务16");
         // TODO 平台选择？
         taskDefineDTO.setPlatform(PlatformEnum.ALGOX);
         // TODO 多租户对接
@@ -41,7 +48,7 @@ public class SolutionCmdServiceImplTest {
         TriggerRunCmd triggerRunCmd = new TriggerRunCmd();
         triggerRunCmd.setName("for_test");
         triggerRunCmd.setExperimentId(GlobalConstant.DEFAULT_EXPERIMENT_ID);
-        triggerRunCmd.setPipelineId("eceb8816-033b-4774-9bbc-1a75e8b9f16b");
+        triggerRunCmd.setPipelineId("268eacf1-126f-4e64-9911-6db5f6ca5a2f");
         List<Map<String, Object>> parameters = Lists.newArrayList();
         Map<String, Object> parameter = Maps.newHashMap();
         parameter.put("name", "train_data_start_date_str");
@@ -53,7 +60,7 @@ public class SolutionCmdServiceImplTest {
         parameters.add(parameter);
         parameter = Maps.newHashMap();
         parameter.put("name", "run_datetime_str");
-        parameter.put("value", "20220707");
+        parameter.put("value", "2022-06-28");
         parameters.add(parameter);
         triggerRunCmd.setPipelineParameters(parameters);
         // TODO 设置任务需要的参数，参数需要定义

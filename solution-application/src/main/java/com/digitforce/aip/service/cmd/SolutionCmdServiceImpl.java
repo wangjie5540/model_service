@@ -3,9 +3,13 @@ package com.digitforce.aip.service.cmd;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.digitforce.aip.GlobalConstant;
+import com.digitforce.aip.KubeflowHelper;
+import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionTriggerCmd;
+import com.digitforce.aip.dto.data.PipelineDataSource;
+import com.digitforce.aip.model.Pipeline;
 import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.aip.repository.SolutionRepository;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineCmdFacade;
@@ -42,6 +46,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     private SolutionRepository solutionRepository;
     @Resource
     private TaskDefineCmdFacade taskDefineCmdFacade;
+    @Resource
+    private KubeflowProperties kubeflowProperties;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -49,7 +55,6 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         // TODO 参数校验
 //        solutionValidator.validate(null);
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
-        solutionRepository.save(solution);
         // TODO 需要任务服务新增对应的任务类型定义
         TaskDefineDTO taskDefineDTO = new AlgorithmTaskDefineDTO();
         taskDefineDTO.setCategory(TaskCategory.BATCH);
@@ -65,7 +70,15 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setType(TaskType.ALGORITHM);
         TriggerRunCmd triggerRunCmd = constructTriggerCmd(solutionAddCmd);
         taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
-        taskDefineCmdFacade.addTask(taskDefineDTO);
+        Long taskId = Long.parseLong(taskDefineCmdFacade.addTask(taskDefineDTO).getData().toString());
+        Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
+                kubeflowProperties.getPort(),
+                solutionAddCmd.getPipelineId());
+        solution.setTaskId(taskId);
+        PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource.class);
+        solution.setDataSource(GsonUtil.objectToString(dataSource));
+        solution.setSchedule(GlobalConstant.DEFAULT_CRON);
+        solutionRepository.save(solution);
     }
 
     private TriggerRunCmd constructTriggerCmd(SolutionAddCmd solutionAddCmd) {
