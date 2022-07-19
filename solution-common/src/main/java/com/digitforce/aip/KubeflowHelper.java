@@ -109,6 +109,9 @@ public class KubeflowHelper {
         HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs/%s" +
                 "/terminate", host, port, runId));
         HttpResponse execute = httpRequest.execute();
+        if (execute.getStatus() != 200) {
+            throw new RuntimeException(String.format("stopRun error. [host=%s,port=%d,runId=%s]", host, port, runId));
+        }
     }
 
     public String generateBody(String name, String experimentId, String pipelineId,
