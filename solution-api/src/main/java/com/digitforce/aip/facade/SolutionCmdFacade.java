@@ -1,7 +1,10 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
-import com.digitforce.aip.dto.cmd.*;
+import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionAddCronCmd;
+import com.digitforce.aip.dto.cmd.SolutionClearCronCmd;
+import com.digitforce.aip.dto.cmd.SolutionStatusCmd;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,11 +29,11 @@ public interface SolutionCmdFacade {
 
     @PostMapping("/on")
     @Operation(summary = "上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result on(@RequestBody SolutionAddCmd solutionAddCmd);
+    Result on(@RequestBody SolutionStatusCmd solutionStatusCmd);
 
     @PostMapping("/off")
     @Operation(summary = "下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result off(@RequestBody SolutionOnOffCmd solutionOnOffCmd);
+    Result off(@RequestBody SolutionStatusCmd solutionOnOffCmd);
 
     @PostMapping("/addCron")
     @Operation(summary = "添加调度", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
@@ -40,7 +43,11 @@ public interface SolutionCmdFacade {
     @Operation(summary = "清除调度", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result clearCron(@RequestBody SolutionClearCronCmd solutionClearCronCmd);
 
-    @PostMapping("/trigger_run")
+    @PostMapping("/execute")
     @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result triggerRun(@RequestBody SolutionTriggerCmd implementationTriggerCmd);
+    Result execute(@RequestBody SolutionStatusCmd solutionStatusCmd);
+
+    @PostMapping("/stop")
+    @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result stop(@RequestBody SolutionStatusCmd solutionStatusCmd);
 }

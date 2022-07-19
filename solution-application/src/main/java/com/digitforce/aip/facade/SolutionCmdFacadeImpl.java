@@ -1,6 +1,9 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.aip.dto.cmd.*;
+import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionAddCronCmd;
+import com.digitforce.aip.dto.cmd.SolutionClearCronCmd;
+import com.digitforce.aip.dto.cmd.SolutionStatusCmd;
 import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.framework.api.dto.Result;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,13 +29,15 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
-    public Result on(SolutionAddCmd solutionAddCmd) {
-        return null;
+    public Result on(SolutionStatusCmd solutionStatusCmd) {
+        solutionCmdService.on(solutionStatusCmd.getId());
+        return Result.success();
     }
 
     @Override
-    public Result off(SolutionOnOffCmd solutionOnOffCmd) {
-        return null;
+    public Result off(SolutionStatusCmd solutionStatusCmd) {
+        solutionCmdService.off(solutionStatusCmd.getId());
+        return Result.success();
     }
 
     @Override
@@ -46,9 +51,14 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
-    public Result triggerRun(SolutionTriggerCmd implementationTriggerCmd) {
-        // TODO 依赖任务服务新增接口定义
-        solutionCmdService.triggerRun(implementationTriggerCmd);
-        return null;
+    public Result execute(SolutionStatusCmd solutionStatusCmd) {
+        solutionCmdService.execute(solutionStatusCmd.getId());
+        return Result.success();
+    }
+
+    @Override
+    public Result stop(SolutionStatusCmd solutionStatusCmd) {
+        solutionCmdService.stop(solutionStatusCmd.getId());
+        return Result.success();
     }
 }

@@ -7,5 +7,6 @@ public enum SolutionStatusEnum {
     NOT_EXECUTE,
     EXECUTING,
     FINISHED,
+    ONLINE,
     FAILED,
 }

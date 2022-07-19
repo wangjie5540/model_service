@@ -9,6 +9,7 @@ import com.digitforce.bdp.operatex.core.consts.TaskCategory;
 import com.digitforce.bdp.operatex.core.consts.TaskType;
 import com.digitforce.bdp.operatex.core.consts.algorithm.AlgorithmTaskDefineDTO;
 import com.digitforce.bdp.operatex.core.dto.TaskDefineDTO;
+import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.util.GsonUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -31,6 +32,7 @@ public class SolutionCmdServiceImplTest {
 
     @Test
     public void taskAdd() {
+        TenantContext.init(10000);
         // TODO 需要任务服务新增对应的任务类型定义
         TaskDefineDTO taskDefineDTO = new AlgorithmTaskDefineDTO();
         taskDefineDTO.setCategory(TaskCategory.BATCH);
@@ -39,7 +41,7 @@ public class SolutionCmdServiceImplTest {
         taskDefineDTO.setCreateUserName("admin");
         taskDefineDTO.setDescription("测试任务描述");
         taskDefineDTO.setFailureStrategy(FailureStrategy.END);
-        taskDefineDTO.setName("算法测试任务16");
+        taskDefineDTO.setName("算法测试任务35");
         // TODO 平台选择？
         taskDefineDTO.setPlatform(PlatformEnum.ALGOX);
         // TODO 多租户对接
@@ -48,7 +50,7 @@ public class SolutionCmdServiceImplTest {
         TriggerRunCmd triggerRunCmd = new TriggerRunCmd();
         triggerRunCmd.setName("for_test");
         triggerRunCmd.setExperimentId(GlobalConstant.DEFAULT_EXPERIMENT_ID);
-        triggerRunCmd.setPipelineId("268eacf1-126f-4e64-9911-6db5f6ca5a2f");
+        triggerRunCmd.setPipelineId("3c094336-21aa-4b54-8833-2bf10e7d2085");
         List<Map<String, Object>> parameters = Lists.newArrayList();
         Map<String, Object> parameter = Maps.newHashMap();
         parameter.put("name", "train_data_start_date_str");

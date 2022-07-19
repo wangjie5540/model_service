@@ -2,7 +2,6 @@ package com.digitforce.aip.service.cmd;
 
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionTriggerCmd;
 import com.digitforce.framework.operation.CrudOperation;
 
 /**
@@ -15,5 +14,11 @@ import com.digitforce.framework.operation.CrudOperation;
 public interface SolutionCmdService extends CrudOperation<Solution> {
     void add(SolutionAddCmd implementationAddCmd);
 
-    void triggerRun(SolutionTriggerCmd implementationTriggerCmd);
+    void on(Long id);
+
+    void off(Long id);
+
+    void execute(Long id);
+
+    void stop(Long id);
 }

@@ -7,12 +7,13 @@ import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionTriggerCmd;
 import com.digitforce.aip.dto.data.PipelineDataSource;
+import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.model.Pipeline;
 import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.aip.repository.SolutionRepository;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineCmdFacade;
+import com.digitforce.bdp.operatex.core.api.taskInstance.TaskInstanceCmdFacade;
 import com.digitforce.bdp.operatex.core.consts.FailureStrategy;
 import com.digitforce.bdp.operatex.core.consts.PlatformEnum;
 import com.digitforce.bdp.operatex.core.consts.TaskCategory;
@@ -47,6 +48,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Resource
     private TaskDefineCmdFacade taskDefineCmdFacade;
     @Resource
+    private TaskInstanceCmdFacade taskInstanceCmdFacade;
+    @Resource
     private KubeflowProperties kubeflowProperties;
 
     @Override
@@ -72,13 +75,35 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
         Long taskId = Long.parseLong(taskDefineCmdFacade.addTask(taskDefineDTO).getData().toString());
         Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
-                kubeflowProperties.getPort(),
-                solutionAddCmd.getPipelineId());
+                kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
         solution.setTaskId(taskId);
         PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource.class);
         solution.setDataSource(GsonUtil.objectToString(dataSource));
         solution.setSchedule(GlobalConstant.DEFAULT_CRON);
+        solution.setStatus(SolutionStatusEnum.EXECUTING);
         solutionRepository.save(solution);
+    }
+
+    @Override
+    public void on(Long id) {
+        Solution solution = solutionRepository.getById(id);
+        if (solution.getStatus() == SolutionStatusEnum.FINISHED) {
+            solution = new Solution();
+            solution.setId(id);
+            solution.setStatus(SolutionStatusEnum.ONLINE);
+            solutionRepository.modifyById(solution);
+        }
+    }
+
+    @Override
+    public void off(Long id) {
+        Solution solution = solutionRepository.getById(id);
+        if (solution.getStatus() == SolutionStatusEnum.ONLINE) {
+            solution = new Solution();
+            solution.setId(id);
+            solution.setStatus(SolutionStatusEnum.FINISHED);
+            solutionRepository.modifyById(solution);
+        }
     }
 
     private TriggerRunCmd constructTriggerCmd(SolutionAddCmd solutionAddCmd) {
@@ -106,10 +131,33 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     }
 
     @Override
-    public void triggerRun(SolutionTriggerCmd implementationTriggerCmd) {
-        Solution implementation = ConvertTool.convert(implementationTriggerCmd, Solution.class);
-        solutionRepository.save(implementation);
-        taskDefineCmdFacade.execute(implementation.getTaskId());
+    public void execute(Long id) {
+        Solution solution = solutionRepository.getById(id);
+        if (solution != null &&
+                (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE
+                        || solution.getStatus() == SolutionStatusEnum.FAILED
+                        || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
+            Long taskInstanceId = taskDefineCmdFacade.execute(solution.getTaskId()).getData();
+            solution = new Solution();
+            solution.setId(id);
+            if (taskInstanceId == null) {
+                return;
+            }
+            solution.setStatus(SolutionStatusEnum.EXECUTING);
+            solution.setTaskInstanceId(taskInstanceId);
+            solutionRepository.upsert(solution);
+        }
+    }
+
+    @Override
+    public void stop(Long id) {
+        Solution solution = solutionRepository.getById(id);
+        if (solution != null && solution.getStatus() == SolutionStatusEnum.EXECUTING) {
+            taskInstanceCmdFacade.stop(solution.getTaskInstanceId());
+            solution = new Solution();
+            solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
+            solutionRepository.save(solution);
+        }
     }
 
 

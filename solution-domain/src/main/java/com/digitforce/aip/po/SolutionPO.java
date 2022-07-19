@@ -20,6 +20,7 @@ public class SolutionPO extends TenantEntity<Long> {
     private Long id;
     private Long templateId;
     private Long taskId;
+    private Long taskInstanceId;
     private String scene;
     private String name;
     private String selection;
