@@ -1,5 +1,7 @@
 logging:
   config: classpath:log4j2-spring-@profileActive@.xml
+  file:
+    path: .
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -20,12 +22,13 @@ spring:
     password: ${redis.password}
     pool:
       max-active: ${redis.max-active:10}
-  cloud:
-    nacos:
-      discovery:
-        enabled: ${nacos.discovery.enabled:${nacos.enabled:true}}
-        server-addr: ${nacos.discovery.server-addr:${nacos.server-addr:${nacos.config.server-addr}}}
-        group: ${digitforce.resource.group:DEFAULT_GROUP}
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: dev-nacos-n1.digitforce.com:8848
+#        namespace: dev
+#        username: nacos
+#        password: nacos
 #    stream:
 #      bindings:
 #        eventInput:
@@ -48,4 +51,10 @@ digitforce:
     contactName: wangtonggui
     contactEmail: wangtonggui@digitforce.com
 server:
-  port: 8080
+  port: 7030
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted

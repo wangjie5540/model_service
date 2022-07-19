@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <!--  <localRepository>D:\tools\repositorys</localRepository>  -->
+  <servers>
+    <server>
+      <id>digit-force-nexus-maven-snapshots</id>
+      <username>maven-snapshots-1653644137716</username>
+      <password>73d3e376100a45eb97420ad87f3b177b243bb5f1</password>
+    </server>
+    <server>
+      <id>digit-force-nexus-maven-releases</id>
+      <username>maven-releases-1653644249922</username>
+      <password>8e7e596d54447a34164fed1ab6406d31d9f7cefc</password>
+    </server>
+  </servers>
+  <profiles>
+    <profile>
+          <id>Repository Proxy</id>
+          <activation>
+              <activeByDefault>true</activeByDefault>
+          </activation>
+          <repositories>
+              <repository>
+                  <id>digit-force-nexus-maven-snapshots</id>
+                  <name>maven-snapshots</name>
+                  <url>https://digit-force-maven.pkg.coding.net/repository/nexus/maven-snapshots/</url>
+              </repository>
+              <repository>
+                  <id>digit-force-nexus-maven-releases</id>
+                  <name>maven-releases</name>
+                  <url>https://digit-force-maven.pkg.coding.net/repository/nexus/maven-releases/</url>
+              </repository>
+          </repositories>
+      </profile>
+    <profile>
+          <id>Repository Proxy</id>
+          <repositories>
+              <repository>
+                  <id>digit-force-nexus-maven-releases</id>
+                  <name>maven-releases</name>
+                  <url>https://digit-force-maven.pkg.coding.net/repository/nexus/maven-releases/</url>
+                  <releases>
+                      <enabled>true</enabled>
+                  </releases>
+                  <snapshots>
+                      <enabled>true</enabled>
+                  </snapshots>
+              </repository>
+          </repositories>
+      </profile>
+  </profiles>
+
+</settings>
