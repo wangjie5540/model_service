@@ -18,6 +18,13 @@ public class KubeflowHelperTest {
 
     @Test
     public void pageByPipeline() {
-        System.out.println(KubeflowHelper.pageByPipeline(kubeflowProperties.getHost(), kubeflowProperties.getPort(), 20));
+        System.out.println(KubeflowHelper.pageByPipeline(kubeflowProperties.getHost(), kubeflowProperties.getPort(),
+                20));
+    }
+
+    @Test
+    public void stopTest() {
+        KubeflowHelper.stopRun(kubeflowProperties.getHost(), kubeflowProperties.getPort(), "d400dc88-3d07-42aa-9b71" +
+                "-3012414b421e");
     }
 }

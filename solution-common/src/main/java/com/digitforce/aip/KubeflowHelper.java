@@ -2,6 +2,7 @@ package com.digitforce.aip;
 
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.digitforce.aip.model.PageByPipelineVO;
 import com.digitforce.aip.model.Pipeline;
@@ -101,6 +102,13 @@ public class KubeflowHelper {
                 .body(generateBody(name, experimentId, pipelineId, pipelineParameters));
         RunDetail runDetail = GsonUtil.gsonToBean(httpRequest.execute().body(), RunDetail.class);
         return runDetail.run.getId();
+    }
+
+    public void stopRun(String host, int port, String runId) {
+        login(host, port);
+        HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs/%s" +
+                "/terminate", host, port, runId));
+        HttpResponse execute = httpRequest.execute();
     }
 
     public String generateBody(String name, String experimentId, String pipelineId,
