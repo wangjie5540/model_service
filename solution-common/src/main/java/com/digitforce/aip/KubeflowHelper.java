@@ -1,11 +1,14 @@
 package com.digitforce.aip;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.digitforce.aip.model.PageByPipelineVO;
 import com.digitforce.aip.model.Pipeline;
+import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.aip.utils.CommonUtils;
 import com.digitforce.framework.util.GsonUtil;
 import com.google.gson.Gson;
@@ -16,6 +19,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -95,6 +100,7 @@ public class KubeflowHelper {
         return URI.create(a.attr("href")).getQuery();
     }
 
+    @Deprecated
     public String triggerRun(String host, int port, String name, String experimentId, String pipelineId,
                              List<Map<String, Object>> pipelineParameters) {
         login(host, port);
@@ -102,6 +108,40 @@ public class KubeflowHelper {
                 .body(generateBody(name, experimentId, pipelineId, pipelineParameters));
         RunDetail runDetail = GsonUtil.gsonToBean(httpRequest.execute().body(), RunDetail.class);
         return runDetail.run.getId();
+    }
+
+    public String triggerRun(String host, int port, TriggerRunCmd triggerRunCmd) {
+        login(host, port);
+        List<Map<String, Object>> pipelineParameters = new ArrayList<>();
+        String startDate = getStartDateStr(triggerRunCmd.getTimeRange(), triggerRunCmd.getTimeUnit());
+        String today = DateUtil.format(LocalDateTime.now(), "yyyy-MM-dd");
+        Map<String, Object> parameter = new HashMap<>();
+        parameter.put("name", "train_data_start_date_str");
+        parameter.put("value", startDate);
+        pipelineParameters.add(parameter);
+        parameter = new HashMap<>();
+        parameter.put("name", "train_data_end_date_str");
+        parameter.put("value", today);
+        pipelineParameters.add(parameter);
+        parameter = new HashMap<>();
+        parameter.put("name", "run_datetime_str");
+        parameter.put("value", today);
+        pipelineParameters.add(parameter);
+//        parameter = new HashMap<>();
+//        parameter.put("name", "instanceId");
+//        parameter.put("value", triggerRunCmd.getInstanceId());
+//        pipelineParameters.add(parameter);
+        HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs", host, port))
+                .body(generateBody(triggerRunCmd.getName(), triggerRunCmd.getExperimentId(),
+                        triggerRunCmd.getPipelineId(), pipelineParameters));
+        RunDetail runDetail = GsonUtil.gsonToBean(httpRequest.execute().body(), RunDetail.class);
+        return runDetail.run.getId();
+    }
+
+    private String getStartDateStr(Integer offset, ChronoUnit chronoUnit) {
+        LocalDateTime localDateTime = LocalDateTimeUtil.offset(LocalDateTime.now(), -1L * offset, chronoUnit);
+        localDateTime = LocalDateTimeUtil.beginOfDay(localDateTime);
+        return DateUtil.format(localDateTime, "yyyy-MM-dd");
     }
 
     public void stopRun(String host, int port, String runId) {
