@@ -1,7 +1,5 @@
 package com.digitforce.aip.dto.data;
 
-import com.digitforce.aip.enums.TemplateStatusEnum;
-
 import java.util.List;
 
 /**
@@ -12,13 +10,13 @@ import java.util.List;
  * @since 2022/05/31 15:35
  */
 public class TemplateStatusListDTO {
-    private List<TemplateStatusEnum> status;
+    private List<TemplateStatus> statusList;
 
-    public List<TemplateStatusEnum> getStatus() {
-        return status;
+    public List<TemplateStatus> getStatusList() {
+        return statusList;
     }
 
-    public void setStatus(List<TemplateStatusEnum> status) {
-        this.status = status;
+    public void setStatusList(List<TemplateStatus> statusList) {
+        this.statusList = statusList;
     }
 }

@@ -5,6 +5,7 @@ import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.SolutionTemplate;
 import com.digitforce.aip.dto.data.PipelineParameterDTO;
 import com.digitforce.aip.dto.data.SolutionTemplateDTO;
+import com.digitforce.aip.dto.data.TemplateStatus;
 import com.digitforce.aip.dto.data.TemplateStatusListDTO;
 import com.digitforce.aip.dto.qry.SolutionTemplateGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionTemplatePageByQry;
@@ -65,9 +66,12 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
 
     @Override
     public Result<TemplateStatusListDTO> statusListBy() {
-        List<TemplateStatusEnum> status = Lists.newArrayList(TemplateStatusEnum.ONLINE, TemplateStatusEnum.OFFLINE);
+        List<TemplateStatus> statusList = Lists.newArrayList(
+                new TemplateStatus(TemplateStatusEnum.ONLINE, TemplateStatusEnum.ONLINE.getCname()),
+                new TemplateStatus(TemplateStatusEnum.OFFLINE, TemplateStatusEnum.OFFLINE.getCname())
+        );
         TemplateStatusListDTO templateStatusListDTO = new TemplateStatusListDTO();
-        templateStatusListDTO.setStatus(status);
+        templateStatusListDTO.setStatusList(statusList);
         return Result.success(templateStatusListDTO);
     }
 }
