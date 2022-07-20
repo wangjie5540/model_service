@@ -12,13 +12,13 @@ import java.util.List;
  * @since 2022/05/31 15:35
  */
 public class TemplateStatusListDTO {
-    private List<TemplateStatusEnum> status;
+    private List<TemplateStatusEnum> statusList;
 
-    public List<TemplateStatusEnum> getStatus() {
-        return status;
+    public List<TemplateStatusEnum> getStatusList() {
+        return statusList;
     }
 
-    public void setStatus(List<TemplateStatusEnum> status) {
-        this.status = status;
+    public void setStatusList(List<TemplateStatusEnum> statusList) {
+        this.statusList = statusList;
     }
 }
