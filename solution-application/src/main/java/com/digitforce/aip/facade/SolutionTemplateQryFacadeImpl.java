@@ -3,9 +3,7 @@ package com.digitforce.aip.facade;
 import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.SolutionTemplate;
-import com.digitforce.aip.dto.data.PipelineParameterDTO;
-import com.digitforce.aip.dto.data.SolutionTemplateDTO;
-import com.digitforce.aip.dto.data.TemplateStatusListDTO;
+import com.digitforce.aip.dto.data.*;
 import com.digitforce.aip.dto.qry.SolutionTemplateGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionTemplatePageByQry;
 import com.digitforce.aip.enums.TemplateStatusEnum;
@@ -52,7 +50,30 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         solutionTemplateDTO.setPipelineParameter(GsonUtil.gsonToBean(pipeline.getDescription(),
                 PipelineParameterDTO.class));
         solutionTemplateMapper.browseCountInc(solutionGetByIdQry.getId());
+        PipelineDataSource dataSource = getDatasource();
+        solutionTemplateDTO.setDataSource(dataSource);
         return Result.success(solutionTemplateDTO);
+    }
+
+    private PipelineDataSource getDatasource() {
+        // TODO mvp版本mock数据
+        PipelineDataSource dataSource = new PipelineDataSource();
+        List<PropertyDesc> goodsProperties = Lists.newArrayList();
+        goodsProperties.add(new PropertyDesc("categoryl", null, null));
+        goodsProperties.add(new PropertyDesc("categorym", null, null));
+        goodsProperties.add(new PropertyDesc("categorys", null, null));
+        dataSource.setGoodsData(goodsProperties);
+        List<PropertyDesc> userProperties = Lists.newArrayList();
+        userProperties.add(new PropertyDesc("userid", null, null));
+        userProperties.add(new PropertyDesc("age", null, null));
+        userProperties.add(new PropertyDesc("city", null, null));
+        dataSource.setUserData(userProperties);
+        List<PropertyDesc> orderProperties = Lists.newArrayList();
+        orderProperties.add(new PropertyDesc("amount", null, null));
+        orderProperties.add(new PropertyDesc("count", null, null));
+        dataSource.setOrderData(orderProperties);
+        // TODO 流量的数据结构需要设计
+        return dataSource;
     }
 
     @Override
