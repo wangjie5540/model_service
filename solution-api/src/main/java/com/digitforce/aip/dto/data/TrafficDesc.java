@@ -7,6 +7,18 @@ public class TrafficDesc {
     private PropertyDesc where;
     private PropertyDesc goodsId;
 
+    public TrafficDesc() {
+    }
+
+    public TrafficDesc(String eventType, PropertyDesc eventTime, PropertyDesc userId, PropertyDesc where,
+                       PropertyDesc goodsId) {
+        this.eventType = eventType;
+        this.eventTime = eventTime;
+        this.userId = userId;
+        this.where = where;
+        this.goodsId = goodsId;
+    }
+
     public String getEventType() {
         return eventType;
     }

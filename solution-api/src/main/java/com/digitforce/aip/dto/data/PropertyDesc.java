@@ -5,6 +5,15 @@ public class PropertyDesc {
     private String cname;
     private String dataType;
 
+    public PropertyDesc() {
+    }
+
+    public PropertyDesc(String name, String cname, String dataType) {
+        this.name = name;
+        this.cname = cname;
+        this.dataType = dataType;
+    }
+
     public String getName() {
         return name;
     }

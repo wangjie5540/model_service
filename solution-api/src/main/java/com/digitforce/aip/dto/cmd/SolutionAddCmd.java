@@ -34,6 +34,7 @@ public class SolutionAddCmd extends Command {
     private String pipelineId;
     private String pipelineName;
     private PipelineDataSource dataSource;
+    private Integer executeNow = 0;
 
     public String getDescription() {
         return description;
@@ -137,5 +138,13 @@ public class SolutionAddCmd extends Command {
 
     public void setPipelineName(String pipelineName) {
         this.pipelineName = pipelineName;
+    }
+
+    public Integer getExecuteNow() {
+        return executeNow;
+    }
+
+    public void setExecuteNow(Integer executeNow) {
+        this.executeNow = executeNow;
     }
 }
