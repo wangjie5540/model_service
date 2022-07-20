@@ -41,7 +41,7 @@ public class SolutionCmdServiceImplTest {
         taskDefineDTO.setCreateUserName("admin");
         taskDefineDTO.setDescription("测试任务描述");
         taskDefineDTO.setFailureStrategy(FailureStrategy.END);
-        taskDefineDTO.setName("算法测试任务35");
+        taskDefineDTO.setName("算法测试任务60");
         // TODO 平台选择？
         taskDefineDTO.setPlatform(PlatformEnum.ALGOX);
         // TODO 多租户对接
@@ -68,5 +68,17 @@ public class SolutionCmdServiceImplTest {
         // TODO 设置任务需要的参数，参数需要定义
         taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
         taskDefineCmdFacade.addTask(taskDefineDTO);
+    }
+
+    @Test
+    public void execute() {
+        TenantContext.init(10000);
+        taskDefineCmdFacade.execute(1541348442958237985L);
+    }
+
+    @Test
+    public void stop() {
+        TenantContext.init(10000);
+        taskDefineCmdFacade.delete(1541348442958237985L);
     }
 }

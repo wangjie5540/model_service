@@ -9,6 +9,7 @@ import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.data.PipelineDataSource;
 import com.digitforce.aip.enums.SolutionStatusEnum;
+import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.model.Pipeline;
 import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.aip.repository.SolutionRepository;
@@ -51,6 +52,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     private TaskInstanceCmdFacade taskInstanceCmdFacade;
     @Resource
     private KubeflowProperties kubeflowProperties;
+    @Resource
+    private SolutionMapper solutionMapper;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -73,6 +76,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setType(TaskType.ALGORITHM);
         TriggerRunCmd triggerRunCmd = constructTriggerCmd(solutionAddCmd);
         taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
+        taskDefineDTO.setIsRunNow(0);
         Long taskId = Long.parseLong(taskDefineCmdFacade.addTask(taskDefineDTO).getData().toString());
         Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
@@ -146,6 +150,14 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             solution.setStatus(SolutionStatusEnum.EXECUTING);
             solution.setTaskInstanceId(taskInstanceId);
             solutionRepository.upsert(solution);
+        }
+    }
+
+    @Override
+    public void finish(Long taskId) {
+        SolutionStatusEnum status = solutionMapper.getStatusByTaskId(taskId);
+        if (status != SolutionStatusEnum.ONLINE) {
+            solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.FINISHED);
         }
     }
 

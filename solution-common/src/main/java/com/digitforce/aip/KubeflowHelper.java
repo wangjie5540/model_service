@@ -114,8 +114,8 @@ public class KubeflowHelper {
         }
     }
 
-    public String generateBody(String name, String experimentId, String pipelineId,
-                               List<Map<String, Object>> pipelineParameters) {
+    private String generateBody(String name, String experimentId, String pipelineId,
+                                List<Map<String, Object>> pipelineParameters) {
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("name", name);
         paramsMap.put("description", "");
