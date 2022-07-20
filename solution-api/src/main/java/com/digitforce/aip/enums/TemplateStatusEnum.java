@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public enum TemplateStatusEnum {
-    ONLINE("上线"),
-    OFFLINE("下线");
+    ONLINE("已发布"),
+    OFFLINE("未发布");
     final String cname;
 
     @JsonValue
