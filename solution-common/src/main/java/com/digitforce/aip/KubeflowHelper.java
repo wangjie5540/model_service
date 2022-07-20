@@ -127,10 +127,14 @@ public class KubeflowHelper {
         parameter.put("name", "run_datetime_str");
         parameter.put("value", today);
         pipelineParameters.add(parameter);
-//        parameter = new HashMap<>();
-//        parameter.put("name", "instanceId");
-//        parameter.put("value", triggerRunCmd.getInstanceId());
-//        pipelineParameters.add(parameter);
+        parameter = new HashMap<>();
+        parameter.put("name", "solution_id");
+        parameter.put("value", String.valueOf(triggerRunCmd.getSolutionId()));
+        pipelineParameters.add(parameter);
+        parameter = new HashMap<>();
+        parameter.put("name", "instance_id");
+        parameter.put("value", String.valueOf(triggerRunCmd.getInstanceId()));
+        pipelineParameters.add(parameter);
         HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs", host, port))
                 .body(generateBody(triggerRunCmd.getName(), triggerRunCmd.getExperimentId(),
                         triggerRunCmd.getPipelineId(), pipelineParameters));

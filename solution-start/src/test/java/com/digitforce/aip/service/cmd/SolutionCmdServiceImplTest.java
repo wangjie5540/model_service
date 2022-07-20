@@ -3,16 +3,19 @@ package com.digitforce.aip.service.cmd;
 import com.digitforce.aip.GlobalConstant;
 import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineCmdFacade;
+import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineQryFacade;
 import com.digitforce.bdp.operatex.core.consts.FailureStrategy;
 import com.digitforce.bdp.operatex.core.consts.PlatformEnum;
 import com.digitforce.bdp.operatex.core.consts.TaskCategory;
 import com.digitforce.bdp.operatex.core.consts.TaskType;
 import com.digitforce.bdp.operatex.core.consts.algorithm.AlgorithmTaskDefineDTO;
 import com.digitforce.bdp.operatex.core.dto.TaskDefineDTO;
+import com.digitforce.bdp.operatex.core.vo.TaskDefineVO;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.util.GsonUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +32,15 @@ import java.util.Map;
 public class SolutionCmdServiceImplTest {
     @Resource
     private TaskDefineCmdFacade taskDefineCmdFacade;
+    @Resource
+    private TaskDefineQryFacade taskDefineQryFacade;
+    @Resource
+    private SolutionCmdService solutionCmdService;
+
+    @Before
+    public void before() {
+        TenantContext.init(10000);
+    }
 
     @Test
     public void taskAdd() {
@@ -71,14 +83,22 @@ public class SolutionCmdServiceImplTest {
     }
 
     @Test
+    public void add() {
+    }
+
+    @Test
     public void execute() {
-        TenantContext.init(10000);
         taskDefineCmdFacade.execute(1541348442958237985L);
     }
 
     @Test
     public void stop() {
-        TenantContext.init(10000);
         taskDefineCmdFacade.delete(1541348442958237985L);
+    }
+
+    @Test
+    public void update() {
+        TaskDefineVO taskDefineVOById = taskDefineQryFacade.getTaskDefineVOById(1541348442958238005L).getData();
+        System.out.println(taskDefineVOById);
     }
 }

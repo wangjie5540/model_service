@@ -1,5 +1,6 @@
 package com.digitforce.aip.service.cmd;
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.digitforce.aip.GlobalConstant;
 import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
@@ -66,9 +67,10 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setPlatform(PlatformEnum.ALGOX);
         taskDefineDTO.setProjectId(GlobalConstant.DEFAULT_PROJECT_ID);
         taskDefineDTO.setType(TaskType.ALGORITHM);
-        TriggerRunCmd triggerRunCmd = constructTriggerCmd(solutionAddCmd);
-        taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
         taskDefineDTO.setIsRunNow(0);
+        solution.setId(IdWorker.getId());
+        TriggerRunCmd triggerRunCmd = constructTriggerCmd(solution.getId(), solutionAddCmd);
+        taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
         Long taskId = Long.parseLong(taskDefineCmdFacade.addTask(taskDefineDTO).getData().toString());
         Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
@@ -76,7 +78,11 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource.class);
         solution.setDataSource(GsonUtil.objectToString(dataSource));
         solution.setSchedule(GlobalConstant.DEFAULT_CRON);
-        solution.setStatus(SolutionStatusEnum.EXECUTING);
+        if (solutionAddCmd.getExecuteNow() == 1) {
+            Long taskInstanceId = taskDefineCmdFacade.execute(taskId).getData();
+            solution.setStatus(SolutionStatusEnum.EXECUTING);
+            solution.setTaskInstanceId(taskInstanceId);
+        }
         solutionRepository.save(solution);
     }
 
@@ -102,13 +108,14 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         }
     }
 
-    private TriggerRunCmd constructTriggerCmd(SolutionAddCmd solutionAddCmd) {
+    private TriggerRunCmd constructTriggerCmd(Long solutionId, SolutionAddCmd solutionAddCmd) {
         TriggerRunCmd triggerRunCmd = new TriggerRunCmd();
         triggerRunCmd.setName(solutionAddCmd.getPipelineName());
         triggerRunCmd.setExperimentId(GlobalConstant.DEFAULT_EXPERIMENT_ID);
         triggerRunCmd.setPipelineId(solutionAddCmd.getPipelineId());
         triggerRunCmd.setTimeRange(solutionAddCmd.getTimeRange());
         triggerRunCmd.setTimeUnit(solutionAddCmd.getTimeUnit());
+        triggerRunCmd.setSolutionId(solutionId);
         return triggerRunCmd;
     }
 
