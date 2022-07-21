@@ -38,9 +38,8 @@ public class KubeflowHelperTest {
         triggerRunCmd.setPipelineId("3c094336-21aa-4b54-8833-2bf10e7d2085");
         triggerRunCmd.setTimeRange(1000);
         triggerRunCmd.setTimeUnit(ChronoUnit.DAYS);
-//        triggerRunCmd.setInstanceId("123123123");
         String runId = KubeflowHelper.triggerRun(kubeflowProperties.getHost(), kubeflowProperties.getPort(),
-                triggerRunCmd);
+                123, triggerRunCmd);
         System.out.println(runId);
     }
 }
