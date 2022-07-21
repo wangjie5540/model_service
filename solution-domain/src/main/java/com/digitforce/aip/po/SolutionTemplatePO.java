@@ -1,5 +1,7 @@
 package com.digitforce.aip.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.digitforce.aip.enums.TemplateStatusEnum;
 import com.digitforce.framework.domain.TenantEntity;
 import lombok.Data;
@@ -13,6 +15,7 @@ import lombok.Data;
  */
 @Data
 public class SolutionTemplatePO extends TenantEntity<Long> {
+    @TableId(type = IdType.AUTO)
     private Long id;
     private String name;
     private String scene;

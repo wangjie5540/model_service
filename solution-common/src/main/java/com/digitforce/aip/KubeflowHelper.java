@@ -110,6 +110,10 @@ public class KubeflowHelper {
         return runDetail.run.getId();
     }
 
+    public String triggerRun(String host, int port, int instanceId, String extra) {
+        return triggerRun(host, port, instanceId, GsonUtil.gsonToBean(extra, TriggerRunCmd.class));
+    }
+
     public String triggerRun(String host, int port, int instanceId, TriggerRunCmd triggerRunCmd) {
         login(host, port);
         List<Map<String, Object>> pipelineParameters = new ArrayList<>();
