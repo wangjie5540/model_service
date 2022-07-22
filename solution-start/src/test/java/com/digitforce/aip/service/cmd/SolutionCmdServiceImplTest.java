@@ -11,8 +11,11 @@ import com.digitforce.bdp.operatex.core.consts.TaskType;
 import com.digitforce.bdp.operatex.core.consts.algorithm.AlgorithmTaskDefineDTO;
 import com.digitforce.bdp.operatex.core.dto.TaskDefineDTO;
 import com.digitforce.bdp.operatex.core.vo.TaskDefineVO;
+import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.util.GsonUtil;
+import com.digitforce.manager.api.dict.client.DictEntryQryFacade;
+import com.digitforce.manager.api.dict.dto.DictEntryDTO;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.junit.Before;
@@ -36,6 +39,8 @@ public class SolutionCmdServiceImplTest {
     private TaskDefineQryFacade taskDefineQryFacade;
     @Resource
     private SolutionCmdService solutionCmdService;
+    @Resource
+    private DictEntryQryFacade dictEntryQryFacade;
 
     @Before
     public void before() {
@@ -100,5 +105,19 @@ public class SolutionCmdServiceImplTest {
     public void update() {
         TaskDefineVO taskDefineVOById = taskDefineQryFacade.getTaskDefineVOById(1541348442958238005L).getData();
         System.out.println(taskDefineVOById);
+    }
+
+    @Test
+    public void getByIdTest() {
+        Result<TaskDefineVO> taskDefineVOById = taskDefineQryFacade.getTaskDefineVOById(1541348442958238012L);
+        System.out.println(taskDefineVOById);
+    }
+
+    @Test
+    public void dictTest() {
+        DictEntryDTO dictEntryDTO = new DictEntryDTO();
+        dictEntryDTO.setTypeKey("goods_property");
+        System.out.println(dictEntryQryFacade.listByTypeKey(dictEntryDTO));
+        //        System.out.println(dictEntryQryFacade.getBy(dictEntryDTO));
     }
 }

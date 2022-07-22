@@ -6,7 +6,6 @@ import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.data.PipelineDataSource;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.model.Pipeline;
@@ -75,8 +74,9 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
         solution.setTaskId(taskId);
-        PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource.class);
-        solution.setDataSource(GsonUtil.objectToString(dataSource));
+//        PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource
+//        .class);
+//        solution.setDataSource(GsonUtil.objectToString(dataSource));
         solution.setSchedule(GlobalConstant.DEFAULT_CRON);
         if (solutionAddCmd.getExecuteNow() == 1) {
             Long taskInstanceId = taskDefineCmdFacade.execute(taskId).getData();
@@ -122,10 +122,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Override
     public void execute(Long id) {
         Solution solution = solutionRepository.getById(id);
-        if (solution != null &&
-                (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE
-                        || solution.getStatus() == SolutionStatusEnum.FAILED
-                        || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
+        if (solution != null && (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE || solution.getStatus() == SolutionStatusEnum.FAILED || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
             Long taskInstanceId = taskDefineCmdFacade.execute(solution.getTaskId()).getData();
             solution = new Solution();
             solution.setId(id);
@@ -136,6 +133,13 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             solution.setTaskInstanceId(taskInstanceId);
             solutionRepository.upsert(solution);
         }
+    }
+
+    @Override
+    public void onExecuting(Long id) {
+        Solution solution = new Solution();
+        solution.setStatus(SolutionStatusEnum.EXECUTING);
+        solutionRepository.upsert(solution);
     }
 
     @Override
@@ -155,6 +159,13 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
             solutionRepository.save(solution);
         }
+    }
+
+    @Override
+    public void onStopping(Long id) {
+        Solution solution = new Solution();
+        solution.setStatus(SolutionStatusEnum.STOPPING);
+        solutionRepository.upsert(solution);
     }
 
     @Override

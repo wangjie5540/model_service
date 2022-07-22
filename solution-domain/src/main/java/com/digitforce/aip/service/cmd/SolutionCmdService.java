@@ -14,13 +14,17 @@ import com.digitforce.framework.operation.CrudOperation;
 public interface SolutionCmdService extends CrudOperation<Solution> {
     void add(SolutionAddCmd implementationAddCmd);
 
+    void execute(Long id);
+
+    void onExecuting(Long id);
+
     void on(Long id);
 
     void off(Long id);
 
-    void execute(Long id);
-
     void finish(Long taskId);
 
     void stop(Long id);
+
+    void onStopping(Long id);
 }
