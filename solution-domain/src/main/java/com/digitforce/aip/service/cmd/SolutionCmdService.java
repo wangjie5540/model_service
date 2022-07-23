@@ -16,15 +16,17 @@ public interface SolutionCmdService extends CrudOperation<Solution> {
 
     void execute(Long id);
 
-    void onExecuting(Long id);
+    void onExecuting(Long taskId);
 
     void on(Long id);
 
     void off(Long id);
 
-    void finish(Long taskId);
+    void onFinished(Long taskId);
 
     void stop(Long id);
 
     void onStopping(Long id);
+
+    void onFailed(Long taskId);
 }

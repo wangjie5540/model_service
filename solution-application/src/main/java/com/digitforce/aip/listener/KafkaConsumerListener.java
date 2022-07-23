@@ -4,6 +4,7 @@ import com.digitforce.aip.GlobalConstant;
 import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.aip.service.qry.SolutionQueryService;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineQryFacade;
+import com.digitforce.bdp.operatex.core.event.TaskDefineStateMessage;
 import com.digitforce.bdp.operatex.core.event.TaskInstanceStateMessage;
 import com.digitforce.framework.util.GsonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +13,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.io.IOException;
+
+import javax.annotation.Resource;
 
 @Component
 @Slf4j
@@ -29,34 +31,41 @@ public class KafkaConsumerListener {
     @Transactional(rollbackFor = RuntimeException.class)
     public void taskStateListener(ConsumerRecord<?, ?> consumerRecord) throws IOException {
         log.info("topic:{}, offset:{}, value:{}", consumerRecord.topic(), consumerRecord.offset(),
-                consumerRecord.value());
-//        MessageDTO messageDTO = GsonUtil.gsonToBean((String) consumerRecord.value(), MessageDTO.class);
-//        System.out.println(messageDTO);
-//        // 调用任务状态变更接口
-//        solutionCmdService.finish(messageDTO.getTaskId());
+            consumerRecord.value());
+        TaskDefineStateMessage message =
+            GsonUtil.gsonToBean((String) consumerRecord.value(), TaskDefineStateMessage.class);
+        switch (message.getStatus()) {
+            case ONLINE:
+                log.info("task is online.[taskId={},name={}]", message.getId(), message.getName());
+                break;
+            case OFFLINE:
+                log.info("task is offline.[taskId={},name={}]", message.getId(), message.getName());
+                break;
+            default:
+        }
     }
 
     @KafkaListener(topics = {GlobalConstant.TASK_INSTANCE_STATUS_TOPIC})
     @Transactional(rollbackFor = RuntimeException.class)
     public void taskInstanceStateListener(ConsumerRecord<?, ?> consumerRecord) throws IOException {
         log.info("topic:{}, offset:{}, value:{}", consumerRecord.topic(), consumerRecord.offset(),
-                consumerRecord.value());
+            consumerRecord.value());
         TaskInstanceStateMessage message = GsonUtil.gsonToBean((String) consumerRecord.value(),
-                TaskInstanceStateMessage.class);
+            TaskInstanceStateMessage.class);
         switch (message.getStatus()) {
             case SUBMITTED_SUCCESS:
-                solutionCmdService.finish(message.getTaskDefineId());
+            case RUNNING:
+                solutionCmdService.onExecuting(message.getTaskDefineId());
                 break;
             case SUCCESS:
+                solutionCmdService.onFinished(message.getTaskDefineId());
                 break;
             case FAILURE:
             case KILL:
+                solutionCmdService.onFailed(message.getTaskDefineId());
                 break;
             default:
-                return;
+                log.warn("unknown task instance status.[status={}]", message.getStatus());
         }
-//        System.out.println(messageDTO);
-//        // 调用任务状态变更接口
-//        solutionCmdService.finish(messageDTO.getTaskId());
     }
 }

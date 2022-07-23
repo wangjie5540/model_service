@@ -72,7 +72,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
         Long taskId = Long.parseLong(taskDefineCmdFacade.addTask(taskDefineDTO).getData().toString());
         Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
-                kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
+            kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
         solution.setTaskId(taskId);
 //        PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource
 //        .class);
@@ -122,7 +122,9 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Override
     public void execute(Long id) {
         Solution solution = solutionRepository.getById(id);
-        if (solution != null && (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE || solution.getStatus() == SolutionStatusEnum.FAILED || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
+        if (solution != null && (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE
+            || solution.getStatus() == SolutionStatusEnum.FAILED
+            || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
             Long taskInstanceId = taskDefineCmdFacade.execute(solution.getTaskId()).getData();
             solution = new Solution();
             solution.setId(id);
@@ -136,14 +138,14 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     }
 
     @Override
-    public void onExecuting(Long id) {
+    public void onExecuting(Long taskId) {
         Solution solution = new Solution();
         solution.setStatus(SolutionStatusEnum.EXECUTING);
         solutionRepository.upsert(solution);
     }
 
     @Override
-    public void finish(Long taskId) {
+    public void onFinished(Long taskId) {
         SolutionStatusEnum status = solutionMapper.getStatusByTaskId(taskId);
         if (status != SolutionStatusEnum.ONLINE) {
             solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.FINISHED);
@@ -165,6 +167,13 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     public void onStopping(Long id) {
         Solution solution = new Solution();
         solution.setStatus(SolutionStatusEnum.STOPPING);
+        solutionRepository.upsert(solution);
+    }
+
+    @Override
+    public void onFailed(Long taskId) {
+        Solution solution = new Solution();
+        solution.setStatus(SolutionStatusEnum.FAILED);
         solutionRepository.upsert(solution);
     }
 
