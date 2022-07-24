@@ -131,7 +131,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             if (taskInstanceId == null) {
                 return;
             }
-            solution.setStatus(SolutionStatusEnum.EXECUTING);
+//            solution.setStatus(SolutionStatusEnum.EXECUTING);
             solution.setTaskInstanceId(taskInstanceId);
             solutionRepository.upsert(solution);
         }
@@ -139,9 +139,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
 
     @Override
     public void onExecuting(Long taskId) {
-        Solution solution = new Solution();
-        solution.setStatus(SolutionStatusEnum.EXECUTING);
-        solutionRepository.upsert(solution);
+        solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.EXECUTING);
     }
 
     @Override
@@ -155,26 +153,17 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Override
     public void stop(Long id) {
         Solution solution = solutionRepository.getById(id);
-        if (solution != null && solution.getStatus() == SolutionStatusEnum.EXECUTING) {
-            taskInstanceCmdFacade.stop(solution.getTaskInstanceId());
-            solution = new Solution();
-            solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
-            solutionRepository.save(solution);
-        }
+        taskInstanceCmdFacade.stop(solution.getTaskInstanceId());
     }
 
     @Override
-    public void onStopping(Long id) {
-        Solution solution = new Solution();
-        solution.setStatus(SolutionStatusEnum.STOPPING);
-        solutionRepository.upsert(solution);
+    public void onStopping(Long taskId) {
+        solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.STOPPING);
     }
 
     @Override
     public void onFailed(Long taskId) {
-        Solution solution = new Solution();
-        solution.setStatus(SolutionStatusEnum.FAILED);
-        solutionRepository.upsert(solution);
+        solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.FAILED);
     }
 
     @Override
