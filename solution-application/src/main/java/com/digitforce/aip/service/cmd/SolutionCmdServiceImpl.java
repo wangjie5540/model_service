@@ -75,7 +75,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         TaskDefineExtraDTO taskDefineExtraDTO = new TaskDefineExtraDTO();
         taskDefineExtraDTO.setSolutionDefine(solutionDefine);
         taskDefineExtraDTO.setTriggerRunCmd(triggerRunCmd);
-        taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
+        taskDefineDTO.setExtra(GsonUtil.objectToString(taskDefineExtraDTO));
         Long taskId = Long.parseLong(taskDefineCmdFacade.addTask(taskDefineDTO).getData().toString());
         Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());

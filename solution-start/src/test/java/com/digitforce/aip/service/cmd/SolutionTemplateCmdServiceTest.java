@@ -77,7 +77,6 @@ public class SolutionTemplateCmdServiceTest {
         parameter.put("name", "run_datetime_str");
         parameter.put("value", "20220707");
         parameters.add(parameter);
-        triggerRunCmd.setPipelineParameters(parameters);
         // TODO 设置任务需要的参数，参数需要定义
         taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
         taskDefineCmdFacade.addTask(taskDefineDTO);

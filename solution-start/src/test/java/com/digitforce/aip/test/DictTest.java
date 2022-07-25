@@ -2,10 +2,10 @@ package com.digitforce.aip.test;
 
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineQryFacade;
 import com.digitforce.bdp.operatex.core.vo.TaskDefineVO;
+import com.digitforce.component.dict.api.client.DictEntryQryFacade;
+import com.digitforce.component.dict.api.dto.DictEntryDTO;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.context.TenantContext;
-import com.digitforce.manager.api.dict.client.DictEntryQryFacade;
-import com.digitforce.manager.api.dict.dto.DictEntryDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
