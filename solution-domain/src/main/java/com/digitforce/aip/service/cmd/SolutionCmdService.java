@@ -29,4 +29,6 @@ public interface SolutionCmdService extends CrudOperation<Solution> {
     void onStopping(Long taskId);
 
     void onFailed(Long taskId);
+
+    void delete(Long id);
 }

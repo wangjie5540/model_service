@@ -1,9 +1,6 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionAddCronCmd;
-import com.digitforce.aip.dto.cmd.SolutionClearCronCmd;
-import com.digitforce.aip.dto.cmd.SolutionStatusCmd;
+import com.digitforce.aip.dto.cmd.*;
 import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.framework.api.dto.Result;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,6 +56,12 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Override
     public Result stop(SolutionStatusCmd solutionStatusCmd) {
         solutionCmdService.stop(solutionStatusCmd.getId());
+        return Result.success();
+    }
+
+    @Override
+    public Result delete(SolutionDeleteCmd solutionDeleteCmd) {
+        solutionCmdService.delete(solutionDeleteCmd.getId());
         return Result.success();
     }
 }
