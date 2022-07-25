@@ -1,10 +1,7 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
-import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionAddCronCmd;
-import com.digitforce.aip.dto.cmd.SolutionClearCronCmd;
-import com.digitforce.aip.dto.cmd.SolutionStatusCmd;
+import com.digitforce.aip.dto.cmd.*;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,4 +47,8 @@ public interface SolutionCmdFacade {
     @PostMapping("/stop")
     @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result stop(@RequestBody SolutionStatusCmd solutionStatusCmd);
+
+    @PostMapping("/delete")
+    @Operation(summary = "删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result delete(@RequestBody SolutionDeleteCmd solutionDeleteCmd);
 }

@@ -6,7 +6,6 @@ import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.data.PipelineDataSource;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.model.Pipeline;
@@ -75,8 +74,9 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
         solution.setTaskId(taskId);
-        PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource.class);
-        solution.setDataSource(GsonUtil.objectToString(dataSource));
+//        PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource
+//        .class);
+//        solution.setDataSource(GsonUtil.objectToString(dataSource));
         solution.setSchedule(GlobalConstant.DEFAULT_CRON);
         if (solutionAddCmd.getExecuteNow() == 1) {
             Long taskInstanceId = taskDefineCmdFacade.execute(taskId).getData();
@@ -122,24 +122,28 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Override
     public void execute(Long id) {
         Solution solution = solutionRepository.getById(id);
-        if (solution != null &&
-                (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE
-                        || solution.getStatus() == SolutionStatusEnum.FAILED
-                        || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
+        if (solution != null && (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE
+                || solution.getStatus() == SolutionStatusEnum.FAILED
+                || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
             Long taskInstanceId = taskDefineCmdFacade.execute(solution.getTaskId()).getData();
             solution = new Solution();
             solution.setId(id);
             if (taskInstanceId == null) {
                 return;
             }
-            solution.setStatus(SolutionStatusEnum.EXECUTING);
+//            solution.setStatus(SolutionStatusEnum.EXECUTING);
             solution.setTaskInstanceId(taskInstanceId);
             solutionRepository.upsert(solution);
         }
     }
 
     @Override
-    public void finish(Long taskId) {
+    public void onExecuting(Long taskId) {
+        solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.EXECUTING);
+    }
+
+    @Override
+    public void onFinished(Long taskId) {
         SolutionStatusEnum status = solutionMapper.getStatusByTaskId(taskId);
         if (status != SolutionStatusEnum.ONLINE) {
             solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.FINISHED);
@@ -149,12 +153,26 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Override
     public void stop(Long id) {
         Solution solution = solutionRepository.getById(id);
-        if (solution != null && solution.getStatus() == SolutionStatusEnum.EXECUTING) {
-            taskInstanceCmdFacade.stop(solution.getTaskInstanceId());
-            solution = new Solution();
-            solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
-            solutionRepository.save(solution);
+        taskInstanceCmdFacade.stop(solution.getTaskInstanceId());
+    }
+
+    @Override
+    public void onStopping(Long taskId) {
+        solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.STOPPING);
+    }
+
+    @Override
+    public void onFailed(Long taskId) {
+        solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.FAILED);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Solution solution = solutionRepository.getById(id);
+        if (solution.getStatus() == SolutionStatusEnum.ONLINE || solution.getStatus() == SolutionStatusEnum.EXECUTING) {
+            throw new RuntimeException("solution is using");
         }
+        solutionRepository.removeById(id);
     }
 
     @Override
