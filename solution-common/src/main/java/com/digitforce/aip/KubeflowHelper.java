@@ -8,6 +8,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.digitforce.aip.model.PageByPipelineVO;
 import com.digitforce.aip.model.Pipeline;
+import com.digitforce.aip.model.TaskDefineExtraDTO;
 import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.aip.utils.CommonUtils;
 import com.digitforce.framework.util.GsonUtil;
@@ -111,7 +112,8 @@ public class KubeflowHelper {
     }
 
     public String triggerRun(String host, int port, int instanceId, String extra) {
-        return triggerRun(host, port, instanceId, GsonUtil.gsonToBean(extra, TriggerRunCmd.class));
+        TaskDefineExtraDTO taskDefineExtraDTO = GsonUtil.gsonToBean(extra, TaskDefineExtraDTO.class);
+        return triggerRun(host, port, instanceId, taskDefineExtraDTO.getTriggerRunCmd());
     }
 
     public String triggerRun(String host, int port, int instanceId, TriggerRunCmd triggerRunCmd) {
