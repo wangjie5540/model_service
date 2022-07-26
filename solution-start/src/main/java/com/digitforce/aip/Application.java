@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableDiscoveryClient
 @EnableAsync
-@EnableFeignClients(value = {"com.digitforce.bdp.operatex.core.api", "com.digitforce.manager"})
+@EnableFeignClients(value = {"com.digitforce.bdp.operatex.core.api", "com.digitforce.component"})
 public class Application {
 
     public static void main(String[] args) {

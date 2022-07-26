@@ -11,11 +11,11 @@ import com.digitforce.bdp.operatex.core.consts.TaskType;
 import com.digitforce.bdp.operatex.core.consts.algorithm.AlgorithmTaskDefineDTO;
 import com.digitforce.bdp.operatex.core.dto.TaskDefineDTO;
 import com.digitforce.bdp.operatex.core.vo.TaskDefineVO;
+import com.digitforce.component.dict.api.client.DictEntryQryFacade;
+import com.digitforce.component.dict.api.dto.DictEntryDTO;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.util.GsonUtil;
-import com.digitforce.manager.api.dict.client.DictEntryQryFacade;
-import com.digitforce.manager.api.dict.dto.DictEntryDTO;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.junit.Before;
@@ -81,7 +81,6 @@ public class SolutionCmdServiceImplTest {
         parameter.put("name", "run_datetime_str");
         parameter.put("value", "2022-06-28");
         parameters.add(parameter);
-        triggerRunCmd.setPipelineParameters(parameters);
         // TODO 设置任务需要的参数，参数需要定义
         taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
         taskDefineCmdFacade.addTask(taskDefineDTO);

@@ -9,6 +9,8 @@ import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.model.Pipeline;
+import com.digitforce.aip.model.SolutionDefine;
+import com.digitforce.aip.model.TaskDefineExtraDTO;
 import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.aip.repository.SolutionRepository;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineCmdFacade;
@@ -69,7 +71,11 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setIsRunNow(0);
         solution.setId(IdWorker.getId());
         TriggerRunCmd triggerRunCmd = constructTriggerCmd(solution.getId(), solutionAddCmd);
-        taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
+        SolutionDefine solutionDefine = ConvertTool.convert(solution, SolutionDefine.class);
+        TaskDefineExtraDTO taskDefineExtraDTO = new TaskDefineExtraDTO();
+        taskDefineExtraDTO.setSolutionDefine(solutionDefine);
+        taskDefineExtraDTO.setTriggerRunCmd(triggerRunCmd);
+        taskDefineDTO.setExtra(GsonUtil.objectToString(taskDefineExtraDTO));
         Long taskId = Long.parseLong(taskDefineCmdFacade.addTask(taskDefineDTO).getData().toString());
         Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
