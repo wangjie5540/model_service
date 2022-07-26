@@ -28,9 +28,17 @@ public interface SolutionCmdFacade {
     @Operation(summary = "上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result on(@RequestBody SolutionStatusCmd solutionStatusCmd);
 
+    @PostMapping("/batchOn")
+    @Operation(summary = "批量上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result batchOn(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
+
     @PostMapping("/off")
     @Operation(summary = "下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result off(@RequestBody SolutionStatusCmd solutionOnOffCmd);
+
+    @PostMapping("/batchOff")
+    @Operation(summary = "批量下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result batchOff(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
 
     @PostMapping("/addCron")
     @Operation(summary = "添加调度", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
@@ -44,6 +52,10 @@ public interface SolutionCmdFacade {
     @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result execute(@RequestBody SolutionStatusCmd solutionStatusCmd);
 
+    @PostMapping("/batchExecute")
+    @Operation(summary = "批量执行方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result batchExecute(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
+
     @PostMapping("/stop")
     @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result stop(@RequestBody SolutionStatusCmd solutionStatusCmd);
@@ -51,4 +63,8 @@ public interface SolutionCmdFacade {
     @PostMapping("/delete")
     @Operation(summary = "删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result delete(@RequestBody SolutionDeleteCmd solutionDeleteCmd);
+
+    @PostMapping("/batchDelete")
+    @Operation(summary = "批量删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result batchDelete(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
 }
