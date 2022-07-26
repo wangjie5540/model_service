@@ -9,7 +9,7 @@ public enum SolutionStatusEnum {
     EXECUTING("执行中"),
     STOPPING("停止中"),
     FINISHED("执行完成"),
-    ONLINE("上线"),
+    ONLINE("已上线"),
     FAILED("执行失败");
     final String cname;
 
