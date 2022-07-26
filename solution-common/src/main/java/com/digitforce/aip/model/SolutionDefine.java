@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class SolutionDefine {
-    private Long solutionId;
+    private Long id;
     private Long templateId;
     private Long taskId;
     private Long taskInstanceId;
