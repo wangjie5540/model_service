@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 方案实施命令类
@@ -104,6 +105,11 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     }
 
     @Override
+    public void batchOn(List<Long> ids) {
+        ids.forEach(this::on);
+    }
+
+    @Override
     public void off(Long id) {
         Solution solution = solutionRepository.getById(id);
         if (solution.getStatus() == SolutionStatusEnum.ONLINE) {
@@ -112,6 +118,11 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             solution.setStatus(SolutionStatusEnum.FINISHED);
             solutionRepository.modifyById(solution);
         }
+    }
+
+    @Override
+    public void batchOff(List<Long> ids) {
+        ids.forEach(this::off);
     }
 
     private TriggerRunCmd constructTriggerCmd(Long solutionId, SolutionAddCmd solutionAddCmd) {
@@ -141,6 +152,11 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             solution.setTaskInstanceId(taskInstanceId);
             solutionRepository.upsert(solution);
         }
+    }
+
+    @Override
+    public void batchExecute(List<Long> ids) {
+        ids.forEach(this::execute);
     }
 
     @Override
@@ -179,6 +195,11 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             throw new RuntimeException("solution is using");
         }
         solutionRepository.removeById(id);
+    }
+
+    @Override
+    public void batchDelete(List<Long> ids) {
+        ids.forEach(this::delete);
     }
 
     @Override

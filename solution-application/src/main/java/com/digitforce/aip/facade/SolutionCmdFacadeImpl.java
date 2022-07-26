@@ -32,8 +32,20 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
+    public Result batchOn(SolutionBatchStatusCmd solutionBatchStatusCmd) {
+        solutionCmdService.batchOn(solutionBatchStatusCmd.getIds());
+        return Result.success();
+    }
+
+    @Override
     public Result off(SolutionStatusCmd solutionStatusCmd) {
         solutionCmdService.off(solutionStatusCmd.getId());
+        return Result.success();
+    }
+
+    @Override
+    public Result batchOff(SolutionBatchStatusCmd solutionBatchStatusCmd) {
+        solutionCmdService.batchOff(solutionBatchStatusCmd.getIds());
         return Result.success();
     }
 
@@ -54,6 +66,12 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
+    public Result batchExecute(SolutionBatchStatusCmd solutionBatchStatusCmd) {
+        solutionCmdService.batchExecute(solutionBatchStatusCmd.getIds());
+        return Result.success();
+    }
+
+    @Override
     public Result stop(SolutionStatusCmd solutionStatusCmd) {
         solutionCmdService.stop(solutionStatusCmd.getId());
         return Result.success();
@@ -62,6 +80,12 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Override
     public Result delete(SolutionDeleteCmd solutionDeleteCmd) {
         solutionCmdService.delete(solutionDeleteCmd.getId());
+        return Result.success();
+    }
+
+    @Override
+    public Result batchDelete(SolutionBatchStatusCmd solutionBatchStatusCmd) {
+        solutionCmdService.batchDelete(solutionBatchStatusCmd.getIds());
         return Result.success();
     }
 }
