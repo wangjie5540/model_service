@@ -117,7 +117,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     private TriggerRunCmd constructTriggerCmd(Long solutionId, SolutionAddCmd solutionAddCmd) {
         TriggerRunCmd triggerRunCmd = new TriggerRunCmd();
         triggerRunCmd.setName(solutionAddCmd.getPipelineName());
-        triggerRunCmd.setExperimentId(GlobalConstant.DEFAULT_EXPERIMENT_ID);
+        triggerRunCmd.setExperimentId(kubeflowProperties.getExperimentId());
         triggerRunCmd.setPipelineId(solutionAddCmd.getPipelineId());
         triggerRunCmd.setTimeRange(solutionAddCmd.getTimeRange());
         triggerRunCmd.setTimeUnit(solutionAddCmd.getTimeUnit());
