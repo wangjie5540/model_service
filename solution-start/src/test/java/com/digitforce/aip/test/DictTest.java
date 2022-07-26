@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,9 +33,10 @@ public class DictTest {
     @Test
     public void get() {
         DictEntryDTO dictEntryDTO = new DictEntryDTO();
-        dictEntryDTO.setId(43L);
-        Result<DictEntryDTO> dictEntryDTOResult = dictEntryQryFacade.getById(dictEntryDTO);
-        System.out.println(dictEntryDTOResult);
+        dictEntryDTO = new DictEntryDTO();
+        dictEntryDTO.setTypeKey("goods_property");
+        Result<List<DictEntryDTO>> listResult = dictEntryQryFacade.listByTypeKey(dictEntryDTO);
+        System.out.println(listResult);
     }
 
     @Test
