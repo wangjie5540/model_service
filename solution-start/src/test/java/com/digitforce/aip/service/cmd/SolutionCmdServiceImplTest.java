@@ -1,6 +1,6 @@
 package com.digitforce.aip.service.cmd;
 
-import com.digitforce.aip.GlobalConstant;
+import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineCmdFacade;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineQryFacade;
@@ -41,6 +41,8 @@ public class SolutionCmdServiceImplTest {
     private SolutionCmdService solutionCmdService;
     @Resource
     private DictEntryQryFacade dictEntryQryFacade;
+    @Resource
+    private KubeflowProperties kubeflowProperties;
 
     @Before
     public void before() {
@@ -66,7 +68,7 @@ public class SolutionCmdServiceImplTest {
         taskDefineDTO.setType(TaskType.ALGORITHM);
         TriggerRunCmd triggerRunCmd = new TriggerRunCmd();
         triggerRunCmd.setName("for_test");
-        triggerRunCmd.setExperimentId(GlobalConstant.DEFAULT_EXPERIMENT_ID);
+        triggerRunCmd.setExperimentId(kubeflowProperties.getExperimentId());
         triggerRunCmd.setPipelineId("3c094336-21aa-4b54-8833-2bf10e7d2085");
         List<Map<String, Object>> parameters = Lists.newArrayList();
         Map<String, Object> parameter = Maps.newHashMap();
