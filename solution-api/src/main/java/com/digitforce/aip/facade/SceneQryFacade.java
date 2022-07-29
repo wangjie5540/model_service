@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SCENE_QRY)
-@RequestMapping(path = "/scene")
+@RequestMapping(path = {"/scene", "/solution/scene"})
 public interface SceneQryFacade {
     @PostMapping("/listBy")
     @Operation(summary = "获取适用系统列表", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
