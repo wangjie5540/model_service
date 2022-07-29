@@ -22,7 +22,7 @@ import java.util.List;
  */
 @FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SCENE_QRY)
-@RequestMapping(path = "/schema")
+@RequestMapping(path = "/solution/schema")
 public interface SchemaQryFacade {
     @PostMapping("/listTable")
     @Operation(summary = "获取table列表", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)

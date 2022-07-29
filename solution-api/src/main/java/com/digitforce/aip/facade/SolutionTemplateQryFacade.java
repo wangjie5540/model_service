@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
-@RequestMapping(path = "/solutionTemplate")
+@RequestMapping(path = {"/solutionTemplate", "/solution/solutionTemplate"})
 public interface SolutionTemplateQryFacade {
     @PostMapping("/getById")
     @Operation(summary = "通过id获取方案模板详情", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
