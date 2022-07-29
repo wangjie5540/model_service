@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 public class Filter {
     private RelationEnum relation;
-    private List<Condition> conditions;
     private List<Filter> filters;
+    private List<Condition> conditions;
 }

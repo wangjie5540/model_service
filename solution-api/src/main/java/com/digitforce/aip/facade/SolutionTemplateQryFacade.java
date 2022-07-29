@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 /**
  * 方案服务查询接口类
  *
@@ -31,6 +33,10 @@ public interface SolutionTemplateQryFacade {
     @PostMapping("/pageBy")
     @Operation(summary = "分页查询方案模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
     Result<PageView<SolutionTemplateDTO>> pageBy(@RequestBody SolutionTemplatePageByQry solutionTemplatePageByQry);
+
+    @PostMapping("/listBy")
+    @Operation(summary = "获取所有已上线模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
+    Result<List<SolutionTemplateDTO>> listBy();
 
     @PostMapping("/status/listBy")
     @Operation(summary = "模板状态列表", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)

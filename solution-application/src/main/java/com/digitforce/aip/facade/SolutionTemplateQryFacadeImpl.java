@@ -85,6 +85,14 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
     }
 
     @Override
+    public Result<List<SolutionTemplateDTO>> listBy() {
+        SolutionTemplate solutionTemplate = new SolutionTemplate();
+        solutionTemplate.setStatus(TemplateStatusEnum.ONLINE);
+        List<SolutionTemplate> solutionTemplateList = solutionTemplateQryService.listBy(solutionTemplate);
+        return Result.success(ConvertTool.convert(solutionTemplateList, SolutionTemplateDTO.class));
+    }
+
+    @Override
     public Result<TemplateStatusListDTO> statusListBy() {
         List<TemplateStatusEnum> statusList = Lists.newArrayList(TemplateStatusEnum.ONLINE, TemplateStatusEnum.OFFLINE);
         TemplateStatusListDTO templateStatusListDTO = new TemplateStatusListDTO();
