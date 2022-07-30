@@ -1,7 +1,13 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
-import com.digitforce.aip.dto.cmd.*;
+import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionAddCronCmd;
+import com.digitforce.aip.dto.cmd.SolutionBatchStatusCmd;
+import com.digitforce.aip.dto.cmd.SolutionClearCronCmd;
+import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
+import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
+import com.digitforce.aip.dto.cmd.SolutionStatusCmd;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -67,4 +73,8 @@ public interface SolutionCmdFacade {
     @PostMapping("/batchDelete")
     @Operation(summary = "批量删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result batchDelete(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
+
+    @PostMapping("/modifyById")
+    @Operation(summary = "编辑方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result modify(@RequestBody SolutionModifyCmd solutionModifyCmd);
 }
