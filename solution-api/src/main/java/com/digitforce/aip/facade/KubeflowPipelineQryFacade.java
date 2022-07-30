@@ -21,7 +21,7 @@ import java.util.List;
  */
 @FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_PIPELINE_QRY)
-@RequestMapping(path = "/pipeline")
+@RequestMapping(path = {"/pipeline", "solution/pipeline"})
 public interface KubeflowPipelineQryFacade {
     @PostMapping("/getById")
     @Operation(summary = "通过id获取pipeline", tags = CommonConst.SWAGGER_TAG_PIPELINE_QRY)
