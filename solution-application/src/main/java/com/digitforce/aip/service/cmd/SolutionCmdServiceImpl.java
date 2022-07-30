@@ -27,8 +27,9 @@ import com.digitforce.framework.util.GsonUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 /**
  * 方案实施命令类
@@ -79,13 +80,13 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setExtra(GsonUtil.objectToString(taskDefineExtraDTO));
         Long taskId = Long.parseLong(taskDefineCmdFacade.addTask(taskDefineDTO).getData().toString());
         Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
-                kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
+            kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
         solution.setTaskId(taskId);
 //        PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource
 //        .class);
 //        solution.setDataSource(GsonUtil.objectToString(dataSource));
         solution.setSchedule(GlobalConstant.DEFAULT_CRON);
-        if (solutionAddCmd.getExecuteNow() == 1) {
+        if (solutionAddCmd.getNeedExecute()) {
             Long taskInstanceId = taskDefineCmdFacade.execute(taskId).getData();
             solution.setStatus(SolutionStatusEnum.EXECUTING);
             solution.setTaskInstanceId(taskInstanceId);
@@ -140,8 +141,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     public void execute(Long id) {
         Solution solution = solutionRepository.getById(id);
         if (solution != null && (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE
-                || solution.getStatus() == SolutionStatusEnum.FAILED
-                || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
+            || solution.getStatus() == SolutionStatusEnum.FAILED
+            || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
             Long taskInstanceId = taskDefineCmdFacade.execute(solution.getTaskId()).getData();
             solution = new Solution();
             solution.setId(id);
