@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * 策略查询接口实现类
+ * 方案服务查询接口类
  *
  * @author wangtonggui
  * @version 1.0.0
