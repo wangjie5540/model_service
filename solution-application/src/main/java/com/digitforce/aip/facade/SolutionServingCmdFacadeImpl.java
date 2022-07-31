@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
     @Override
-    public Result<SolutionServingDTO> add(SolutionServingAddCmd implementAddCmd) {
+    public Result<SolutionServingDTO> add(SolutionServingAddCmd solutionServingAddCmd) {
         return null;
     }
 }

@@ -23,5 +23,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface SolutionServingCmdFacade {
     @PostMapping("/add")
     @Operation(summary = "添加方案服务", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_CMD)
-    Result<SolutionServingDTO> add(@RequestBody SolutionServingAddCmd implementAddCmd);
+    Result<SolutionServingDTO> add(@RequestBody SolutionServingAddCmd solutionServingAddCmd);
 }
