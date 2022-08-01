@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2022/06/05 13:57
  */
 public interface SolutionCmdService extends CrudOperation<Solution> {
-    void add(SolutionAddCmd implementationAddCmd);
+    void add(SolutionAddCmd solutionAddCmd);
 
     void execute(Long id);
 

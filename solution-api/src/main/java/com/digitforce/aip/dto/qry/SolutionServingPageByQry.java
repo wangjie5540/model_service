@@ -12,13 +12,4 @@ import com.digitforce.framework.api.dto.PageQuery;
  * @since 2022/06/06 14:39
  */
 public class SolutionServingPageByQry extends PageQuery<SolutionServingDTO> {
-    private Long solutionId;
-
-    public Long getSolutionId() {
-        return solutionId;
-    }
-
-    public void setSolutionId(Long solutionId) {
-        this.solutionId = solutionId;
-    }
 }

@@ -1,5 +1,6 @@
 package com.digitforce.aip.dto.cmd;
 
+import com.digitforce.aip.dto.data.Filter;
 import com.digitforce.aip.dto.data.PipelineDataSource;
 import com.digitforce.framework.api.dto.Command;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -7,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 
 /**
  * 新增方案实体类
@@ -16,7 +18,7 @@ import java.time.temporal.ChronoUnit;
  * @since 2022/05/31 15:41
  */
 @Schema(
-    description = "新增方案实体类"
+        description = "新增方案实体类"
 )
 @Data
 public class SolutionAddCmd extends Command {
@@ -29,7 +31,7 @@ public class SolutionAddCmd extends Command {
     private String schedule;
     private Integer timeRange;
     private ChronoUnit timeUnit;
-    private Object selection;
+    private Map<String, Filter> selection;
     private Boolean needExecute = false;
     private String pipelineId;
     private String pipelineName;

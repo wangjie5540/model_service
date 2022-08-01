@@ -14,6 +14,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("solution")
+@TableName(value = "solution", autoResultMap = true)
 public class Solution extends SolutionPO {
 }
