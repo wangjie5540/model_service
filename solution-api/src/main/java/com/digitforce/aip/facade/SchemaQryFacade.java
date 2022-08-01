@@ -21,14 +21,14 @@ import java.util.List;
  * @version 1.0.0
  */
 @FeignClient("solution")
-@Tag(name = CommonConst.SWAGGER_TAG_SCENE_QRY)
+@Tag(name = CommonConst.SWAGGER_TAG_SCHEMA_QRY)
 @RequestMapping(path = "/solution/schema")
 public interface SchemaQryFacade {
     @PostMapping("/listTable")
-    @Operation(summary = "获取table列表", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
+    @Operation(summary = "获取table列表", tags = CommonConst.SWAGGER_TAG_SCHEMA_QRY)
     Result<List<String>> listTable(@RequestBody SchemaListTableQry schemaListTableQry);
 
     @PostMapping("/getByTable")
-    @Operation(summary = "表schema信息查询", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
+    @Operation(summary = "表schema信息查询", tags = CommonConst.SWAGGER_TAG_SCHEMA_QRY)
     Result<SchemaDTO> getByTable(@RequestBody SchemaGetByTableQry schemaGetByTableQry);
 }
