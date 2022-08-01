@@ -1,14 +1,13 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.framework.api.dto.Result;
 import com.digitforce.aip.dto.data.CatalogDTO;
 import com.digitforce.aip.dto.qry.CatalogListQry;
 import com.digitforce.aip.dto.qry.CatalogPageQry;
 import com.digitforce.aip.service.qry.CatalogQryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.tool.ConvertTool;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.digitforce.framework.tool.ConvertTool;
 
 import javax.annotation.Resource;
 import java.util.Collections;
@@ -40,7 +39,8 @@ public class CatalogQryFacadeImpl implements CatalogQryFacade {
      */
     @Override
     public Result<List<CatalogDTO>> getByIds(@RequestBody List<Long> catalogIds) {
-        List<CatalogDTO> catalogDTOList = ConvertTool.convert(catalogQryService.listByIds(catalogIds), CatalogDTO.class);
+        List<CatalogDTO> catalogDTOList = ConvertTool.convert(catalogQryService.listByIds(catalogIds),
+                CatalogDTO.class);
         return Result.success(catalogDTOList);
     }
 
@@ -51,7 +51,7 @@ public class CatalogQryFacadeImpl implements CatalogQryFacade {
      * @return
      */
     @Override
-    public  Result<List<CatalogDTO>> listBy(@RequestBody CatalogListQry catalogListQry) {
+    public Result<List<CatalogDTO>> listBy(@RequestBody CatalogListQry catalogListQry) {
         return Result.success(Collections.emptyList());
     }
 
@@ -65,6 +65,4 @@ public class CatalogQryFacadeImpl implements CatalogQryFacade {
     public Result<List<CatalogDTO>> pageBy(@RequestBody CatalogPageQry catalogPageQry) {
         return Result.success(Collections.emptyList());
     }
-
-
 }

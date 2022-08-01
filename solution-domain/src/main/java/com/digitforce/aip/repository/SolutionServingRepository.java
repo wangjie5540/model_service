@@ -1,6 +1,6 @@
 package com.digitforce.aip.repository;
 
-import com.digitforce.aip.domain.SolutionTemplate;
+import com.digitforce.aip.domain.SolutionServing;
 import com.digitforce.framework.operation.CrudOperation;
 
 /**
@@ -10,6 +10,6 @@ import com.digitforce.framework.operation.CrudOperation;
  * @version 1.0.0
  * @since 2022/06/05 13:54
  */
-public interface SolutionServingRepository extends CrudOperation<SolutionTemplate> {
-    boolean isExist(SolutionTemplate solutionTemplate);
+public interface SolutionServingRepository extends CrudOperation<SolutionServing> {
+    boolean isExist(SolutionServing solutionServing);
 }

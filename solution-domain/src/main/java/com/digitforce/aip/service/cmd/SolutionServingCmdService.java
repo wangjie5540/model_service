@@ -4,7 +4,7 @@ import com.digitforce.aip.domain.SolutionServing;
 import com.digitforce.framework.operation.CrudOperation;
 
 /**
- * TODO
+ * 方案服务命令接口类
  *
  * @author wangtonggui
  * @version 1.0.0
