@@ -9,5 +9,7 @@ public enum FunctionEnum {
     LE,
     IS_NULL,
     IS_NOT_NULL,
+    INCLUDE,
+    NOT_INCLUDE,
     BETWEEN,
 }

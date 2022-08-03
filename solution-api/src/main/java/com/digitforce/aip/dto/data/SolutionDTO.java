@@ -5,13 +5,13 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
+import java.util.List;
 
 @Data
 public class SolutionDTO {
     private Long id;
     private String name;
-    private Map<String, Filter> selection;
+    private List<TableSelection> selection;
     private String schedule;
     private Long templateId;
     private Long taskId;

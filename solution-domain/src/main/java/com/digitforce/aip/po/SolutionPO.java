@@ -2,14 +2,14 @@ package com.digitforce.aip.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.digitforce.aip.dto.data.Filter;
+import com.digitforce.aip.dto.data.TableSelection;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.framework.domain.TenantEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
+import java.util.List;
 
 /**
  * 方案持久化类
@@ -28,7 +28,7 @@ public class SolutionPO extends TenantEntity<Long> {
     private String scene;
     private String name;
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private Map<String, Filter> selection;
+    private List<TableSelection> selection;
     private String description;
     private String dataSource;
     private String schedule;
