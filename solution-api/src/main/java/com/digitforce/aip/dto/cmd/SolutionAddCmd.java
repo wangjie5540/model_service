@@ -32,6 +32,7 @@ public class SolutionAddCmd extends Command {
     private Integer timeRange;
     private ChronoUnit timeUnit;
     private List<TableSelection> selection;
+    private Object frontExtra;
     private Boolean needExecute = false;
     private String pipelineId;
     private String pipelineName;
