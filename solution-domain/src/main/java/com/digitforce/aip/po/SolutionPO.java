@@ -30,6 +30,9 @@ public class SolutionPO extends TenantEntity<Long> {
     private String name;
     @TableField(typeHandler = JacksonTypeHandler.class)
     private List<TableSelection> selection;
+    // 前端临时参数存储
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private Object frontExtra;
     private String description;
     @TableField(typeHandler = JacksonTypeHandler.class)
     private PipelineDataSource dataSource;

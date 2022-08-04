@@ -12,6 +12,7 @@ public class SolutionDTO {
     private Long id;
     private String name;
     private List<TableSelection> selection;
+    private Object frontExtra;
     private String schedule;
     private Long templateId;
     private Long taskId;
