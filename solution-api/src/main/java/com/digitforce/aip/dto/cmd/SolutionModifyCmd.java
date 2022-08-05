@@ -1,7 +1,7 @@
 package com.digitforce.aip.dto.cmd;
 
-import com.digitforce.aip.dto.data.Filter;
 import com.digitforce.aip.dto.data.PipelineDataSource;
+import com.digitforce.aip.dto.data.TableSelection;
 import com.digitforce.framework.api.dto.Command;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
+import java.util.List;
 
 /**
  * 编辑方案实体类
@@ -31,6 +31,6 @@ public class SolutionModifyCmd extends Command {
     private String schedule;
     private Integer timeRange;
     private ChronoUnit timeUnit;
-    private Map<String, Filter> selection;
+    private List<TableSelection> selection;
     private PipelineDataSource dataSource;
 }
