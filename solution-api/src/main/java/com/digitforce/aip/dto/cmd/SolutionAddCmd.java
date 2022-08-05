@@ -22,6 +22,7 @@ import java.util.List;
 )
 @Data
 public class SolutionAddCmd extends Command {
+    @Parameter(required = true)
     private Long templateId;
     @Parameter(required = true)
     private String name;
@@ -34,7 +35,9 @@ public class SolutionAddCmd extends Command {
     private List<TableSelection> selection;
     private Object frontExtra;
     private Boolean needExecute = false;
+    @Parameter(required = true)
     private String pipelineId;
+    @Parameter(required = true)
     private String pipelineName;
     private PipelineDataSource dataSource;
 }
