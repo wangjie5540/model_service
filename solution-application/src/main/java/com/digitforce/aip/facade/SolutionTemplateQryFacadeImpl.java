@@ -3,11 +3,7 @@ package com.digitforce.aip.facade;
 import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.SolutionTemplate;
-import com.digitforce.aip.dto.data.PipelineDataSource;
-import com.digitforce.aip.dto.data.PipelineParameterDTO;
-import com.digitforce.aip.dto.data.PropertyDesc;
-import com.digitforce.aip.dto.data.SolutionTemplateDTO;
-import com.digitforce.aip.dto.data.TemplateStatusListDTO;
+import com.digitforce.aip.dto.data.*;
 import com.digitforce.aip.dto.qry.SolutionTemplateGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionTemplatePageByQry;
 import com.digitforce.aip.enums.DataTypeEnum;
@@ -24,9 +20,8 @@ import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 方案查询接口实现类
@@ -52,9 +47,9 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         }
         SolutionTemplateDTO solutionTemplateDTO = ConvertTool.convert(solutionTemplate, SolutionTemplateDTO.class);
         Pipeline pipeline = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
-            kubeflowProperties.getPort(), solutionTemplateDTO.getPipelineId());
+                kubeflowProperties.getPort(), solutionTemplateDTO.getPipelineId());
         solutionTemplateDTO.setPipelineParameter(GsonUtil.gsonToBean(pipeline.getDescription(),
-            PipelineParameterDTO.class));
+                PipelineParameterDTO.class));
         solutionTemplateMapper.browseCountInc(solutionGetByIdQry.getId());
         PipelineDataSource dataSource = getDatasource();
         solutionTemplateDTO.setDataSource(dataSource);
@@ -67,14 +62,29 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         List<PropertyDesc> goodsProperties = Lists.newArrayList();
         goodsProperties.add(new PropertyDesc("category", "品类", DataTypeEnum.STRING));
         goodsProperties.add(new PropertyDesc("tags", "标签", DataTypeEnum.STRING));
+        goodsProperties.add(new PropertyDesc("author", "作者", DataTypeEnum.STRING));
+        goodsProperties.add(new PropertyDesc("merchant", "商家", DataTypeEnum.STRING));
+        goodsProperties.add(new PropertyDesc("publish_time", "发布时间", DataTypeEnum.DATETIME));
         dataSource.setGoodsData(goodsProperties);
         List<PropertyDesc> userProperties = Lists.newArrayList();
         userProperties.add(new PropertyDesc("userId", "用户id", DataTypeEnum.STRING));
         userProperties.add(new PropertyDesc("age", "用户年龄", DataTypeEnum.NUMERIC));
         userProperties.add(new PropertyDesc("city", "城市", DataTypeEnum.STRING));
+        userProperties.add(new PropertyDesc("channel_user_id", "用户渠道id", DataTypeEnum.STRING));
+        userProperties.add(new PropertyDesc("channel_type", "渠道类型", DataTypeEnum.STRING));
+        userProperties.add(new PropertyDesc("sex", "性别", DataTypeEnum.STRING));
+        userProperties.add(new PropertyDesc("birthday", "生日", DataTypeEnum.STRING));
+        userProperties.add(new PropertyDesc("education", "学历", DataTypeEnum.STRING));
+        userProperties.add(new PropertyDesc("constellation", "星座", DataTypeEnum.STRING));
+        userProperties.add(new PropertyDesc("country_code", "国籍编码", DataTypeEnum.STRING));
+        userProperties.add(new PropertyDesc("country_code", "国籍编码", DataTypeEnum.STRING));
+        userProperties.add(new PropertyDesc("city_code", "故乡城市", DataTypeEnum.STRING));
+        userProperties.add(new PropertyDesc("signup_datetime", "注册时间", DataTypeEnum.DATETIME));
+        userProperties.add(new PropertyDesc("last_view_time", "末次访问时间", DataTypeEnum.DATETIME));
         dataSource.setUserData(userProperties);
         List<PropertyDesc> orderProperties = Lists.newArrayList();
         orderProperties.add(new PropertyDesc("amount", "订单金额", DataTypeEnum.NUMERIC));
+        orderProperties.add(new PropertyDesc("total_amount", "交易总金额", DataTypeEnum.NUMERIC));
         orderProperties.add(new PropertyDesc("count", "商品数量", DataTypeEnum.NUMERIC));
         dataSource.setOrderData(orderProperties);
         // TODO 流量的数据结构需要设计
@@ -85,7 +95,7 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
     public Result<PageView<SolutionTemplateDTO>> pageBy(@RequestBody SolutionTemplatePageByQry templatePageByQry) {
         PageView<SolutionTemplate> templatePageView = solutionTemplateQryService.pageBy(templatePageByQry);
         PageView<SolutionTemplateDTO> solutionDTOPageView = PageTool.pageView(templatePageView,
-            SolutionTemplateDTO.class);
+                SolutionTemplateDTO.class);
         solutionDTOPageView.getList().forEach(s -> s.setDataSource(getDatasource()));
         return Result.success(solutionDTOPageView);
     }
@@ -96,7 +106,7 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         solutionTemplate.setStatus(TemplateStatusEnum.ONLINE);
         List<SolutionTemplate> solutionTemplateList = solutionTemplateQryService.listBy(solutionTemplate);
         List<SolutionTemplateDTO> solutionTemplateDTOS =
-            ConvertTool.convert(solutionTemplateList, SolutionTemplateDTO.class);
+                ConvertTool.convert(solutionTemplateList, SolutionTemplateDTO.class);
         solutionTemplateDTOS.forEach(s -> s.setDataSource(getDatasource()));
         return Result.success(solutionTemplateDTOS);
     }
