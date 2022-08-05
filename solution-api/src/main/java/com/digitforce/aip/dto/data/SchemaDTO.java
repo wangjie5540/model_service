@@ -14,5 +14,6 @@ import java.util.List;
 @Data
 public class SchemaDTO {
     private String tableName;
+    private String tableCname;
     private List<PropertyDesc> propertyList;
 }
