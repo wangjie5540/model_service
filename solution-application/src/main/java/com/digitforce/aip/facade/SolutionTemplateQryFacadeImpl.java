@@ -3,7 +3,10 @@ package com.digitforce.aip.facade;
 import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.SolutionTemplate;
-import com.digitforce.aip.dto.data.*;
+import com.digitforce.aip.dto.data.PipelineDataSource;
+import com.digitforce.aip.dto.data.PropertyDesc;
+import com.digitforce.aip.dto.data.SolutionTemplateDTO;
+import com.digitforce.aip.dto.data.TemplateStatusListDTO;
 import com.digitforce.aip.dto.qry.SolutionTemplateGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionTemplatePageByQry;
 import com.digitforce.aip.enums.DataTypeEnum;
@@ -15,7 +18,6 @@ import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
-import com.digitforce.framework.util.GsonUtil;
 import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,8 +50,8 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         SolutionTemplateDTO solutionTemplateDTO = ConvertTool.convert(solutionTemplate, SolutionTemplateDTO.class);
         Pipeline pipeline = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), solutionTemplateDTO.getPipelineId());
-        solutionTemplateDTO.setPipelineParameter(GsonUtil.gsonToBean(pipeline.getDescription(),
-                PipelineParameterDTO.class));
+//        solutionTemplateDTO.setPipelineParameter(GsonUtil.gsonToBean(pipeline.getDescription(),
+//                PipelineParameterDTO.class));
         solutionTemplateMapper.browseCountInc(solutionGetByIdQry.getId());
         PipelineDataSource dataSource = getDatasource();
         solutionTemplateDTO.setDataSource(dataSource);
