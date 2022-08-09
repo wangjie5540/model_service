@@ -7,6 +7,7 @@ import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.SolutionMapper;
+import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.aip.model.Pipeline;
 import com.digitforce.aip.model.SolutionDefine;
 import com.digitforce.aip.model.TaskDefineExtraDTO;
@@ -48,6 +49,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     private KubeflowProperties kubeflowProperties;
     @Resource
     private SolutionMapper solutionMapper;
+    @Resource
+    private SolutionTemplateMapper solutionTemplateMapper;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -93,6 +96,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             solution.setTaskInstanceId(taskInstanceId);
         }
         solutionRepository.upsert(solution);
+        solutionTemplateMapper.applyCountInc(solutionAddCmd.getTemplateId());
     }
 
     @Override

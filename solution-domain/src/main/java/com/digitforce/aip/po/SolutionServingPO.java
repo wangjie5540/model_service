@@ -7,7 +7,7 @@ import com.digitforce.framework.domain.TenantEntity;
 import lombok.Data;
 
 /**
- * 方案实施持久化类
+ * 方案服务持久化类
  *
  * @author wangtonggui
  * @version 1.0.0
