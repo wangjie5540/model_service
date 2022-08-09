@@ -1,6 +1,5 @@
 package com.digitforce.aip.service.cmd;
 
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.digitforce.aip.GlobalConstant;
 import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
@@ -8,6 +7,7 @@ import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.SolutionMapper;
+import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.aip.model.Pipeline;
 import com.digitforce.aip.model.SolutionDefine;
 import com.digitforce.aip.model.TaskDefineExtraDTO;
@@ -49,6 +49,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     private KubeflowProperties kubeflowProperties;
     @Resource
     private SolutionMapper solutionMapper;
+    @Resource
+    private SolutionTemplateMapper solutionTemplateMapper;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -56,6 +58,9 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         // TODO 参数校验
 //        solutionValidator.validate(null);
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
+        // TODO 应产品要求，近期必须使用自增id，所以先进行save，获取数据库自增id，供任务管理使用
+        // TODO 后续推动产品级别纠正为全局统一id
+        solutionRepository.save(solution);
         // TODO 需要任务服务新增对应的任务类型定义
         TaskDefineDTO taskDefineDTO = new AlgorithmTaskDefineDTO();
         taskDefineDTO.setCategory(TaskCategory.BATCH);
@@ -70,7 +75,6 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setProjectId(GlobalConstant.DEFAULT_PROJECT_ID);
         taskDefineDTO.setType(TaskType.ALGORITHM);
         taskDefineDTO.setIsRunNow(0);
-        solution.setId(IdWorker.getId());
         TriggerRunCmd triggerRunCmd = constructTriggerCmd(solution.getId(), solutionAddCmd);
         SolutionDefine solutionDefine = ConvertTool.convert(solution, SolutionDefine.class);
         TaskDefineExtraDTO taskDefineExtraDTO = new TaskDefineExtraDTO();
@@ -91,7 +95,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             solution.setStatus(SolutionStatusEnum.EXECUTING);
             solution.setTaskInstanceId(taskInstanceId);
         }
-        solutionRepository.save(solution);
+        solutionRepository.upsert(solution);
+        solutionTemplateMapper.applyCountInc(solutionAddCmd.getTemplateId());
     }
 
     @Override

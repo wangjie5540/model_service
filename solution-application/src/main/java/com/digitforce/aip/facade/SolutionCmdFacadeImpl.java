@@ -1,13 +1,7 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.domain.Solution;
-import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionAddCronCmd;
-import com.digitforce.aip.dto.cmd.SolutionBatchStatusCmd;
-import com.digitforce.aip.dto.cmd.SolutionClearCronCmd;
-import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
-import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
-import com.digitforce.aip.dto.cmd.SolutionStatusCmd;
+import com.digitforce.aip.dto.cmd.*;
 import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
