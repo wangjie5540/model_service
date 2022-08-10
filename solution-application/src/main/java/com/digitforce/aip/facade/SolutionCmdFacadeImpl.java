@@ -2,6 +2,7 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.*;
+import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
@@ -95,6 +96,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     public Result modify(SolutionModifyCmd solutionModifyCmd) {
         // TODO 添加状态控制
         Solution solution = ConvertTool.convert(solutionModifyCmd, Solution.class);
+        solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
         solutionCmdService.modifyById(solution);
         return Result.success();
     }
