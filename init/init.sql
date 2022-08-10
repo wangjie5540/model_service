@@ -1,19 +1,5 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : 算法平台-dev环境
- Source Server Type    : MySQL
- Source Server Version : 50738
- Source Host           : 172.21.32.143:3306
- Source Schema         : aip_solution
-
- Target Server Type    : MySQL
- Target Server Version : 50738
- File Encoding         : 65001
-
- Date: 10/08/2022 18:45:33
-*/
-
+CREATE
+DATABASE aip_solution;
 SET NAMES utf8mb4;
 SET
 FOREIGN_KEY_CHECKS = 0;
@@ -21,7 +7,6 @@ FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for solution
 -- ----------------------------
-DROP TABLE IF EXISTS `solution`;
 CREATE TABLE `solution`
 (
     `id`                  bigint(20) NOT NULL AUTO_INCREMENT COMMENT '方案主键id',
@@ -53,7 +38,6 @@ CREATE TABLE `solution`
 -- ----------------------------
 -- Table structure for solution_serving
 -- ----------------------------
-DROP TABLE IF EXISTS `solution_serving`;
 CREATE TABLE `solution_serving`
 (
     `id`           bigint(20) NOT NULL COMMENT '方案服务id',
@@ -73,7 +57,6 @@ CREATE TABLE `solution_serving`
 -- ----------------------------
 -- Table structure for solution_template
 -- ----------------------------
-DROP TABLE IF EXISTS `solution_template`;
 CREATE TABLE `solution_template`
 (
     `id`            bigint(20) NOT NULL AUTO_INCREMENT COMMENT '模板主键id',
@@ -115,6 +98,10 @@ FOREIGN_KEY_CHECKS = 1;
 
  Date: 10/08/2022 18:46:53
 */
+CREATE
+DATABASE aip_model;
+    USE
+aip_model;
 
 SET NAMES utf8mb4;
 SET
@@ -123,7 +110,6 @@ FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for model
 -- ----------------------------
-DROP TABLE IF EXISTS `model`;
 CREATE TABLE `model`
 (
     `id`               bigint(20) NOT NULL,
@@ -149,7 +135,6 @@ CREATE TABLE `model`
 -- ----------------------------
 -- Table structure for model_package
 -- ----------------------------
-DROP TABLE IF EXISTS `model_package`;
 CREATE TABLE `model_package`
 (
     `id`               bigint(20) NOT NULL COMMENT '模型簇id',
