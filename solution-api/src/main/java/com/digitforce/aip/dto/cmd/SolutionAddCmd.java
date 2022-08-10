@@ -40,4 +40,5 @@ public class SolutionAddCmd extends Command {
     @Parameter(required = true)
     private String pipelineName;
     private PipelineDataSource dataSource;
+    private String createUser;
 }

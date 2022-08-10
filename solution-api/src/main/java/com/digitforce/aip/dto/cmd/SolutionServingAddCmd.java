@@ -23,4 +23,5 @@ public class SolutionServingAddCmd extends Command {
     private Long solutionId;
     private List<TableSelection> selection;
     private ServingTypeEnum servingType;
+    private String createUser;
 }
