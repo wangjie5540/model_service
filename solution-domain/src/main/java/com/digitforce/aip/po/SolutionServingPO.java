@@ -2,9 +2,12 @@ package com.digitforce.aip.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.digitforce.aip.dto.data.TableSelection;
 import com.digitforce.aip.enums.ServingTypeEnum;
 import com.digitforce.framework.domain.TenantEntity;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 方案服务持久化类
@@ -19,6 +22,6 @@ public class SolutionServingPO extends TenantEntity<Long> {
     private Long id;
     private Long solutionId;
     private Long templateId;
-    private String config;
+    private List<TableSelection> selection;
     private ServingTypeEnum servingType;
 }
