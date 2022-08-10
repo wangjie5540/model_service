@@ -26,4 +26,14 @@ public class SolutionTemplateDTO extends AggregateRoot<Long> {
     private String schedule = GlobalConstant.DEFAULT_CRON;
     private PipelineParameterDTO pipelineParameter;
     private TemplateStatusEnum status;
+
+    // TODO 添加mock用户数据
+    public String getCreateUser() {
+        return "admin";
+    }
+
+    // TODO 添加mock用户数据
+    public String getUpdateUser() {
+        return "admin";
+    }
 }
