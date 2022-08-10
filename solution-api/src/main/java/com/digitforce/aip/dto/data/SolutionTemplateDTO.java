@@ -32,14 +32,4 @@ public class SolutionTemplateDTO {
     private String updateUser;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
-
-    // TODO 添加mock用户数据
-    public String getCreateUser() {
-        return "admin";
-    }
-
-    // TODO 添加mock用户数据
-    public String getUpdateUser() {
-        return "admin";
-    }
 }
