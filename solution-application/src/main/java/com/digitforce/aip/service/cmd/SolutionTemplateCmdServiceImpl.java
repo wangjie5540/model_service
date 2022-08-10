@@ -7,6 +7,7 @@ import com.digitforce.aip.enums.TemplateStatusEnum;
 import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.aip.repository.SolutionTemplateRepository;
 import com.digitforce.aip.validator.SolutionValidator;
+import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.operation.DefaultService;
 import com.digitforce.framework.tool.ConvertTool;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
     public void add(SolutionTemplateAddCmd solutionAddCmd) {
 //        solutionValidator.validate(null);
         SolutionTemplate solutionTemplate = ConvertTool.convert(solutionAddCmd, SolutionTemplate.class);
+        solutionTemplate.setCreateUser(TenantContext.tenant().getUserName());
         solutionTemplateRepository.save(solutionTemplate);
     }
 
