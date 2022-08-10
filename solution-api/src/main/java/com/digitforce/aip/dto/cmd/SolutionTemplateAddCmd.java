@@ -23,4 +23,5 @@ public class SolutionTemplateAddCmd extends Command {
     private String pipelineName;
     private String description;
     private TemplateStatusEnum status;
+    private String createUser;
 }

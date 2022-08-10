@@ -3,7 +3,7 @@ package com.digitforce.aip.po;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.digitforce.aip.enums.TemplateStatusEnum;
-import com.digitforce.framework.domain.TenantEntity;
+import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
 
 /**
@@ -14,7 +14,7 @@ import lombok.Data;
  * @since 2022/06/05 13:55
  */
 @Data
-public class SolutionTemplatePO extends TenantEntity<Long> {
+public class SolutionTemplatePO extends AggregateRoot<Long> {
     @TableId(type = IdType.AUTO)
     private Long id;
     private String name;

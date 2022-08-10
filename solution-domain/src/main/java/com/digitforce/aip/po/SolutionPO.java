@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.digitforce.aip.dto.data.PipelineDataSource;
 import com.digitforce.aip.dto.data.TableSelection;
 import com.digitforce.aip.enums.SolutionStatusEnum;
-import com.digitforce.framework.domain.TenantEntity;
+import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class SolutionPO extends TenantEntity<Long> {
+public class SolutionPO extends AggregateRoot<Long> {
     @TableId(type = IdType.AUTO)
     private Long id;
     private Long templateId;
