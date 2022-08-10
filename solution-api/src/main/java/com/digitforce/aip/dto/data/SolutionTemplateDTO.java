@@ -2,8 +2,9 @@ package com.digitforce.aip.dto.data;
 
 import com.digitforce.aip.GlobalConstant;
 import com.digitforce.aip.enums.TemplateStatusEnum;
-import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * 方案模板实体定义类
@@ -13,7 +14,8 @@ import lombok.Data;
  * @since 2022/05/31 15:35
  */
 @Data
-public class SolutionTemplateDTO extends AggregateRoot<Long> {
+public class SolutionTemplateDTO {
+    private Long id;
     private String name;
     private String scene;
     private String description;
@@ -26,6 +28,10 @@ public class SolutionTemplateDTO extends AggregateRoot<Long> {
     private String schedule = GlobalConstant.DEFAULT_CRON;
     private PipelineParameterDTO pipelineParameter;
     private TemplateStatusEnum status;
+    private String createUser;
+    private String updateUser;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 
     // TODO 添加mock用户数据
     public String getCreateUser() {

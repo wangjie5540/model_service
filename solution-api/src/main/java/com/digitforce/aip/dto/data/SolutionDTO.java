@@ -1,14 +1,15 @@
 package com.digitforce.aip.dto.data;
 
 import com.digitforce.aip.enums.SolutionStatusEnum;
-import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Data
-public class SolutionDTO extends AggregateRoot<Long> {
+public class SolutionDTO {
+    private Long id;
     private String name;
     private List<TableSelection> selection;
     private Object frontExtra;
@@ -21,4 +22,6 @@ public class SolutionDTO extends AggregateRoot<Long> {
     private Integer timeRange;
     private ChronoUnit timeUnit;
     private SolutionStatusEnum status;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
 }
