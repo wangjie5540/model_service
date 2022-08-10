@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -115,9 +116,8 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
 
     @Override
     public Result<TemplateStatusListDTO> statusListBy() {
-        List<TemplateStatusEnum> statusList = Lists.newArrayList(TemplateStatusEnum.ONLINE, TemplateStatusEnum.OFFLINE);
         TemplateStatusListDTO templateStatusListDTO = new TemplateStatusListDTO();
-        templateStatusListDTO.setStatusList(statusList);
+        templateStatusListDTO.setStatusList(Arrays.asList(TemplateStatusEnum.values()));
         return Result.success(templateStatusListDTO);
     }
 }
