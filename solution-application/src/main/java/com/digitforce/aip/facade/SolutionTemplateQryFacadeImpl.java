@@ -56,8 +56,6 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         solutionTemplateMapper.browseCountInc(solutionGetByIdQry.getId());
         PipelineDataSource dataSource = getDatasource();
         solutionTemplateDTO.setDataSource(dataSource);
-        // TODO: mock数据
-        solutionTemplate.setUpdateUser("admin");
         return Result.success(solutionTemplateDTO);
     }
 
