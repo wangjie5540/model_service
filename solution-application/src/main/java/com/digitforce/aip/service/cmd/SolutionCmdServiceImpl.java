@@ -21,9 +21,11 @@ import com.digitforce.bdp.operatex.core.consts.TaskCategory;
 import com.digitforce.bdp.operatex.core.consts.TaskType;
 import com.digitforce.bdp.operatex.core.consts.algorithm.AlgorithmTaskDefineDTO;
 import com.digitforce.bdp.operatex.core.dto.TaskDefineDTO;
+import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.operation.DefaultService;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.util.GsonUtil;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,9 +60,13 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         // TODO 参数校验
 //        solutionValidator.validate(null);
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
-        // TODO 应产品要求，近期必须使用自增id，所以先进行save，获取数据库自增id，供任务管理使用
-        // TODO 后续推动产品级别纠正为全局统一id
-        solutionRepository.save(solution);
+        try {
+            // TODO 应产品要求，近期必须使用自增id，所以先进行save，获取数据库自增id，供任务管理使用
+            // TODO 后续推动产品级别纠正为全局统一id
+            solutionRepository.save(solution);
+        } catch (DuplicateKeyException e) {
+            throw new BizException("方案名称重复");
+        }
         // TODO 需要任务服务新增对应的任务类型定义
         TaskDefineDTO taskDefineDTO = new AlgorithmTaskDefineDTO();
         taskDefineDTO.setCategory(TaskCategory.BATCH);
