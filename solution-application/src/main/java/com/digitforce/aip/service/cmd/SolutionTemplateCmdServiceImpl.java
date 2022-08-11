@@ -41,6 +41,7 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
 //        solutionValidator.validate(null);
         SolutionTemplate solutionTemplate = ConvertTool.convert(solutionAddCmd, SolutionTemplate.class);
         solutionTemplate.setCreateUser(TenantContext.tenant().getUserName());
+        solutionTemplate.setUpdateUser(TenantContext.tenant().getUserName());
         try {
             solutionTemplateRepository.save(solutionTemplate);
         } catch (DuplicateKeyException e) {
