@@ -7,9 +7,12 @@ import com.digitforce.aip.enums.TemplateStatusEnum;
 import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.aip.repository.SolutionTemplateRepository;
 import com.digitforce.aip.validator.SolutionValidator;
+import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.operation.DefaultService;
 import com.digitforce.framework.tool.ConvertTool;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
  * @since 2022/06/05 13:59
  */
 @Service
+@Slf4j
 public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTemplate> implements SolutionTemplateCmdService {
     @Resource
     private SolutionValidator solutionValidator;
@@ -37,7 +41,11 @@ public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTempl
 //        solutionValidator.validate(null);
         SolutionTemplate solutionTemplate = ConvertTool.convert(solutionAddCmd, SolutionTemplate.class);
         solutionTemplate.setCreateUser(TenantContext.tenant().getUserName());
-        solutionTemplateRepository.save(solutionTemplate);
+        try {
+            solutionTemplateRepository.save(solutionTemplate);
+        } catch (DuplicateKeyException e) {
+            throw new BizException("模板名称重复");
+        }
     }
 
     @Override
