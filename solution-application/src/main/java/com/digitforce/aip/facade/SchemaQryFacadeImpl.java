@@ -56,7 +56,7 @@ public class SchemaQryFacadeImpl implements SchemaQryFacade {
         DictEntryDTO dictEntryDTO = new DictEntryDTO();
         dictEntryDTO.setTypeKey("screen_table");
         List<DictEntryDTO> dictEntryDTOList = dictEntryQryFacade.listByTypeKey(dictEntryDTO).getData();
-        return Result.success(dictEntryDTOList.stream().map(DictEntryDTO::getEntryKey).collect(Collectors.toList()));
+        return Result.success(dictEntryDTOList.stream().map(DictEntryDTO::getEntryName).collect(Collectors.toList()));
     }
 
     @Override
