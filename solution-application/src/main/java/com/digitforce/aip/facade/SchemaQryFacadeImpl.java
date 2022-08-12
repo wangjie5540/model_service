@@ -37,7 +37,7 @@ public class SchemaQryFacadeImpl implements SchemaQryFacade {
         propertyDescList.add(new PropertyDesc("tags", "物品标签", DataTypeEnum.STRING));
         propertyDescList.add(new PropertyDesc("publish_time", "发布时间", DataTypeEnum.DATETIME));
         schemaDTO.setPropertyList(propertyDescList);
-        schemaMap.put("goods_table", schemaDTO);
+        schemaMap.put("物品表", schemaDTO);
         schemaDTO = new SchemaDTO();
         schemaDTO.setTableName("user_table");
         schemaDTO.setTableCname("用户表");
@@ -45,7 +45,7 @@ public class SchemaQryFacadeImpl implements SchemaQryFacade {
         propertyDescList.add(new PropertyDesc("age", "品类", DataTypeEnum.NUMERIC));
         propertyDescList.add(new PropertyDesc("last_login_time", "上次登录时间", DataTypeEnum.DATETIME));
         schemaDTO.setPropertyList(propertyDescList);
-        schemaMap.put("user_table", schemaDTO);
+        schemaMap.put("用户表", schemaDTO);
     }
 
     @Resource
