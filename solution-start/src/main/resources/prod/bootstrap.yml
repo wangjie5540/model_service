@@ -4,14 +4,14 @@ spring:
     nacos:
       discovery:
         # https://digit-force.coding.net/km/spaces/47/pages/K-986
-        server-addr: test-nacos-n1.digitforce.com:8848,test-nacos-n2.digitforce.com:8848,test-nacos-n3.digitforce.com:8848
+        server-addr: prod-nacos-n1.digitforce.com:8848,prod-nacos-n2.digitforce.com:8848,prod-nacos-n3.digitforce.com:8848
         username: nacos
         password: nacos
         register-enabled: true
         namespace: dev
       config:
         enabled: true
-        server-addr: test-nacos-n1.digitforce.com:8848,test-nacos-n2.digitforce.com:8848,test-nacos-n3.digitforce.com:8848
+        server-addr: prod-nacos-n1.digitforce.com:8848,prod-nacos-n2.digitforce.com:8848,prod-nacos-n3.digitforce.com:8848
         namespace: dev
         username: nacos
         password: nacos
