@@ -1,5 +1,7 @@
 CREATE
 DATABASE aip_solution;
+USE
+aip_solution;
 SET NAMES utf8mb4;
 SET
 FOREIGN_KEY_CHECKS = 0;
