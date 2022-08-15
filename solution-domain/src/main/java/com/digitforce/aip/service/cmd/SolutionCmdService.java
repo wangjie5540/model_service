@@ -2,6 +2,7 @@ package com.digitforce.aip.service.cmd;
 
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.framework.operation.CrudOperation;
 
 import java.util.List;
@@ -41,4 +42,6 @@ public interface SolutionCmdService extends CrudOperation<Solution> {
     void delete(Long id);
 
     void batchDelete(List<Long> ids);
+
+    boolean modifyById(SolutionModifyCmd solutionModifyCmd);
 }

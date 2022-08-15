@@ -5,6 +5,7 @@ import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.mapper.SolutionTemplateMapper;
@@ -33,7 +34,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 方案实施命令类
+ * 方案命令类
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -212,6 +213,15 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Override
     public void batchDelete(List<Long> ids) {
         ids.forEach(this::delete);
+    }
+
+    @Override
+    public boolean modifyById(SolutionModifyCmd solutionModifyCmd) {
+        Solution solution = ConvertTool.convert(solutionModifyCmd, Solution.class);
+        if (solutionModifyCmd.getNeedExecute()) {
+            taskDefineCmdFacade.execute(getById(solution.getId()).getTaskId());
+        }
+        return modifyById(solution);
     }
 
     @Override
