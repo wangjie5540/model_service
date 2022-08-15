@@ -97,7 +97,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
         // TODO 添加状态控制
         Solution solution = ConvertTool.convert(solutionModifyCmd, Solution.class);
         solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
-        solutionCmdService.modifyById(solution);
+        solutionCmdService.modifyById(solutionModifyCmd);
         return Result.success();
     }
 }
