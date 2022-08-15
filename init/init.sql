@@ -1,5 +1,7 @@
 CREATE
 DATABASE aip_solution;
+USE
+aip_solution;
 SET NAMES utf8mb4;
 SET
 FOREIGN_KEY_CHECKS = 0;
@@ -40,7 +42,7 @@ CREATE TABLE `solution`
 -- ----------------------------
 CREATE TABLE `solution_serving`
 (
-    `id`           bigint(20) NOT NULL COMMENT '方案服务id',
+    `id`           bigint(20) NOT NULL AUTO_INCREMENT COMMENT '方案服务id',
     `tenant_id`    int(11) DEFAULT NULL COMMENT '租户id',
     `template_id`  bigint(20) DEFAULT NULL COMMENT '方案模板id',
     `solution_id`  bigint(20) DEFAULT NULL COMMENT '方案id',
@@ -112,7 +114,7 @@ FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 CREATE TABLE `model`
 (
-    `id`               bigint(20) NOT NULL,
+    `id`               bigint(20) NOT NULL AUTO_INCREMENT,
     `tenant_id`        int(11) DEFAULT NULL COMMENT '租户id',
     `template_id`      bigint(20) DEFAULT NULL COMMENT '模板id',
     `solution_id`      bigint(20) DEFAULT NULL COMMENT '方案id',
@@ -137,7 +139,7 @@ CREATE TABLE `model`
 -- ----------------------------
 CREATE TABLE `model_package`
 (
-    `id`               bigint(20) NOT NULL COMMENT '模型簇id',
+    `id`               bigint(20) NOT NULL AUTO_INCREMENT COMMENT '模型包id',
     `template_id`      bigint(20) DEFAULT NULL COMMENT '方案模板id',
     `solution_id`      bigint(20) DEFAULT NULL COMMENT '方案id',
     `task_id`          varchar(255)  DEFAULT NULL COMMENT '任务id',
