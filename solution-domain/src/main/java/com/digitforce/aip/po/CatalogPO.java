@@ -5,11 +5,9 @@ import lombok.Data;
 
 @Data
 public class CatalogPO extends TenantEntity<Long> {
-
     private String name;
     private Long pid;
     private String code;
     private Integer level;
     private Integer status;
-
 }

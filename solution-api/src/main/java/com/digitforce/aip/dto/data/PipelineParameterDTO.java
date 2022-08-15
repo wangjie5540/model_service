@@ -1,5 +1,7 @@
 package com.digitforce.aip.dto.data;
 
+import java.util.List;
+
 /**
  * kubeflow pipeline的入参类
  *
@@ -8,5 +10,13 @@ package com.digitforce.aip.dto.data;
  * @since 2022/05/31 16:30
  */
 public class PipelineParameterDTO {
-    private String name;
+    private List<String> parameters;
+
+    public List<String> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(List<String> parameters) {
+        this.parameters = parameters;
+    }
 }

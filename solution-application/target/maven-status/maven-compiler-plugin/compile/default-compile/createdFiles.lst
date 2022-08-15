@@ -1,6 +1,0 @@
-com/digitforce/aip/facade/CatalogCmdFacadeImpl.class
-com/digitforce/aip/listener/CatalogListener.class
-com/digitforce/aip/service/cmd/CatalogCmdServiceImpl.class
-com/digitforce/aip/facade/CatalogQryFacadeImpl.class
-com/digitforce/aip/validator/CatalogValidator.class
-com/digitforce/aip/service/qry/CatalogQryServiceImpl.class

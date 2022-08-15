@@ -1,8 +1,14 @@
 package com.digitforce.aip.dto.cmd;
 
-import com.digitforce.aip.dto.data.SolutionDTO;
+import com.digitforce.aip.dto.data.PipelineDataSource;
+import com.digitforce.aip.dto.data.TableSelection;
 import com.digitforce.framework.api.dto.Command;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 /**
  * 新增方案实体类
@@ -12,16 +18,26 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @since 2022/05/31 15:41
  */
 @Schema(
-    description = "新增方案实体类"
+        description = "新增方案实体类"
 )
+@Data
 public class SolutionAddCmd extends Command {
-    private SolutionDTO solutionDTO;
-
-    public SolutionDTO getSolutionDTO() {
-        return solutionDTO;
-    }
-
-    public void setSolutionDTO(SolutionDTO solutionDTO) {
-        this.solutionDTO = solutionDTO;
-    }
+    @Parameter(required = true)
+    private Long templateId;
+    @Parameter(required = true)
+    private String name;
+    @Parameter(required = true)
+    private String scene;
+    private String description;
+    private String schedule;
+    private Integer timeRange;
+    private ChronoUnit timeUnit;
+    private List<TableSelection> selection;
+    private Object frontExtra;
+    private Boolean needExecute = false;
+    @Parameter(required = true)
+    private String pipelineId;
+    @Parameter(required = true)
+    private String pipelineName;
+    private PipelineDataSource dataSource;
 }
