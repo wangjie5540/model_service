@@ -141,7 +141,8 @@ public class KubeflowHelper {
         parameter.put("name", "instance_id");
         parameter.put("value", String.valueOf(instanceId));
         pipelineParameters.add(parameter);
-        HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs", host, port))
+        HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs",
+                        triggerRunCmd.getHost(), triggerRunCmd.getPort()))
                 .body(generateBody(triggerRunCmd.getName(), triggerRunCmd.getExperimentId(),
                         triggerRunCmd.getPipelineId(), pipelineParameters));
         RunDetail runDetail = GsonUtil.gsonToBean(httpRequest.execute().body(), RunDetail.class);
