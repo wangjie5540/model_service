@@ -13,4 +13,6 @@ public class TriggerRunCmd {
     private Long instanceId;
     private Integer timeRange;
     private ChronoUnit timeUnit;
+    private String host;
+    private Integer port;
 }
