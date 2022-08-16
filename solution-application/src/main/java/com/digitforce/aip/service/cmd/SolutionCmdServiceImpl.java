@@ -146,8 +146,6 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         triggerRunCmd.setTimeRange(solutionAddCmd.getTimeRange());
         triggerRunCmd.setTimeUnit(solutionAddCmd.getTimeUnit());
         triggerRunCmd.setSolutionId(solutionId);
-        triggerRunCmd.setHost(kubeflowProperties.getHost());
-        triggerRunCmd.setPort(kubeflowProperties.getPort());
         return triggerRunCmd;
     }
 
