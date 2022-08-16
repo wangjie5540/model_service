@@ -117,7 +117,7 @@ public class KubeflowHelper {
     }
 
     public String triggerRun(String host, int port, int instanceId, TriggerRunCmd triggerRunCmd) {
-        login(host, port);
+        login(triggerRunCmd.getHost(), triggerRunCmd.getPort());
         List<Map<String, Object>> pipelineParameters = new ArrayList<>();
         String startDate = getStartDateStr(triggerRunCmd.getTimeRange(), triggerRunCmd.getTimeUnit());
         String today = DateUtil.format(LocalDateTime.now(), "yyyy-MM-dd");
