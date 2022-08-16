@@ -5,13 +5,11 @@ import com.digitforce.aip.dto.data.SchemaDTO;
 import com.digitforce.aip.dto.qry.SchemaGetByTableQry;
 import com.digitforce.aip.dto.qry.SchemaListTableQry;
 import com.digitforce.aip.enums.DataTypeEnum;
-import com.digitforce.component.dict.api.client.DictEntryQryFacade;
 import com.digitforce.component.dict.api.dto.DictEntryDTO;
 import com.digitforce.framework.api.dto.Result;
 import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,15 +46,22 @@ public class SchemaQryFacadeImpl implements SchemaQryFacade {
         schemaMap.put("用户表", schemaDTO);
     }
 
-    @Resource
-    private DictEntryQryFacade dictEntryQryFacade;
+//    @Resource
+//    private DictEntryQryFacade dictEntryQryFacade;
 
     @Override
     public Result<List<String>> listTable(SchemaListTableQry schemaListTableQry) {
         DictEntryDTO dictEntryDTO = new DictEntryDTO();
         dictEntryDTO.setTypeKey("screen_table");
-        List<DictEntryDTO> dictEntryDTOList = dictEntryQryFacade.listByTypeKey(dictEntryDTO).getData();
-        return Result.success(dictEntryDTOList.stream().map(DictEntryDTO::getEntryName).collect(Collectors.toList()));
+//        List<DictEntryDTO> dictEntryDTOList = dictEntryQryFacade.listByTypeKey(dictEntryDTO).getData();
+        List<DictEntryDTO> dictEntryDTOS = Lists.newArrayList();
+        DictEntryDTO dto = new DictEntryDTO();
+        dto.setEntryName("物品表");
+        dictEntryDTOS.add(dto);
+        dto = new DictEntryDTO();
+        dto.setEntryName("用户表");
+        dictEntryDTOS.add(dto);
+        return Result.success(dictEntryDTOS.stream().map(DictEntryDTO::getEntryName).collect(Collectors.toList()));
     }
 
     @Override

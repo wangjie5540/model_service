@@ -33,4 +33,5 @@ public class SolutionModifyCmd extends Command {
     private ChronoUnit timeUnit;
     private List<TableSelection> selection;
     private PipelineDataSource dataSource;
+    private Boolean needExecute = false;
 }
