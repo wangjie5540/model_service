@@ -65,17 +65,14 @@ public class KafkaConsumerListener {
         switch (instanceStateMessage.getStatus()) {
             case SUBMITTED_SUCCESS:
             case RUNNING:
-                solutionCmdService.onExecuting(instanceStateMessage.getTaskDefineId(),
-                        Long.valueOf(instanceStateMessage.getDsTaskInsId()));
+                solutionCmdService.onExecuting(instanceStateMessage.getTaskDefineId(), instanceStateMessage.getId());
                 break;
             case SUCCESS:
-                solutionCmdService.onFinished(instanceStateMessage.getTaskDefineId(),
-                        Long.valueOf(instanceStateMessage.getDsTaskInsId()));
+                solutionCmdService.onFinished(instanceStateMessage.getTaskDefineId(), instanceStateMessage.getId());
                 break;
             case FAILURE:
             case KILL:
-                solutionCmdService.onFailed(instanceStateMessage.getTaskDefineId(),
-                        Long.valueOf(instanceStateMessage.getDsTaskInsId()));
+                solutionCmdService.onFailed(instanceStateMessage.getTaskDefineId(), instanceStateMessage.getId());
                 break;
             default:
                 log.warn("unknown task instance status.[status={}]", instanceStateMessage.getStatus());
