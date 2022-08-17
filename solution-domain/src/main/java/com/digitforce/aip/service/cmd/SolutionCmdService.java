@@ -21,7 +21,7 @@ public interface SolutionCmdService extends CrudOperation<Solution> {
 
     void batchExecute(List<Long> ids);
 
-    void onExecuting(Long taskId);
+    void onExecuting(Long taskId, Long taskInstanceId);
 
     void on(Long id);
 
@@ -31,13 +31,13 @@ public interface SolutionCmdService extends CrudOperation<Solution> {
 
     void batchOff(List<Long> ids);
 
-    void onFinished(Long taskId);
+    void onFinished(Long taskId, Long taskInstanceId);
 
     void stop(Long id);
 
-    void onStopping(Long taskId);
+    void onStopping(Long taskId, Long taskInstanceId);
 
-    void onFailed(Long taskId);
+    void onFailed(Long taskId, Long taskInstanceId);
 
     void delete(Long id);
 

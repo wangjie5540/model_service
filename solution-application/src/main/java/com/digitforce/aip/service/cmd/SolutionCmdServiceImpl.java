@@ -77,10 +77,11 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setDescription(solutionAddCmd.getDescription());
         taskDefineDTO.setFailureStrategy(FailureStrategy.END);
         taskDefineDTO.setName(solutionAddCmd.getName());
-        // TODO 平台选择？
         taskDefineDTO.setPlatform(PlatformEnum.ALGOX);
+        // TODO 需要任务管理提供projectId选择方式
         taskDefineDTO.setProjectId(GlobalConstant.DEFAULT_PROJECT_ID);
         taskDefineDTO.setType(TaskType.ALGORITHM);
+        // 设置为只创建不执行
         taskDefineDTO.setIsRunNow(0);
         TriggerRunCmd triggerRunCmd = constructTriggerCmd(solution.getId(), solutionAddCmd);
         SolutionDefine solutionDefine = ConvertTool.convert(solution, SolutionDefine.class);
@@ -173,15 +174,15 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     }
 
     @Override
-    public void onExecuting(Long taskId) {
-        solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.EXECUTING);
+    public void onExecuting(Long taskId, Long taskInstanceId) {
+        solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.EXECUTING);
     }
 
     @Override
-    public void onFinished(Long taskId) {
+    public void onFinished(Long taskId, Long taskInstanceId) {
         SolutionStatusEnum status = solutionMapper.getStatusByTaskId(taskId);
         if (status != SolutionStatusEnum.ONLINE) {
-            solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.FINISHED);
+            solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.FINISHED);
         }
     }
 
@@ -192,13 +193,13 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     }
 
     @Override
-    public void onStopping(Long taskId) {
-        solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.STOPPING);
+    public void onStopping(Long taskId, Long taskInstanceId) {
+        solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.STOPPING);
     }
 
     @Override
-    public void onFailed(Long taskId) {
-        solutionMapper.updateStatusByTaskId(taskId, SolutionStatusEnum.FAILED);
+    public void onFailed(Long taskId, Long taskInstanceId) {
+        solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.FAILED);
     }
 
     @Override
