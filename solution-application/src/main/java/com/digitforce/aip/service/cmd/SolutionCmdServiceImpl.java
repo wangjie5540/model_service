@@ -162,7 +162,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             if (taskInstanceId == null) {
                 return;
             }
-//            solution.setStatus(SolutionStatusEnum.EXECUTING);
+            solution.setStatus(SolutionStatusEnum.EXECUTING);
             solution.setTaskInstanceId(taskInstanceId);
             solutionRepository.upsert(solution);
         }
