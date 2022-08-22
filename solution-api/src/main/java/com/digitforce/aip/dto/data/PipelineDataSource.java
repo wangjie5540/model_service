@@ -6,7 +6,7 @@ public class PipelineDataSource {
     private List<PropertyDesc> userData;
     private List<PropertyDesc> goodsData;
     private List<PropertyDesc> orderData;
-    private List<TrafficDesc> trafficData;
+    private List<PropertyDesc> trafficData;
 
     public List<PropertyDesc> getUserData() {
         return userData;
@@ -32,11 +32,11 @@ public class PipelineDataSource {
         this.orderData = orderData;
     }
 
-    public List<TrafficDesc> getTrafficData() {
+    public List<PropertyDesc> getTrafficData() {
         return trafficData;
     }
 
-    public void setTrafficData(List<TrafficDesc> trafficData) {
+    public void setTrafficData(List<PropertyDesc> trafficData) {
         this.trafficData = trafficData;
     }
 }
