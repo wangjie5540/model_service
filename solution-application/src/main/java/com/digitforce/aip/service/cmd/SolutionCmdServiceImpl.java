@@ -26,6 +26,7 @@ import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.operation.DefaultService;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.util.GsonUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,7 @@ import java.util.List;
  * @since 2022/06/05 13:59
  */
 @Service
+@Slf4j
 public class SolutionCmdServiceImpl extends DefaultService<Solution> implements SolutionCmdService {
     @Resource
     private SolutionRepository solutionRepository;
@@ -164,6 +166,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             }
             solution.setStatus(SolutionStatusEnum.EXECUTING);
             solution.setTaskInstanceId(taskInstanceId);
+            log.info("start to upsert solution. [id={}, status={}, taskInstanceId={}]",
+                    solution.getId(), solution.getStatus(), solution.getTaskInstanceId());
             solutionRepository.upsert(solution);
         }
     }
@@ -221,6 +225,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         Solution solution = ConvertTool.convert(solutionModifyCmd, Solution.class);
         if (solutionModifyCmd.getNeedExecute()) {
             taskDefineCmdFacade.execute(getById(solution.getId()).getTaskId());
+            solution.setStatus(SolutionStatusEnum.EXECUTING);
         }
         return modifyById(solution);
     }
