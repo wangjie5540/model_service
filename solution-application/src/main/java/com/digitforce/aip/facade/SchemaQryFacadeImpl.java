@@ -94,10 +94,7 @@ public class SchemaQryFacadeImpl implements SchemaQryFacade {
 //        List<DictEntryDTO> dictEntryDTOList = dictEntryQryFacade.listByTypeKey(dictEntryDTO).getData();
         List<DictEntryDTO> dictEntryDTOS = Lists.newArrayList();
         DictEntryDTO dto = new DictEntryDTO();
-        dto.setEntryName("物品表");
-        dictEntryDTOS.add(dto);
-        dto = new DictEntryDTO();
-        dto.setEntryName("用户表");
+        dto.setEntryName("内容表");
         dictEntryDTOS.add(dto);
         return Result.success(dictEntryDTOS.stream().map(DictEntryDTO::getEntryName).collect(Collectors.toList()));
     }
