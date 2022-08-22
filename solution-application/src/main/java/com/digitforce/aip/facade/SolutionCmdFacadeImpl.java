@@ -1,11 +1,8 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.*;
-import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.framework.api.dto.Result;
-import com.digitforce.framework.tool.ConvertTool;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -94,9 +91,6 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
 
     @Override
     public Result modify(SolutionModifyCmd solutionModifyCmd) {
-        // TODO 添加状态控制
-        Solution solution = ConvertTool.convert(solutionModifyCmd, Solution.class);
-        solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
         solutionCmdService.modifyById(solutionModifyCmd);
         return Result.success();
     }
