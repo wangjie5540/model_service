@@ -224,8 +224,11 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     public boolean modifyById(SolutionModifyCmd solutionModifyCmd) {
         Solution solution = ConvertTool.convert(solutionModifyCmd, Solution.class);
         if (solutionModifyCmd.getNeedExecute()) {
-            taskDefineCmdFacade.execute(getById(solution.getId()).getTaskId());
+            Long taskInstanceId = taskDefineCmdFacade.execute(getById(solution.getId()).getTaskId()).getData();
             solution.setStatus(SolutionStatusEnum.EXECUTING);
+            solution.setTaskInstanceId(taskInstanceId);
+        } else {
+            solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
         }
         return modifyById(solution);
     }
