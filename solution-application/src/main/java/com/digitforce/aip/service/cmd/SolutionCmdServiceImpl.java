@@ -227,6 +227,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             Long taskInstanceId = taskDefineCmdFacade.execute(getById(solution.getId()).getTaskId()).getData();
             solution.setStatus(SolutionStatusEnum.EXECUTING);
             solution.setTaskInstanceId(taskInstanceId);
+        } else {
+            solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
         }
         return modifyById(solution);
     }
