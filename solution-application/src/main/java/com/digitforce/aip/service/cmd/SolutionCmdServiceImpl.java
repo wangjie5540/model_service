@@ -166,7 +166,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             }
             solution.setStatus(SolutionStatusEnum.EXECUTING);
             solution.setTaskInstanceId(taskInstanceId);
-            log.info("start to upsert solution. solution={}", solution);
+            log.info("start to upsert solution. [id={}, status={}, taskInstanceId={}]",
+                    solution.getId(), solution.getStatus(), solution.getTaskInstanceId());
             solutionRepository.upsert(solution);
         }
     }
