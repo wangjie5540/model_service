@@ -225,6 +225,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         Solution solution = ConvertTool.convert(solutionModifyCmd, Solution.class);
         if (solutionModifyCmd.getNeedExecute()) {
             taskDefineCmdFacade.execute(getById(solution.getId()).getTaskId());
+            solution.setStatus(SolutionStatusEnum.EXECUTING);
         }
         return modifyById(solution);
     }
