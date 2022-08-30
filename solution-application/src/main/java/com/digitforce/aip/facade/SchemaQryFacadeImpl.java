@@ -105,4 +105,11 @@ public class SchemaQryFacadeImpl implements SchemaQryFacade {
     public Result<SchemaDTO> getByTable(SchemaGetByTableQry schemaGetByTableQry) {
         return Result.success(schemaMap.get(schemaGetByTableQry.getName()));
     }
+
+    @Override
+    public Result<List<SchemaDTO>> listTableSchema() {
+        List<SchemaDTO> schemaDTOS = Lists.newArrayList();
+        schemaDTOS.add(schemaMap.get("内容表"));
+        return Result.success(schemaDTOS);
+    }
 }
