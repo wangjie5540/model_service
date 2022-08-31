@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 public class SceneQryFacadeImpl implements SceneQryFacade {
     // TODO 后续对接字典服务，获取适用系统信息
-    private final static List<String> sceneList = Lists.newArrayList("CJ");
+    private final static List<String> sceneList = Lists.newArrayList("CJ", "CD");
 
     @Override
     public Result<SceneDTO> listBy() {
