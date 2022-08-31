@@ -25,6 +25,6 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
     public Result add(SolutionServingAddCmd solutionServingAddCmd) {
         SolutionServing solutionServing = ConvertTool.convert(solutionServingAddCmd, SolutionServing.class);
         solutionServingCmdService.save(solutionServing);
-        return Result.success();
+        return Result.success(solutionServing.getId());
     }
 }
