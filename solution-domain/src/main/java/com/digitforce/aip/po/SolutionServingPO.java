@@ -1,7 +1,9 @@
 package com.digitforce.aip.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.digitforce.aip.dto.data.TableSelection;
 import com.digitforce.aip.enums.ServingTypeEnum;
 import com.digitforce.framework.domain.AggregateRoot;
@@ -22,6 +24,7 @@ public class SolutionServingPO extends AggregateRoot<Long> {
     private Long id;
     private Long solutionId;
     private Long templateId;
+    @TableField(typeHandler = JacksonTypeHandler.class)
     private List<TableSelection> selection;
     private ServingTypeEnum servingType;
 }
