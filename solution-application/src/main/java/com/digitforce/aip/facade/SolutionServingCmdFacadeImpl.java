@@ -3,6 +3,7 @@ package com.digitforce.aip.facade;
 import com.digitforce.aip.domain.SolutionServing;
 import com.digitforce.aip.dto.cmd.SolutionServingAddCmd;
 import com.digitforce.aip.service.cmd.SolutionServingCmdService;
+import com.digitforce.aip.utils.ApplicationUtil;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
     @Override
     public Result add(SolutionServingAddCmd solutionServingAddCmd) {
         SolutionServing solutionServing = ConvertTool.convert(solutionServingAddCmd, SolutionServing.class);
+        solutionServing.getSelection().forEach(tableSelection -> tableSelection.setFilterSql(ApplicationUtil.filterToSql(tableSelection.getFilter())));
         solutionServingCmdService.save(solutionServing);
         return Result.success(solutionServing.getId());
     }
