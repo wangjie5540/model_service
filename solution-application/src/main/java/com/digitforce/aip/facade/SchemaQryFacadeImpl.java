@@ -1,15 +1,19 @@
 package com.digitforce.aip.facade;
 
+import com.digitforce.aip.domain.SolutionTemplate;
 import com.digitforce.aip.dto.data.PropertyDesc;
 import com.digitforce.aip.dto.data.SchemaDTO;
+import com.digitforce.aip.dto.qry.SchemaGetAllTableQry;
 import com.digitforce.aip.dto.qry.SchemaGetByTableQry;
 import com.digitforce.aip.dto.qry.SchemaListTableQry;
 import com.digitforce.aip.enums.DataTypeEnum;
+import com.digitforce.aip.service.qry.SolutionTemplateQryService;
 import com.digitforce.component.dict.api.dto.DictEntryDTO;
 import com.digitforce.framework.api.dto.Result;
 import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +33,9 @@ public class SchemaQryFacadeImpl implements SchemaQryFacade {
     public static final List<PropertyDesc> contentPropertyList = Lists.newArrayList();
     public static final List<PropertyDesc> userPropertyList = Lists.newArrayList();
     public static final List<PropertyDesc> trafficPropertyList = Lists.newArrayList();
+
+    @Resource
+    private SolutionTemplateQryService solutionTemplateQryService;
 
 
     static {
@@ -107,9 +114,21 @@ public class SchemaQryFacadeImpl implements SchemaQryFacade {
     }
 
     @Override
-    public Result<List<SchemaDTO>> listTableSchema() {
+    public Result<List<SchemaDTO>> listTableSchema(SchemaGetAllTableQry schemaGetAllTableQry) {
+        SolutionTemplate solutionTemplate = solutionTemplateQryService.getById(schemaGetAllTableQry.getTemplateId());
         List<SchemaDTO> schemaDTOS = Lists.newArrayList();
-        schemaDTOS.add(schemaMap.get("内容表"));
+        // TODO mock数据
+        if (solutionTemplate.getScene().equals("CJ")) {
+            SchemaDTO schemaDTO = new SchemaDTO();
+            schemaDTO.setTableName("labelx.push_googds");
+            schemaDTO.setTableCname("内容表");
+            List<PropertyDesc> propertyDescList = Lists.newArrayList();
+            propertyDescList.add(new PropertyDesc("sku", "商品ID", DataTypeEnum.STRING));
+            propertyDescList.add(new PropertyDesc("brand", "品牌", DataTypeEnum.STRING));
+            propertyDescList.add(new PropertyDesc("cate", "品类", DataTypeEnum.STRING));
+            schemaDTO.setPropertyList(propertyDescList);
+            schemaDTOS.add(schemaDTO);
+        }
         return Result.success(schemaDTOS);
     }
 }
