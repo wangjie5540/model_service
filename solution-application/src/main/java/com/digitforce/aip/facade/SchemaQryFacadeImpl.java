@@ -120,7 +120,7 @@ public class SchemaQryFacadeImpl implements SchemaQryFacade {
         // TODO mock数据
         if (solutionTemplate.getScene().equals("CJ")) {
             SchemaDTO schemaDTO = new SchemaDTO();
-            schemaDTO.setTableName("labelx.push_googds");
+            schemaDTO.setTableName("labelx.push_goods");
             schemaDTO.setTableCname("内容表");
             List<PropertyDesc> propertyDescList = Lists.newArrayList();
             propertyDescList.add(new PropertyDesc("sku", "商品ID", DataTypeEnum.STRING));
