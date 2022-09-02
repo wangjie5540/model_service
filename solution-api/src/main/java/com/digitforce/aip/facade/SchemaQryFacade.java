@@ -2,6 +2,7 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.data.SchemaDTO;
+import com.digitforce.aip.dto.qry.SchemaGetAllTableQry;
 import com.digitforce.aip.dto.qry.SchemaGetByTableQry;
 import com.digitforce.aip.dto.qry.SchemaListTableQry;
 import com.digitforce.framework.api.dto.Result;
@@ -34,5 +35,5 @@ public interface SchemaQryFacade {
 
     @PostMapping("/getAllTableSchema")
     @Operation(summary = "获取所有的tableSchema信息", tags = CommonConst.SWAGGER_TAG_SCHEMA_QRY)
-    Result<List<SchemaDTO>> listTableSchema();
+    Result<List<SchemaDTO>> listTableSchema(@RequestBody SchemaGetAllTableQry schemaGetAllTableQry);
 }
