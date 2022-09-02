@@ -12,6 +12,6 @@ import lombok.Data;
  * @since 2022/06/05 13:55
  */
 @Data
-@TableName("solution_serving")
+@TableName(value = "solution_serving", autoResultMap = true)
 public class SolutionServing extends SolutionServingPO {
 }
