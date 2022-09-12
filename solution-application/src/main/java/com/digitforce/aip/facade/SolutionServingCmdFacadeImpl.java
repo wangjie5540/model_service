@@ -2,6 +2,7 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.domain.SolutionServing;
 import com.digitforce.aip.dto.cmd.SolutionServingAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionServingDeleteCmd;
 import com.digitforce.aip.service.cmd.SolutionServingCmdService;
 import com.digitforce.aip.utils.ApplicationUtil;
 import com.digitforce.framework.api.dto.Result;
@@ -28,5 +29,11 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
         solutionServing.getSelection().forEach(tableSelection -> tableSelection.setFilterSql(ApplicationUtil.filterToSql(tableSelection.getFilter())));
         solutionServingCmdService.save(solutionServing);
         return Result.success(solutionServing.getId());
+    }
+
+    @Override
+    public Result delete(SolutionServingDeleteCmd solutionServingDeleteCmd) {
+        solutionServingCmdService.removeById(solutionServingDeleteCmd.getServingId());
+        return Result.success();
     }
 }
