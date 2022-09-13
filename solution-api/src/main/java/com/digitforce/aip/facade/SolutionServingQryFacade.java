@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_QRY)
-@RequestMapping(path = "/solutionServing")
+@RequestMapping(path = {"/solutionServing", "/solution/solutionServing"})
 public interface SolutionServingQryFacade {
     @PostMapping("/getById")
     @Operation(summary = "通过方案服务id获取详情", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_QRY)

@@ -31,6 +31,10 @@
             <artifactId>mybatis-plus-annotation</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

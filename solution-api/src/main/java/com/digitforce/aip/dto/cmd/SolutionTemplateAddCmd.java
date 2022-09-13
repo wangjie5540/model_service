@@ -1,7 +1,9 @@
 package com.digitforce.aip.dto.cmd;
 
+import com.digitforce.aip.enums.TemplateStatusEnum;
 import com.digitforce.framework.api.dto.Command;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 /**
  * 新增方案实体类
@@ -13,52 +15,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(
         description = "新增方案模板入参类"
 )
+@Data
 public class SolutionTemplateAddCmd extends Command {
     private String name;
     private String scene;
     private String pipelineId;
     private String pipelineName;
     private String description;
-
-    public String getPipelineName() {
-        return pipelineName;
-    }
-
-    public void setPipelineName(String pipelineName) {
-        this.pipelineName = pipelineName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
-    public String getPipelineId() {
-        return pipelineId;
-    }
-
-    public void setPipelineId(String pipelineId) {
-        this.pipelineId = pipelineId;
-    }
-
-    public String getScene() {
-        return scene;
-    }
-
-    public void setScene(String scene) {
-        this.scene = scene;
-    }
+    private TemplateStatusEnum status;
 }

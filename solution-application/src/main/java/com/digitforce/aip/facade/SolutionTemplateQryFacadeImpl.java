@@ -3,7 +3,7 @@ package com.digitforce.aip.facade;
 import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.SolutionTemplate;
-import com.digitforce.aip.dto.data.PipelineParameterDTO;
+import com.digitforce.aip.dto.data.PipelineDataSource;
 import com.digitforce.aip.dto.data.SolutionTemplateDTO;
 import com.digitforce.aip.dto.data.TemplateStatusListDTO;
 import com.digitforce.aip.dto.qry.SolutionTemplateGetByIdQry;
@@ -16,12 +16,11 @@ import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
-import com.digitforce.framework.util.GsonUtil;
-import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -49,10 +48,22 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         SolutionTemplateDTO solutionTemplateDTO = ConvertTool.convert(solutionTemplate, SolutionTemplateDTO.class);
         Pipeline pipeline = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), solutionTemplateDTO.getPipelineId());
-        solutionTemplateDTO.setPipelineParameter(GsonUtil.gsonToBean(pipeline.getDescription(),
-                PipelineParameterDTO.class));
+//        solutionTemplateDTO.setPipelineParameter(GsonUtil.gsonToBean(pipeline.getDescription(),
+//                PipelineParameterDTO.class));
         solutionTemplateMapper.browseCountInc(solutionGetByIdQry.getId());
+        PipelineDataSource dataSource = getDatasource();
+        solutionTemplateDTO.setDataSource(dataSource);
         return Result.success(solutionTemplateDTO);
+    }
+
+    private PipelineDataSource getDatasource() {
+        // TODO mvp版本mock数据
+        PipelineDataSource dataSource = new PipelineDataSource();
+        dataSource.setGoodsData(SchemaQryFacadeImpl.contentPropertyList);
+        dataSource.setUserData(SchemaQryFacadeImpl.userPropertyList);
+        dataSource.setTrafficData(SchemaQryFacadeImpl.trafficPropertyList);
+        // TODO 流量的数据结构需要设计
+        return dataSource;
     }
 
     @Override
@@ -60,14 +71,25 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         PageView<SolutionTemplate> templatePageView = solutionTemplateQryService.pageBy(templatePageByQry);
         PageView<SolutionTemplateDTO> solutionDTOPageView = PageTool.pageView(templatePageView,
                 SolutionTemplateDTO.class);
+        solutionDTOPageView.getList().forEach(s -> s.setDataSource(getDatasource()));
         return Result.success(solutionDTOPageView);
     }
 
     @Override
+    public Result<List<SolutionTemplateDTO>> listBy() {
+        SolutionTemplate solutionTemplate = new SolutionTemplate();
+        solutionTemplate.setStatus(TemplateStatusEnum.ONLINE);
+        List<SolutionTemplate> solutionTemplateList = solutionTemplateQryService.listBy(solutionTemplate);
+        List<SolutionTemplateDTO> solutionTemplateDTOS =
+                ConvertTool.convert(solutionTemplateList, SolutionTemplateDTO.class);
+        solutionTemplateDTOS.forEach(s -> s.setDataSource(getDatasource()));
+        return Result.success(solutionTemplateDTOS);
+    }
+
+    @Override
     public Result<TemplateStatusListDTO> statusListBy() {
-        List<TemplateStatusEnum> status = Lists.newArrayList(TemplateStatusEnum.ONLINE, TemplateStatusEnum.OFFLINE);
         TemplateStatusListDTO templateStatusListDTO = new TemplateStatusListDTO();
-        templateStatusListDTO.setStatus(status);
+        templateStatusListDTO.setStatusList(Arrays.asList(TemplateStatusEnum.values()));
         return Result.success(templateStatusListDTO);
     }
 }

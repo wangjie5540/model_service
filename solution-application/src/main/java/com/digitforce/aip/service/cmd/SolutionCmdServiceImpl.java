@@ -1,15 +1,17 @@
 package com.digitforce.aip.service.cmd;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.date.LocalDateTimeUtil;
 import com.digitforce.aip.GlobalConstant;
 import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.data.PipelineDataSource;
+import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.enums.SolutionStatusEnum;
+import com.digitforce.aip.mapper.SolutionMapper;
+import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.aip.model.Pipeline;
+import com.digitforce.aip.model.SolutionDefine;
+import com.digitforce.aip.model.TaskDefineExtraDTO;
 import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.aip.repository.SolutionRepository;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineCmdFacade;
@@ -20,28 +22,27 @@ import com.digitforce.bdp.operatex.core.consts.TaskCategory;
 import com.digitforce.bdp.operatex.core.consts.TaskType;
 import com.digitforce.bdp.operatex.core.consts.algorithm.AlgorithmTaskDefineDTO;
 import com.digitforce.bdp.operatex.core.dto.TaskDefineDTO;
+import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.operation.DefaultService;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.util.GsonUtil;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Map;
 
 /**
- * 方案实施命令类
+ * 方案命令类
  *
  * @author wangtonggui
  * @version 1.0.0
  * @since 2022/06/05 13:59
  */
 @Service
+@Slf4j
 public class SolutionCmdServiceImpl extends DefaultService<Solution> implements SolutionCmdService {
     @Resource
     private SolutionRepository solutionRepository;
@@ -51,6 +52,10 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     private TaskInstanceCmdFacade taskInstanceCmdFacade;
     @Resource
     private KubeflowProperties kubeflowProperties;
+    @Resource
+    private SolutionMapper solutionMapper;
+    @Resource
+    private SolutionTemplateMapper solutionTemplateMapper;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -58,6 +63,13 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         // TODO 参数校验
 //        solutionValidator.validate(null);
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
+        try {
+            // TODO 应产品要求，近期必须使用自增id，所以先进行save，获取数据库自增id，供任务管理使用
+            // TODO 后续推动产品级别纠正为全局统一id
+            solutionRepository.save(solution);
+        } catch (DuplicateKeyException e) {
+            throw new BizException("方案名称重复");
+        }
         // TODO 需要任务服务新增对应的任务类型定义
         TaskDefineDTO taskDefineDTO = new AlgorithmTaskDefineDTO();
         taskDefineDTO.setCategory(TaskCategory.BATCH);
@@ -67,21 +79,34 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         taskDefineDTO.setDescription(solutionAddCmd.getDescription());
         taskDefineDTO.setFailureStrategy(FailureStrategy.END);
         taskDefineDTO.setName(solutionAddCmd.getName());
-        // TODO 平台选择？
         taskDefineDTO.setPlatform(PlatformEnum.ALGOX);
+        // TODO 需要任务管理提供projectId选择方式
         taskDefineDTO.setProjectId(GlobalConstant.DEFAULT_PROJECT_ID);
         taskDefineDTO.setType(TaskType.ALGORITHM);
-        TriggerRunCmd triggerRunCmd = constructTriggerCmd(solutionAddCmd);
-        taskDefineDTO.setExtra(GsonUtil.objectToString(triggerRunCmd));
+        // 设置为只创建不执行
+        taskDefineDTO.setIsRunNow(0);
+        TriggerRunCmd triggerRunCmd = constructTriggerCmd(solution.getId(), solutionAddCmd);
+        SolutionDefine solutionDefine = ConvertTool.convert(solution, SolutionDefine.class);
+        TaskDefineExtraDTO taskDefineExtraDTO = new TaskDefineExtraDTO();
+        taskDefineExtraDTO.setSolutionDefine(solutionDefine);
+        taskDefineExtraDTO.setTriggerRunCmd(triggerRunCmd);
+        taskDefineDTO.setExtra(GsonUtil.objectToString(taskDefineExtraDTO));
         Long taskId = Long.parseLong(taskDefineCmdFacade.addTask(taskDefineDTO).getData().toString());
         Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
         solution.setTaskId(taskId);
-        PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource.class);
-        solution.setDataSource(GsonUtil.objectToString(dataSource));
+//        PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource
+//        .class);
+//        solution.setDataSource(GsonUtil.objectToString(dataSource));
+        solution.setDataSource(solutionAddCmd.getDataSource());
         solution.setSchedule(GlobalConstant.DEFAULT_CRON);
-        solution.setStatus(SolutionStatusEnum.EXECUTING);
-        solutionRepository.save(solution);
+        if (solutionAddCmd.getNeedExecute()) {
+            Long taskInstanceId = taskDefineCmdFacade.execute(taskId).getData();
+            solution.setStatus(SolutionStatusEnum.EXECUTING);
+            solution.setTaskInstanceId(taskInstanceId);
+        }
+        solutionRepository.upsert(solution);
+        solutionTemplateMapper.applyCountInc(solutionAddCmd.getTemplateId());
     }
 
     @Override
@@ -96,6 +121,11 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     }
 
     @Override
+    public void batchOn(List<Long> ids) {
+        ids.forEach(this::on);
+    }
+
+    @Override
     public void off(Long id) {
         Solution solution = solutionRepository.getById(id);
         if (solution.getStatus() == SolutionStatusEnum.ONLINE) {
@@ -106,37 +136,28 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
         }
     }
 
-    private TriggerRunCmd constructTriggerCmd(SolutionAddCmd solutionAddCmd) {
+    @Override
+    public void batchOff(List<Long> ids) {
+        ids.forEach(this::off);
+    }
+
+    private TriggerRunCmd constructTriggerCmd(Long solutionId, SolutionAddCmd solutionAddCmd) {
         TriggerRunCmd triggerRunCmd = new TriggerRunCmd();
         triggerRunCmd.setName(solutionAddCmd.getPipelineName());
-        triggerRunCmd.setExperimentId(GlobalConstant.DEFAULT_EXPERIMENT_ID);
+        triggerRunCmd.setExperimentId(kubeflowProperties.getExperimentId());
         triggerRunCmd.setPipelineId(solutionAddCmd.getPipelineId());
-        String startDate = getStartDateStr(solutionAddCmd.getTimeRange(), solutionAddCmd.getTimeUnit());
-        String today = DateUtil.format(LocalDateTime.now(), "yyyy-MM-dd");
-        List<Map<String, Object>> parameters = Lists.newArrayList();
-        Map<String, Object> parameter = Maps.newHashMap();
-        parameter.put("name", "train_data_start_date_str");
-        parameter.put("value", startDate);
-        parameters.add(parameter);
-        parameter = Maps.newHashMap();
-        parameter.put("name", "train_data_end_date_str");
-        parameter.put("value", today);
-        parameters.add(parameter);
-        parameter = Maps.newHashMap();
-        parameter.put("name", "run_datetime_str");
-        parameter.put("value", today);
-        parameters.add(parameter);
-        triggerRunCmd.setPipelineParameters(parameters);
+        triggerRunCmd.setTimeRange(solutionAddCmd.getTimeRange());
+        triggerRunCmd.setTimeUnit(solutionAddCmd.getTimeUnit());
+        triggerRunCmd.setSolutionId(solutionId);
         return triggerRunCmd;
     }
 
     @Override
     public void execute(Long id) {
         Solution solution = solutionRepository.getById(id);
-        if (solution != null &&
-                (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE
-                        || solution.getStatus() == SolutionStatusEnum.FAILED
-                        || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
+        if (solution != null && (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE
+                || solution.getStatus() == SolutionStatusEnum.FAILED
+                || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
             Long taskInstanceId = taskDefineCmdFacade.execute(solution.getTaskId()).getData();
             solution = new Solution();
             solution.setId(id);
@@ -145,30 +166,75 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
             }
             solution.setStatus(SolutionStatusEnum.EXECUTING);
             solution.setTaskInstanceId(taskInstanceId);
+            log.info("start to upsert solution. [id={}, status={}, taskInstanceId={}]",
+                    solution.getId(), solution.getStatus(), solution.getTaskInstanceId());
             solutionRepository.upsert(solution);
+        }
+    }
+
+    @Override
+    public void batchExecute(List<Long> ids) {
+        ids.forEach(this::execute);
+    }
+
+    @Override
+    public void onExecuting(Long taskId, Long taskInstanceId) {
+        solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.EXECUTING);
+    }
+
+    @Override
+    public void onFinished(Long taskId, Long taskInstanceId) {
+        SolutionStatusEnum status = solutionMapper.getStatusByTaskId(taskId);
+        if (status != SolutionStatusEnum.ONLINE) {
+            solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.FINISHED);
         }
     }
 
     @Override
     public void stop(Long id) {
         Solution solution = solutionRepository.getById(id);
-        if (solution != null && solution.getStatus() == SolutionStatusEnum.EXECUTING) {
-            taskInstanceCmdFacade.stop(solution.getTaskInstanceId());
-            solution = new Solution();
-            solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
-            solutionRepository.save(solution);
-        }
+        taskInstanceCmdFacade.stop(solution.getTaskInstanceId());
     }
 
+    @Override
+    public void onStopping(Long taskId, Long taskInstanceId) {
+        solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.STOPPING);
+    }
+
+    @Override
+    public void onFailed(Long taskId, Long taskInstanceId) {
+        solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.FAILED);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Solution solution = solutionRepository.getById(id);
+        if (solution.getStatus() == SolutionStatusEnum.ONLINE || solution.getStatus() == SolutionStatusEnum.EXECUTING) {
+            throw new RuntimeException("solution is using");
+        }
+        solutionRepository.removeById(id);
+    }
+
+    @Override
+    public void batchDelete(List<Long> ids) {
+        ids.forEach(this::delete);
+    }
+
+    @Override
+    public boolean modifyById(SolutionModifyCmd solutionModifyCmd) {
+        Solution solution = ConvertTool.convert(solutionModifyCmd, Solution.class);
+        if (solutionModifyCmd.getNeedExecute()) {
+            Long taskInstanceId = taskDefineCmdFacade.execute(getById(solution.getId()).getTaskId()).getData();
+            solution.setStatus(SolutionStatusEnum.EXECUTING);
+            solution.setTaskInstanceId(taskInstanceId);
+        } else {
+            solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
+        }
+        return modifyById(solution);
+    }
 
     @Override
     public SolutionRepository getRepository() {
         return solutionRepository;
-    }
-
-    private String getStartDateStr(Integer offset, ChronoUnit chronoUnit) {
-        LocalDateTime localDateTime = LocalDateTimeUtil.offset(LocalDateTime.now(), -1L * offset, chronoUnit);
-        localDateTime = LocalDateTimeUtil.beginOfDay(localDateTime);
-        return DateUtil.format(localDateTime, "yyyy-MM-dd");
     }
 }

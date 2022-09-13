@@ -10,6 +10,7 @@ public class CommonUtils {
     private static final Gson gson;
 
     static {
+        // TODO: 后续修改不再进行统一封装
         gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();

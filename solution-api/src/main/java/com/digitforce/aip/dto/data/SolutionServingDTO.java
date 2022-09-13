@@ -4,13 +4,14 @@ import com.digitforce.aip.enums.ServingTypeEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class SolutionServingDTO {
     private Long id;
     private Long solutionId;
     private Long templateId;
-    private String config;
+    private List<TableSelection> selection;
     private ServingTypeEnum servingType;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

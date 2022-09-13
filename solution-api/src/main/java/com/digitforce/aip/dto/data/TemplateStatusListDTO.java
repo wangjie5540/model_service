@@ -1,6 +1,7 @@
 package com.digitforce.aip.dto.data;
 
 import com.digitforce.aip.enums.TemplateStatusEnum;
+import lombok.Data;
 
 import java.util.List;
 
@@ -11,14 +12,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 2022/05/31 15:35
  */
+@Data
 public class TemplateStatusListDTO {
-    private List<TemplateStatusEnum> status;
-
-    public List<TemplateStatusEnum> getStatus() {
-        return status;
-    }
-
-    public void setStatus(List<TemplateStatusEnum> status) {
-        this.status = status;
-    }
+    private List<TemplateStatusEnum> statusList;
 }

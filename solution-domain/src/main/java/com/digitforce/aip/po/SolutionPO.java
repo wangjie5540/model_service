@@ -1,11 +1,18 @@
 package com.digitforce.aip.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.digitforce.aip.dto.data.PipelineDataSource;
+import com.digitforce.aip.dto.data.TableSelection;
 import com.digitforce.aip.enums.SolutionStatusEnum;
-import com.digitforce.framework.domain.TenantEntity;
+import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 /**
  * 方案持久化类
@@ -16,16 +23,22 @@ import java.time.temporal.ChronoUnit;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class SolutionPO extends TenantEntity<Long> {
+public class SolutionPO extends AggregateRoot<Long> {
+    @TableId(type = IdType.AUTO)
     private Long id;
     private Long templateId;
     private Long taskId;
     private Long taskInstanceId;
     private String scene;
     private String name;
-    private String selection;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<TableSelection> selection;
+    // 前端临时参数存储
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private Object frontExtra;
     private String description;
-    private String dataSource;
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private PipelineDataSource dataSource;
     private String schedule;
     private SolutionStatusEnum status;
     private Integer timeRange;
