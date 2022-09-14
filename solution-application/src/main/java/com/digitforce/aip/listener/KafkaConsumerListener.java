@@ -1,6 +1,5 @@
 package com.digitforce.aip.listener;
 
-import com.digitforce.aip.GlobalConstant;
 import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.aip.service.qry.SolutionQueryService;
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineQryFacade;
@@ -11,6 +10,7 @@ import com.digitforce.framework.util.GsonUtil;
 import com.google.gson.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +42,9 @@ public class KafkaConsumerListener {
                     .registerTypeAdapter(LocalDateTime.class, jsonDeserializer)
                     .create();
 
-    @KafkaListener(topics = {GlobalConstant.TASK_STATUS_TOPIC})
+    // 参考：https://blog.csdn.net/qq_30823993/article/details/125056041
+    @KafkaListener(topics = "#{'${TASK_STATUS_TOPIC}'}")
+    @DependsOn(value = "kafkaConfig")
     @Transactional(rollbackFor = RuntimeException.class)
     public void taskStateListener(ConsumerRecord<?, ?> consumerRecord) throws IOException {
         log.info("topic:{}, offset:{}, value:{}", consumerRecord.topic(), consumerRecord.offset(),
@@ -54,7 +56,8 @@ public class KafkaConsumerListener {
         log.info("{}", publishEventData);
     }
 
-    @KafkaListener(topics = {GlobalConstant.TASK_INSTANCE_STATUS_TOPIC})
+    @KafkaListener(topics = "#{'${TASK_INSTANCE_STATUS_TOPIC}'}")
+    @DependsOn(value = "kafkaConfig")
     @Transactional(rollbackFor = RuntimeException.class)
     public void taskInstanceStateListener(ConsumerRecord<?, ?> consumerRecord) throws IOException {
         log.info("topic:{}, offset:{}, value:{}", consumerRecord.topic(), consumerRecord.offset(),
