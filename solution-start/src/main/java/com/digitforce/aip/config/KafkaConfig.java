@@ -4,6 +4,7 @@ import com.digitforce.aip.GlobalConstant;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
 
 import javax.annotation.Resource;
 
@@ -16,6 +17,7 @@ import javax.annotation.Resource;
  */
 @Configuration
 @EnableConfigurationProperties(value = KafkaProperties.class)
+@EnableKafka
 public class KafkaConfig implements InitializingBean {
     @Resource
     private KafkaProperties properties;
