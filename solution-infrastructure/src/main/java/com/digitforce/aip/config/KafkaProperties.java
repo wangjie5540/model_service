@@ -16,4 +16,5 @@ public class KafkaProperties {
     public static final String PREFIX = "digitforce.kafka";
     private String taskStatusTopic;
     private String taskInstanceStatusTopic;
+    private String solutionServingStatusTopic;
 }
