@@ -34,7 +34,9 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
     @Override
     public Result add(SolutionServingAddCmd solutionServingAddCmd) {
         SolutionServing solutionServing = ConvertTool.convert(solutionServingAddCmd, SolutionServing.class);
-        solutionServing.getSelection().forEach(tableSelection -> tableSelection.setFilterSql(ApplicationUtil.filterToSql(tableSelection.getFilter())));
+        if (solutionServing.getSelection() != null) {
+            solutionServing.getSelection().forEach(tableSelection -> tableSelection.setFilterSql(ApplicationUtil.filterToSql(tableSelection.getFilter())));
+        }
         solutionServingCmdService.save(solutionServing);
         SolutionServingStatusDTO solutionServingStatusDTO = new SolutionServingStatusDTO();
         solutionServingStatusDTO.setStatus(StatusChangeEnum.ADD);
