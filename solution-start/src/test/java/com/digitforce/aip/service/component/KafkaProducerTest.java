@@ -1,6 +1,5 @@
-package com.digitforce.aip.listener;
+package com.digitforce.aip.service.component;
 
-import com.digitforce.aip.config.KafkaProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,14 +12,12 @@ import javax.annotation.Resource;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("dev")
-public class KafkaConsumerListenerTest {
+public class KafkaProducerTest {
     @Resource
-    private KafkaTemplate<String, String> kafkaTemplate;
-    @Resource
-    private KafkaProperties kafkaProperties;
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
     @Test
-    public void producerTest() {
-        kafkaTemplate.send(kafkaProperties.getTaskStatusTopic(), "{\"taskId\":123123}");
+    public void sendTest() {
+        kafkaTemplate.send("wtg_test", "123123");
     }
 }
