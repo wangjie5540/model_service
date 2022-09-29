@@ -11,6 +11,7 @@ import com.digitforce.aip.utils.ApplicationUtil;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -32,9 +33,12 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
     private KafkaProperties kafkaProperties;
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public Result add(SolutionServingAddCmd solutionServingAddCmd) {
         SolutionServing solutionServing = ConvertTool.convert(solutionServingAddCmd, SolutionServing.class);
-        solutionServing.getSelection().forEach(tableSelection -> tableSelection.setFilterSql(ApplicationUtil.filterToSql(tableSelection.getFilter())));
+        if (solutionServing.getSelection() != null) {
+            solutionServing.getSelection().forEach(tableSelection -> tableSelection.setFilterSql(ApplicationUtil.filterToSql(tableSelection.getFilter())));
+        }
         solutionServingCmdService.save(solutionServing);
         SolutionServingStatusDTO solutionServingStatusDTO = new SolutionServingStatusDTO();
         solutionServingStatusDTO.setStatus(StatusChangeEnum.ADD);

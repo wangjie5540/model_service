@@ -3,6 +3,7 @@ package com.digitforce.aip.facade;
 import com.digitforce.aip.dto.cmd.*;
 import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.framework.api.dto.Result;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -20,6 +21,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     private SolutionCmdService solutionCmdService;
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public Result add(SolutionAddCmd solutionAddCmd) {
         solutionCmdService.add(solutionAddCmd);
         return Result.success();

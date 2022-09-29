@@ -15,6 +15,7 @@ import com.digitforce.framework.util.GsonUtil;
 import com.google.gson.Gson;
 import lombok.Data;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -35,6 +36,7 @@ import java.util.Map;
  * @since 2022/06/05 17:04
  */
 @UtilityClass
+@Slf4j
 public class KubeflowHelper {
     private static final Gson gson = CommonUtils.getGson();
     // https://digit-force.coding.net/p/ai-platform/km/spaces/73/pages/K-259
@@ -141,10 +143,13 @@ public class KubeflowHelper {
         parameter.put("name", "instance_id");
         parameter.put("value", String.valueOf(instanceId));
         pipelineParameters.add(parameter);
+        log.info("start to request kubeflow.[pipelineParameters={}]", pipelineParameters);
         HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs", host, port))
                 .body(generateBody(triggerRunCmd.getName(), triggerRunCmd.getExperimentId(),
                         triggerRunCmd.getPipelineId(), pipelineParameters));
-        RunDetail runDetail = GsonUtil.gsonToBean(httpRequest.execute().body(), RunDetail.class);
+        String body = httpRequest.execute().body();
+        log.info("kubeflow response. [body={}]", body);
+        RunDetail runDetail = GsonUtil.gsonToBean(body, RunDetail.class);
         return runDetail.run.getId();
     }
 
