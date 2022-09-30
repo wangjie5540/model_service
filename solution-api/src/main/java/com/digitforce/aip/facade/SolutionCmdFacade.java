@@ -1,13 +1,7 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
-import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionAddCronCmd;
-import com.digitforce.aip.dto.cmd.SolutionBatchStatusCmd;
-import com.digitforce.aip.dto.cmd.SolutionClearCronCmd;
-import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
-import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
-import com.digitforce.aip.dto.cmd.SolutionStatusCmd;
+import com.digitforce.aip.dto.cmd.*;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,6 +9,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.validation.Valid;
 
 /**
  * 方案命令接口类
@@ -28,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface SolutionCmdFacade {
     @PostMapping("/add")
     @Operation(summary = "根据模板创建方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result add(@RequestBody SolutionAddCmd solutionAddCmd);
+    Result add(@RequestBody @Valid SolutionAddCmd solutionAddCmd);
 
     @PostMapping("/on")
     @Operation(summary = "上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
