@@ -31,7 +31,7 @@ public class SolutionAddCmd extends Command {
     private String scene;
     private String description;
     private String schedule;
-    @NotNull
+    @NotNull(message = "timeRange can not be null")
     private Integer timeRange;
     private ChronoUnit timeUnit;
     private List<TableSelection> selection;
