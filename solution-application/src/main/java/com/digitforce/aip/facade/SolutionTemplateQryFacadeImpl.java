@@ -55,11 +55,6 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         solutionTemplateMapper.browseCountInc(solutionGetByIdQry.getId());
         PipelineDataSource dataSource = getDatasource();
         solutionTemplateDTO.setDataSource(dataSource);
-        Map<String, String> tableMap = Maps.newHashMap();
-        tableMap.put("userData", "用户数据表");
-        tableMap.put("goodsData", "产品数据表");
-        tableMap.put("trafficData", "流量数据表");
-        solutionTemplateDTO.setDataSourceTableMap(tableMap);
         return Result.success(solutionTemplateDTO);
     }
 
@@ -98,5 +93,14 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         TemplateStatusListDTO templateStatusListDTO = new TemplateStatusListDTO();
         templateStatusListDTO.setStatusList(Arrays.asList(TemplateStatusEnum.values()));
         return Result.success(templateStatusListDTO);
+    }
+
+    @Override
+    public Result<Map<String, String>> getDataSourceTableMapping() {
+        Map<String, String> tableMap = Maps.newHashMap();
+        tableMap.put("userData", "用户数据表");
+        tableMap.put("goodsData", "产品数据表");
+        tableMap.put("trafficData", "流量数据表");
+        return Result.success(tableMap);
     }
 }

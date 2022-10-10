@@ -5,7 +5,6 @@ import com.digitforce.aip.enums.TemplateStatusEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 /**
  * 方案模板实体定义类
@@ -25,7 +24,6 @@ public class SolutionTemplateDTO {
     private Integer browseCount;
     private Integer applyCount;
     private PipelineDataSource dataSource;
-    private Map<String, String> dataSourceTableMap;
     // TODO 后续将迭代调度机制
     private String schedule = GlobalConstant.DEFAULT_CRON;
     private PipelineParameterDTO pipelineParameter;

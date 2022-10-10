@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 方案服务查询接口类
@@ -41,4 +42,8 @@ public interface SolutionTemplateQryFacade {
     @PostMapping("/status/listBy")
     @Operation(summary = "模板状态列表", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
     Result<TemplateStatusListDTO> statusListBy();
+
+    @PostMapping("/getDataSourceTableMapping")
+    @Operation(summary = "获取数据源表映射", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_QRY)
+    Result<Map<String, String>> getDataSourceTableMapping();
 }
