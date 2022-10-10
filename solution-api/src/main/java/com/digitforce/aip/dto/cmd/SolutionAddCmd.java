@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class SolutionAddCmd extends Command {
     private String scene;
     private String description;
     private String schedule;
+    @NotNull(message = "timeRange can not be null")
     private Integer timeRange;
     private ChronoUnit timeUnit;
     private List<TableSelection> selection;

@@ -16,12 +16,14 @@ import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
+import com.google.common.collect.Maps;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 方案查询接口实现类
@@ -53,6 +55,11 @@ public class SolutionTemplateQryFacadeImpl implements SolutionTemplateQryFacade 
         solutionTemplateMapper.browseCountInc(solutionGetByIdQry.getId());
         PipelineDataSource dataSource = getDatasource();
         solutionTemplateDTO.setDataSource(dataSource);
+        Map<String, String> tableMap = Maps.newHashMap();
+        tableMap.put("userData", "用户数据表");
+        tableMap.put("goodsData", "产品数据表");
+        tableMap.put("trafficData", "流量数据表");
+        solutionTemplateDTO.setDataSourceTableMap(tableMap);
         return Result.success(solutionTemplateDTO);
     }
 
