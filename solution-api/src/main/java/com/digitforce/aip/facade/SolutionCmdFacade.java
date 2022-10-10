@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
@@ -20,57 +19,56 @@ import javax.validation.Valid;
  */
 @FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-@RequestMapping(path = "/solution")
 public interface SolutionCmdFacade {
-    @PostMapping("/add")
+    @PostMapping("/solution/add")
     @Operation(summary = "根据模板创建方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result add(@RequestBody @Valid SolutionAddCmd solutionAddCmd);
 
-    @PostMapping("/on")
+    @PostMapping("/solution/on")
     @Operation(summary = "上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result on(@RequestBody SolutionStatusCmd solutionStatusCmd);
 
-    @PostMapping("/batchOn")
+    @PostMapping("/solution/batchOn")
     @Operation(summary = "批量上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result batchOn(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
 
-    @PostMapping("/off")
+    @PostMapping("/solution/off")
     @Operation(summary = "下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result off(@RequestBody SolutionStatusCmd solutionOnOffCmd);
 
-    @PostMapping("/batchOff")
+    @PostMapping("/solution/batchOff")
     @Operation(summary = "批量下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result batchOff(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
 
-    @PostMapping("/addCron")
+    @PostMapping("/solution/addCron")
     @Operation(summary = "添加调度", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result addCron(@RequestBody SolutionAddCronCmd solutionAddCronCmd);
 
-    @PostMapping("/clearCron")
+    @PostMapping("/solution/clearCron")
     @Operation(summary = "清除调度", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result clearCron(@RequestBody SolutionClearCronCmd solutionClearCronCmd);
 
-    @PostMapping("/execute")
+    @PostMapping("/solution/execute")
     @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result execute(@RequestBody SolutionStatusCmd solutionStatusCmd);
 
-    @PostMapping("/batchExecute")
+    @PostMapping("/solution/batchExecute")
     @Operation(summary = "批量执行方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result batchExecute(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
 
-    @PostMapping("/stop")
+    @PostMapping("/solution/stop")
     @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result stop(@RequestBody SolutionStatusCmd solutionStatusCmd);
 
-    @PostMapping("/delete")
+    @PostMapping("/solution/delete")
     @Operation(summary = "删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result delete(@RequestBody SolutionDeleteCmd solutionDeleteCmd);
 
-    @PostMapping("/batchDelete")
+    @PostMapping("/solution/batchDelete")
     @Operation(summary = "批量删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result batchDelete(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
 
-    @PostMapping("/modifyById")
+    @PostMapping("/solution/modifyById")
     @Operation(summary = "编辑方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result modify(@RequestBody SolutionModifyCmd solutionModifyCmd);
 }

@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * filter相关接口类
@@ -18,13 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_FILTER_QRY)
-@RequestMapping(path = "/solution/filter")
 public interface FilterQryFacade {
-    @PostMapping("/function/listBy")
+    @PostMapping("/solution/filter/function/listBy")
     @Operation(summary = "获取function列表", tags = CommonConst.SWAGGER_TAG_FILTER_QRY)
     Result<FunctionDTO> functionListBy();
 
-    @PostMapping("/relation/listBy")
+    @PostMapping("/solution/filter/relation/listBy")
     @Operation(summary = "获取relation列表", tags = CommonConst.SWAGGER_TAG_FILTER_QRY)
     Result<RelationDTO> relationListBy();
 }
