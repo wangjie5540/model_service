@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 方案模板命令接口类
@@ -18,41 +17,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
-@RequestMapping(path = {"/solutionTemplate", "/solution/solutionTemplate"})
 public interface SolutionTemplateCmdFacade {
-    @PostMapping("/add")
+    @PostMapping("/solution/solutionTemplate/add")
     @Operation(summary = "创建模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
     Result add(@RequestBody SolutionTemplateAddCmd solutionAddCmd);
 
     @Operation(summary = "上线模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
-    @PostMapping("/on")
+    @PostMapping("/solution/solutionTemplate/on")
     Result on(@RequestBody SolutionTemplateStatusCmd solutionTemplateStatusCmd);
 
     @Operation(summary = "批量上线模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
-    @PostMapping("/batchOn")
+    @PostMapping("/solution/solutionTemplate/batchOn")
     Result batchOn(@RequestBody SolutionTemplateBatchStatusCmd solutionTemplateBatchStatusCmd);
 
     @Operation(summary = "下线模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
-    @PostMapping("/off")
+    @PostMapping("/solution/solutionTemplate/off")
     Result off(@RequestBody SolutionTemplateStatusCmd solutionTemplateStatusCmd);
 
     @Operation(summary = "批量下线模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
-    @PostMapping("/batchOff")
+    @PostMapping("/solution/solutionTemplate/batchOff")
     Result batchOff(@RequestBody SolutionTemplateBatchStatusCmd solutionTemplateBatchStatusCmd);
 
     @Operation(summary = "删除模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
-    @PostMapping("/delete")
+    @PostMapping("/solution/solutionTemplate/delete")
     Result delete(@RequestBody SolutionTemplateDeleteCmd solutionTemplateDeleteCmd);
 
     @Operation(summary = "批量删除模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
-    @PostMapping("/batchDelete")
+    @PostMapping("/solution/solutionTemplate/batchDelete")
     Result batchDelete(@RequestBody SolutionTemplateBatchDeleteCmd solutionTemplateBatchDeleteCmd);
 
     @Operation(summary = "修改模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
-    @PostMapping("/modify")
+    @PostMapping("/solution/solutionTemplate/modify")
     Result modify(@RequestBody SolutionTemplateModifyCmd solutionModifyCmd);
 
     @Operation(summary = "批量修改模板", tags = CommonConst.SWAGGER_TAG_SOLUTION_TEMPLATE_CMD)
-    @PostMapping("/batchModify")
+    @PostMapping("/solution/solutionTemplate/batchModify")
     Result batchModify(@RequestBody SolutionTemplateBatchModifyCmd solutionTemplateBatchModifyCmd);
 }

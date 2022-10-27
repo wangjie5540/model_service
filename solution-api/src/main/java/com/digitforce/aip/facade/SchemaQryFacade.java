@@ -25,15 +25,15 @@ import java.util.List;
 @Tag(name = CommonConst.SWAGGER_TAG_SCHEMA_QRY)
 @RequestMapping(path = "/solution/schema")
 public interface SchemaQryFacade {
-    @PostMapping("/listTable")
+    @PostMapping("/solution/schema/listTable")
     @Operation(summary = "获取table列表", tags = CommonConst.SWAGGER_TAG_SCHEMA_QRY)
     Result<List<String>> listTable(@RequestBody SchemaListTableQry schemaListTableQry);
 
-    @PostMapping("/getByTable")
+    @PostMapping("/solution/schema/getByTable")
     @Operation(summary = "表schema信息查询", tags = CommonConst.SWAGGER_TAG_SCHEMA_QRY)
     Result<SchemaDTO> getByTable(@RequestBody SchemaGetByTableQry schemaGetByTableQry);
 
-    @PostMapping("/getAllTableSchema")
+    @PostMapping("/solution/schema/getAllTableSchema")
     @Operation(summary = "获取所有的tableSchema信息", tags = CommonConst.SWAGGER_TAG_SCHEMA_QRY)
     Result<List<SchemaDTO>> listTableSchema(@RequestBody SchemaGetAllTableQry schemaGetAllTableQry);
 }

@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 方案查询接口类
@@ -21,13 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
-@RequestMapping(path = "/solution")
 public interface SolutionQryFacade {
-    @PostMapping("/getById")
+    @PostMapping("/solution/getById")
     @Operation(summary = "通过id获取方案详情", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
     Result<SolutionDTO> getById(@RequestBody SolutionGetByIdQry strategyGetByIdQry);
 
-    @PostMapping("/pageBy")
+    @PostMapping("/solution/pageBy")
     @Operation(summary = "方案分页查询", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
     Result<PageView<SolutionDTO>> pageBy(@RequestBody SolutionPageByQry solutionPageByQry);
 }
