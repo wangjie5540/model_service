@@ -25,7 +25,7 @@ public class SolutionMapperTest {
 
     @Test
     public void updateStatusByTaskId() {
-        solutionMapper.updateStatusByTaskId(1541348442958237985L, SolutionStatusEnum.ONLINE);
+        solutionMapper.updateStatusByTaskId(1541348442958237985L, 1L, SolutionStatusEnum.ONLINE);
     }
 
     @Test
