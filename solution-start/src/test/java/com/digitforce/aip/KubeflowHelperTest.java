@@ -33,9 +33,10 @@ public class KubeflowHelperTest {
     @Test
     public void triggerTest() {
         TriggerRunCmd triggerRunCmd = new TriggerRunCmd();
-        triggerRunCmd.setName("run_name_1231");
+        triggerRunCmd.setName("test_run_wtg");
         triggerRunCmd.setExperimentId(kubeflowProperties.getExperimentId());
-        triggerRunCmd.setPipelineId("4f8b48ec-ec2d-4d7c-8a0e-ccee8f5cfc29");
+        triggerRunCmd.setPipelineId("14f84a2a-12fe-40e3-b192-306f2aa83930");
+        triggerRunCmd.setSolutionId(95L);
         triggerRunCmd.setTimeRange(1000);
         triggerRunCmd.setTimeUnit(ChronoUnit.DAYS);
         String runId = KubeflowHelper.triggerRun(kubeflowProperties.getHost(), kubeflowProperties.getPort(),

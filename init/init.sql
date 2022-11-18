@@ -1,5 +1,3 @@
-CREATE
-DATABASE aip_solution;
 USE
 aip_solution;
 SET NAMES utf8mb4;
@@ -34,7 +32,7 @@ CREATE TABLE `solution`
     `create_time`         datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`         datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `name_uniq` (`name`) USING BTREE
+    UNIQUE KEY `uniq_tenant_name` (`tenant_id`, `name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
@@ -77,87 +75,8 @@ CREATE TABLE `solution_template`
     `create_time`   datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`   datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq_name` (`name`) USING BTREE
+    UNIQUE KEY `uniq_tenant_name` (`tenant_id`, `name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='方案表';
 
 SET
 FOREIGN_KEY_CHECKS = 1;
-
-
-
-/*
- Navicat Premium Data Transfer
-
- Source Server         : 算法平台-dev环境
- Source Server Type    : MySQL
- Source Server Version : 50738
- Source Host           : 172.21.32.143:3306
- Source Schema         : aip_model
-
- Target Server Type    : MySQL
- Target Server Version : 50738
- File Encoding         : 65001
-
- Date: 10/08/2022 18:46:53
-*/
-CREATE
-DATABASE aip_model;
-    USE
-aip_model;
-
-SET NAMES utf8mb4;
-SET
-FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for model
--- ----------------------------
-CREATE TABLE `model`
-(
-    `id`               bigint(20) NOT NULL AUTO_INCREMENT,
-    `tenant_id`        int(11) DEFAULT NULL COMMENT '租户id',
-    `template_id`      bigint(20) DEFAULT NULL COMMENT '模板id',
-    `solution_id`      bigint(20) DEFAULT NULL COMMENT '方案id',
-    `name`             varchar(255)      DEFAULT NULL COMMENT '名称',
-    `cname`            varchar(255)      DEFAULT NULL COMMENT '展示名称',
-    `resource_type`    varchar(64)       DEFAULT NULL COMMENT 'model or data',
-    `size`             float             DEFAULT NULL COMMENT '单位MB',
-    `metrics_list`     text COMMENT '模型指标',
-    `package_id`       bigint(20) DEFAULT NULL COMMENT '模型包id',
-    `task_id`          bigint(20) DEFAULT NULL COMMENT '任务id',
-    `task_instance_id` bigint(20) DEFAULT NULL COMMENT '任务实例id',
-    `ds_instance_id`   int(11) DEFAULT NULL COMMENT 'ds任务实例id',
-    `pipeline_id`      varchar(255)      DEFAULT NULL COMMENT 'kubeflow的pipeline_id',
-    `deleted`          tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
-    `create_time`      datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`      datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- ----------------------------
--- Table structure for model_package
--- ----------------------------
-CREATE TABLE `model_package`
-(
-    `id`               bigint(20) NOT NULL AUTO_INCREMENT COMMENT '模型包id',
-    `template_id`      bigint(20) DEFAULT NULL COMMENT '方案模板id',
-    `solution_id`      bigint(20) DEFAULT NULL COMMENT '方案id',
-    `task_id`          varchar(255)  DEFAULT NULL COMMENT '任务id',
-    `tenant_id`        int(11) DEFAULT NULL COMMENT '租户id',
-    `task_instance_id` bigint(20) DEFAULT NULL COMMENT '任务实例id',
-    `ds_instance_id`   int(11) DEFAULT NULL COMMENT 'ds任务实例id',
-    `scene`            varchar(128)  DEFAULT NULL COMMENT '来源系统',
-    `name`             varchar(255)  DEFAULT NULL COMMENT '模型包名称',
-    `solution_name`    varchar(255)  DEFAULT NULL COMMENT '方案名称',
-    `lifecycle`        int(11) DEFAULT '3' COMMENT '生存周期',
-    `path`             varchar(2048) DEFAULT NULL COMMENT '模型数据路径',
-    `pipeline_id`      varchar(255)  DEFAULT NULL COMMENT 'kubeflow的pipeline_id',
-    `deleted`          tinyint(1) DEFAULT '0' COMMENT '删除标志',
-    `create_time`      datetime      DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time`      datetime      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-SET
-FOREIGN_KEY_CHECKS = 1;
-
