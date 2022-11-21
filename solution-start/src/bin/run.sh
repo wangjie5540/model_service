@@ -13,7 +13,7 @@ echo "Current ip: ${LOCAL_IP}"
 if [[ $LOCAL_IP =~ ^172.21.* ]]; then
   JAVA_OPTS="-Xms256m -Xmx512m -XX:+UseG1GC"
 else
-  JAVA_OPTS="-Xms2048m -Xmx2048m -XX:+UseG1GC"
+  JAVA_OPTS="-Xms1024m -Xmx1024m -XX:+UseG1GC"
 fi
 
 PIDFILE=$APP_DIR/service.pid
