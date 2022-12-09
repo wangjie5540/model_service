@@ -1,6 +1,9 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.dto.data.SceneDTO;
+import com.digitforce.aip.dto.qry.SceneGetByIdQry;
+import com.digitforce.aip.dto.qry.ScenePageByQry;
+import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,5 +27,16 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
         SceneDTO sceneDTO = new SceneDTO();
         sceneDTO.setScenes(sceneList);
         return Result.success(sceneDTO);
+    }
+
+    @Override
+    public Result<PageView<SceneDTO>> pageBy(ScenePageByQry scenePageByQry) {
+        return null;
+    }
+
+    @Override
+    public Result<SceneDTO> getById(SceneGetByIdQry sceneGetByIdQry) {
+        // TODO
+        return null;
     }
 }
