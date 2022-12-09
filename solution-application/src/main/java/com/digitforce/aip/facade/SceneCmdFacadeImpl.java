@@ -6,7 +6,9 @@ import com.digitforce.aip.dto.cmd.SceneDeleteCmd;
 import com.digitforce.aip.dto.cmd.SceneModifyCmd;
 import com.digitforce.aip.dto.cmd.ScenePublishCmd;
 import com.digitforce.aip.dto.cmd.SceneUnPublishCmd;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class SceneCmdFacadeImpl implements SceneCmdFacade {
     @Override
     public void add(SceneAddCmd sceneAddCmd) {
