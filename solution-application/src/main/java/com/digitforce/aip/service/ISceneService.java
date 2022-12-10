@@ -1,7 +1,9 @@
 package com.digitforce.aip.service;
 
-import com.digitforce.aip.entity.Scene;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.digitforce.aip.dto.qry.ScenePageByQry;
+import com.digitforce.aip.entity.Scene;
+import com.digitforce.framework.api.dto.PageView;
 
 /**
  * <p>
@@ -12,5 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-12-09
  */
 public interface ISceneService extends IService<Scene> {
-
+    PageView<Scene> page(ScenePageByQry scenePageByQry);
 }

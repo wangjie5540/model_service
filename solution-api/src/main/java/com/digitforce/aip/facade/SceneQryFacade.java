@@ -21,11 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient("solution")
 @Tag(name = CommonConst.SWAGGER_TAG_SCENE_QRY)
 public interface SceneQryFacade {
-    @PostMapping("/solution/scene/listBy")
-    @Operation(summary = "获取适用系统列表", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
-    @Deprecated
-    Result<SceneDTO> listBy();
-
     @PostMapping("/solution/scene/pageBy")
     @Operation(summary = "分页查询场景", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
     Result<PageView<SceneDTO>> pageBy(@RequestBody ScenePageByQry scenePageByQry);

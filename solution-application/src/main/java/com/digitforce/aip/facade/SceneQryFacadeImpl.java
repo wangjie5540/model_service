@@ -8,6 +8,7 @@ import com.digitforce.aip.service.ISceneService;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
+import com.digitforce.framework.tool.PageTool;
 import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,15 +30,9 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
     private ISceneService sceneService;
 
     @Override
-    public Result<SceneDTO> listBy() {
-        SceneDTO sceneDTO = new SceneDTO();
-        sceneDTO.setScenes(sceneList);
-        return Result.success(sceneDTO);
-    }
-
-    @Override
     public Result<PageView<SceneDTO>> pageBy(ScenePageByQry scenePageByQry) {
-        return null;
+        PageView<Scene> pageView = sceneService.page(scenePageByQry);
+        return Result.success(PageTool.pageView(pageView, SceneDTO.class));
     }
 
     @Override
