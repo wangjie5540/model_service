@@ -1,15 +1,9 @@
 package com.digitforce.aip.dto.cmd;
 
-import com.digitforce.aip.dto.data.PipelineDataSource;
-import com.digitforce.aip.dto.data.TableSelection;
 import com.digitforce.framework.api.dto.Command;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
-import javax.validation.constraints.NotNull;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
+import lombok.EqualsAndHashCode;
 
 /**
  * 新增方案实体类
@@ -18,28 +12,18 @@ import java.util.List;
  * @version 1.0.0
  * @since 2022/05/31 15:41
  */
-@Schema(
-        description = "新增方案实体类"
-)
+@Schema(description = "新增方案实体类")
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class SolutionAddCmd extends Command {
-    @Parameter(required = true)
-    private Long templateId;
-    @Parameter(required = true)
-    private String name;
-    @Parameter(required = true)
-    private String scene;
+    private String title;
+    private Long sceneId;
+    private String sceneName;
+    private String system;
     private String description;
-    private String schedule;
-    @NotNull(message = "timeRange can not be null")
-    private Integer timeRange;
-    private ChronoUnit timeUnit;
-    private List<TableSelection> selection;
-    private Object frontExtra;
-    private Boolean needExecute = false;
-    @Parameter(required = true)
+    private Object trainingSampleParams;
+    private Object modelHyperParams;
+    private boolean isAutoML;
     private String pipelineId;
-    @Parameter(required = true)
     private String pipelineName;
-    private PipelineDataSource dataSource;
 }

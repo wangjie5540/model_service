@@ -1,7 +1,11 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
-import com.digitforce.aip.dto.cmd.*;
+import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionBatchStatusCmd;
+import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
+import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
+import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,36 +25,24 @@ import javax.validation.Valid;
 @Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
 public interface SolutionCmdFacade {
     @PostMapping("/solution/add")
-    @Operation(summary = "根据模板创建方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    @Operation(summary = "创建方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result add(@RequestBody @Valid SolutionAddCmd solutionAddCmd);
 
-    @PostMapping("/solution/on")
-    @Operation(summary = "上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result on(@RequestBody SolutionStatusCmd solutionStatusCmd);
+    @PostMapping("/solution/delete")
+    @Operation(summary = "删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result delete(@RequestBody SolutionDeleteCmd solutionDeleteCmd);
 
-    @PostMapping("/solution/batchOn")
-    @Operation(summary = "批量上线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result batchOn(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
+    @PostMapping("/solution/publish")
+    @Operation(summary = "发布方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result publish(@RequestBody SolutionPublishCmd solutionPublishCmd);
 
-    @PostMapping("/solution/off")
-    @Operation(summary = "下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result off(@RequestBody SolutionStatusCmd solutionOnOffCmd);
-
-    @PostMapping("/solution/batchOff")
-    @Operation(summary = "批量下线方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result batchOff(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
-
-    @PostMapping("/solution/addCron")
-    @Operation(summary = "添加调度", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result addCron(@RequestBody SolutionAddCronCmd solutionAddCronCmd);
-
-    @PostMapping("/solution/clearCron")
-    @Operation(summary = "清除调度", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result clearCron(@RequestBody SolutionClearCronCmd solutionClearCronCmd);
+    @PostMapping("/solution/unPublish")
+    @Operation(summary = "取消发布方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result off(@RequestBody SolutionPublishCmd solutionPublishCmd);
 
     @PostMapping("/solution/execute")
     @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result execute(@RequestBody SolutionStatusCmd solutionStatusCmd);
+    Result execute(@RequestBody SolutionPublishCmd solutionStatusCmd);
 
     @PostMapping("/solution/batchExecute")
     @Operation(summary = "批量执行方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
@@ -58,11 +50,8 @@ public interface SolutionCmdFacade {
 
     @PostMapping("/solution/stop")
     @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result stop(@RequestBody SolutionStatusCmd solutionStatusCmd);
+    Result stop(@RequestBody SolutionPublishCmd solutionStatusCmd);
 
-    @PostMapping("/solution/delete")
-    @Operation(summary = "删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result delete(@RequestBody SolutionDeleteCmd solutionDeleteCmd);
 
     @PostMapping("/solution/batchDelete")
     @Operation(summary = "批量删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
@@ -70,5 +59,5 @@ public interface SolutionCmdFacade {
 
     @PostMapping("/solution/modifyById")
     @Operation(summary = "编辑方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result modify(@RequestBody SolutionModifyCmd solutionModifyCmd);
+    Result modifyById(@RequestBody SolutionModifyCmd solutionModifyCmd);
 }

@@ -6,6 +6,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SceneUnPublishCmd extends Command {
+public class SceneStatusCmd extends Command {
     private Long id;
 }

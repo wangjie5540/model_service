@@ -12,9 +12,11 @@ import lombok.EqualsAndHashCode;
  * @version 1.0.0
  * @since 2022/05/31 15:41
  */
-@Schema(description = "方案状态命令实体类")
+@Schema(description = "发布方案实体类")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SolutionStatusCmd extends Command {
+public class SolutionPublishCmd extends Command {
     private Long id;
+    private String cron;
+    private String cronDesc;
 }
