@@ -1,7 +1,5 @@
 package com.digitforce.aip.service.cmd;
 
-import com.digitforce.aip.GlobalConstant;
-import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
@@ -9,25 +7,9 @@ import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.mapper.SolutionTemplateMapper;
-import com.digitforce.aip.model.Pipeline;
-import com.digitforce.aip.model.SolutionDefine;
-import com.digitforce.aip.model.TaskDefineExtraDTO;
-import com.digitforce.aip.model.TriggerRunCmd;
 import com.digitforce.aip.repository.SolutionRepository;
-import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineCmdFacade;
-import com.digitforce.bdp.operatex.core.api.taskInstance.TaskInstanceCmdFacade;
-import com.digitforce.bdp.operatex.core.consts.FailureStrategy;
-import com.digitforce.bdp.operatex.core.consts.PlatformEnum;
-import com.digitforce.bdp.operatex.core.consts.TaskCategory;
-import com.digitforce.bdp.operatex.core.consts.TaskType;
-import com.digitforce.bdp.operatex.core.consts.algorithm.AlgorithmTaskDefineDTO;
-import com.digitforce.bdp.operatex.core.dto.TaskDefineDTO;
-import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.operation.DefaultService;
-import com.digitforce.framework.tool.ConvertTool;
-import com.digitforce.framework.util.GsonUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,10 +29,6 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Resource
     private SolutionRepository solutionRepository;
     @Resource
-    private TaskDefineCmdFacade taskDefineCmdFacade;
-    @Resource
-    private TaskInstanceCmdFacade taskInstanceCmdFacade;
-    @Resource
     private KubeflowProperties kubeflowProperties;
     @Resource
     private SolutionMapper solutionMapper;
@@ -60,53 +38,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void add(SolutionAddCmd solutionAddCmd) {
-        // TODO 参数校验
-//        solutionValidator.validate(null);
-        Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
-        try {
-            // TODO 应产品要求，近期必须使用自增id，所以先进行save，获取数据库自增id，供任务管理使用
-            // TODO 后续推动产品级别纠正为全局统一id
-            solutionRepository.save(solution);
-        } catch (DuplicateKeyException e) {
-            throw new BizException("方案名称重复");
-        }
-        // TODO 需要任务服务新增对应的任务类型定义
-        TaskDefineDTO taskDefineDTO = new AlgorithmTaskDefineDTO();
-        taskDefineDTO.setCategory(TaskCategory.BATCH);
-        // TODO 后续将进行权限与用户对接
-        taskDefineDTO.setCreateUserId(0L);
-        taskDefineDTO.setCreateUserName("admin");
-        taskDefineDTO.setDescription(solutionAddCmd.getDescription());
-        taskDefineDTO.setFailureStrategy(FailureStrategy.END);
-        taskDefineDTO.setName(solutionAddCmd.getName());
-        taskDefineDTO.setPlatform(PlatformEnum.ALGOX);
-        // TODO 需要任务管理提供projectId选择方式
-        taskDefineDTO.setProjectId(GlobalConstant.DEFAULT_PROJECT_ID);
-        taskDefineDTO.setType(TaskType.ALGORITHM);
-        // 设置为只创建不执行
-        taskDefineDTO.setIsRunNow(0);
-        TriggerRunCmd triggerRunCmd = constructTriggerCmd(solution.getId(), solutionAddCmd);
-        SolutionDefine solutionDefine = ConvertTool.convert(solution, SolutionDefine.class);
-        TaskDefineExtraDTO taskDefineExtraDTO = new TaskDefineExtraDTO();
-        taskDefineExtraDTO.setSolutionDefine(solutionDefine);
-        taskDefineExtraDTO.setTriggerRunCmd(triggerRunCmd);
-        taskDefineDTO.setExtra(GsonUtil.objectToString(taskDefineExtraDTO));
-        Long taskId = Long.parseLong(taskDefineCmdFacade.addTask(taskDefineDTO).getData().toString());
-        Pipeline pipelineDetail = KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
-                kubeflowProperties.getPort(), solutionAddCmd.getPipelineId());
-        solution.setTaskId(taskId);
-//        PipelineDataSource dataSource = ConvertTool.convert(pipelineDetail.getDescription(), PipelineDataSource
-//        .class);
-//        solution.setDataSource(GsonUtil.objectToString(dataSource));
-        solution.setDataSource(solutionAddCmd.getDataSource());
-        solution.setSchedule(GlobalConstant.DEFAULT_CRON);
-        if (solutionAddCmd.getNeedExecute()) {
-            Long taskInstanceId = taskDefineCmdFacade.execute(taskId).getData();
-            solution.setStatus(SolutionStatusEnum.EXECUTING);
-            solution.setTaskInstanceId(taskInstanceId);
-        }
-        solutionRepository.upsert(solution);
-        solutionTemplateMapper.applyCountInc(solutionAddCmd.getTemplateId());
+        // TODO
     }
 
     @Override
@@ -121,11 +53,6 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     }
 
     @Override
-    public void batchOn(List<Long> ids) {
-        ids.forEach(this::on);
-    }
-
-    @Override
     public void off(Long id) {
         Solution solution = solutionRepository.getById(id);
         if (solution.getStatus() == SolutionStatusEnum.ONLINE) {
@@ -137,39 +64,8 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     }
 
     @Override
-    public void batchOff(List<Long> ids) {
-        ids.forEach(this::off);
-    }
-
-    private TriggerRunCmd constructTriggerCmd(Long solutionId, SolutionAddCmd solutionAddCmd) {
-        TriggerRunCmd triggerRunCmd = new TriggerRunCmd();
-        triggerRunCmd.setName(solutionAddCmd.getPipelineName());
-        triggerRunCmd.setExperimentId(kubeflowProperties.getExperimentId());
-        triggerRunCmd.setPipelineId(solutionAddCmd.getPipelineId());
-        triggerRunCmd.setTimeRange(solutionAddCmd.getTimeRange());
-        triggerRunCmd.setTimeUnit(solutionAddCmd.getTimeUnit());
-        triggerRunCmd.setSolutionId(solutionId);
-        return triggerRunCmd;
-    }
-
-    @Override
     public void execute(Long id) {
-        Solution solution = solutionRepository.getById(id);
-        if (solution != null && (solution.getStatus() == SolutionStatusEnum.NOT_EXECUTE
-                || solution.getStatus() == SolutionStatusEnum.FAILED
-                || solution.getStatus() == SolutionStatusEnum.FINISHED)) {
-            Long taskInstanceId = taskDefineCmdFacade.execute(solution.getTaskId()).getData();
-            solution = new Solution();
-            solution.setId(id);
-            if (taskInstanceId == null) {
-                return;
-            }
-            solution.setStatus(SolutionStatusEnum.EXECUTING);
-            solution.setTaskInstanceId(taskInstanceId);
-            log.info("start to upsert solution. [id={}, status={}, taskInstanceId={}]",
-                    solution.getId(), solution.getStatus(), solution.getTaskInstanceId());
-            solutionRepository.upsert(solution);
-        }
+        // TODO
     }
 
     @Override
@@ -179,31 +75,23 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
 
     @Override
     public void onExecuting(Long taskId, Long taskInstanceId) {
-        solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.EXECUTING);
     }
 
     @Override
     public void onFinished(Long taskId, Long taskInstanceId) {
-        SolutionStatusEnum status = solutionMapper.getStatusByTaskId(taskId);
-        if (status != SolutionStatusEnum.ONLINE) {
-            solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.FINISHED);
-        }
+
     }
 
     @Override
     public void stop(Long id) {
-        Solution solution = solutionRepository.getById(id);
-        taskInstanceCmdFacade.stop(solution.getTaskInstanceId());
     }
 
     @Override
     public void onStopping(Long taskId, Long taskInstanceId) {
-        solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.STOPPING);
     }
 
     @Override
     public void onFailed(Long taskId, Long taskInstanceId) {
-        solutionMapper.updateStatusByTaskId(taskId, taskInstanceId, SolutionStatusEnum.FAILED);
     }
 
     @Override
@@ -221,16 +109,7 @@ public class SolutionCmdServiceImpl extends DefaultService<Solution> implements 
     }
 
     @Override
-    public boolean modifyById(SolutionModifyCmd solutionModifyCmd) {
-        Solution solution = ConvertTool.convert(solutionModifyCmd, Solution.class);
-        if (solutionModifyCmd.getNeedExecute()) {
-            Long taskInstanceId = taskDefineCmdFacade.execute(getById(solution.getId()).getTaskId()).getData();
-            solution.setStatus(SolutionStatusEnum.EXECUTING);
-            solution.setTaskInstanceId(taskInstanceId);
-        } else {
-            solution.setStatus(SolutionStatusEnum.NOT_EXECUTE);
-        }
-        return modifyById(solution);
+    public void modifyById(SolutionModifyCmd solutionModifyCmd) {
     }
 
     @Override

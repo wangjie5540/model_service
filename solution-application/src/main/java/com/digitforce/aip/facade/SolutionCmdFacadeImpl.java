@@ -1,6 +1,10 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.aip.dto.cmd.*;
+import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionBatchStatusCmd;
+import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
+import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
+import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
 import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.framework.api.dto.Result;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,41 +32,19 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
-    public Result on(SolutionStatusCmd solutionStatusCmd) {
-        solutionCmdService.on(solutionStatusCmd.getId());
+    public Result publish(SolutionPublishCmd solutionPublishCmd) {
+        solutionCmdService.on(solutionPublishCmd.getId());
         return Result.success();
     }
 
     @Override
-    public Result batchOn(SolutionBatchStatusCmd solutionBatchStatusCmd) {
-        solutionCmdService.batchOn(solutionBatchStatusCmd.getIds());
+    public Result off(SolutionPublishCmd solutionPublishCmd) {
+        solutionCmdService.off(solutionPublishCmd.getId());
         return Result.success();
     }
 
     @Override
-    public Result off(SolutionStatusCmd solutionStatusCmd) {
-        solutionCmdService.off(solutionStatusCmd.getId());
-        return Result.success();
-    }
-
-    @Override
-    public Result batchOff(SolutionBatchStatusCmd solutionBatchStatusCmd) {
-        solutionCmdService.batchOff(solutionBatchStatusCmd.getIds());
-        return Result.success();
-    }
-
-    @Override
-    public Result addCron(SolutionAddCronCmd solutionAddCronCmd) {
-        return null;
-    }
-
-    @Override
-    public Result clearCron(SolutionClearCronCmd solutionClearCronCmd) {
-        return null;
-    }
-
-    @Override
-    public Result execute(SolutionStatusCmd solutionStatusCmd) {
+    public Result execute(SolutionPublishCmd solutionStatusCmd) {
         solutionCmdService.execute(solutionStatusCmd.getId());
         return Result.success();
     }
@@ -74,7 +56,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
-    public Result stop(SolutionStatusCmd solutionStatusCmd) {
+    public Result stop(SolutionPublishCmd solutionStatusCmd) {
         solutionCmdService.stop(solutionStatusCmd.getId());
         return Result.success();
     }
@@ -92,7 +74,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
-    public Result modify(SolutionModifyCmd solutionModifyCmd) {
+    public Result modifyById(SolutionModifyCmd solutionModifyCmd) {
         solutionCmdService.modifyById(solutionModifyCmd);
         return Result.success();
     }

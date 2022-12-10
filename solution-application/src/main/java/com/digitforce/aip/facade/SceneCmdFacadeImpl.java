@@ -4,34 +4,39 @@ package com.digitforce.aip.facade;
 import com.digitforce.aip.dto.cmd.SceneAddCmd;
 import com.digitforce.aip.dto.cmd.SceneDeleteCmd;
 import com.digitforce.aip.dto.cmd.SceneModifyCmd;
-import com.digitforce.aip.dto.cmd.ScenePublishCmd;
-import com.digitforce.aip.dto.cmd.SceneUnPublishCmd;
+import com.digitforce.aip.dto.cmd.SceneStatusCmd;
+import com.digitforce.framework.api.dto.Result;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SceneCmdFacadeImpl implements SceneCmdFacade {
     @Override
-    public void add(SceneAddCmd sceneAddCmd) {
+    public Result add(SceneAddCmd sceneAddCmd) {
         // TODO add
+        return Result.success();
     }
 
     @Override
-    public void delete(SceneDeleteCmd sceneDeleteCmd) {
+    public Result delete(SceneDeleteCmd sceneDeleteCmd) {
         // TODO delete
+        return Result.success();
     }
 
     @Override
-    public void publish(ScenePublishCmd scenePublishCmd) {
+    public Result publish(SceneStatusCmd sceneStatusCmd) {
         // TODO
+        return Result.success();
     }
 
     @Override
-    public void unPublish(SceneUnPublishCmd sceneUnPublishCmd) {
+    public Result unPublish(SceneStatusCmd sceneStatusCmd) {
         // TODO
+        return Result.success();
     }
 
     @Override
-    public void modify(SceneModifyCmd sceneModifyCmd) {
+    public Result modify(SceneModifyCmd sceneModifyCmd) {
         // TODO
+        return Result.success();
     }
 }
