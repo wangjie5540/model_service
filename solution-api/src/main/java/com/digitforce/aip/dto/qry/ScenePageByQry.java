@@ -8,4 +8,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ScenePageByQry extends PageQuery<SceneDTO> {
+    private static final long serialVersionUID = 6265300280360766485L;
+    private SceneDTO likeClause;
 }
