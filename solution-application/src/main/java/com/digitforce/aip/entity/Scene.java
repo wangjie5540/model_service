@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.digitforce.aip.enums.SceneTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -21,7 +20,6 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
 @TableName("scene")
 public class Scene implements Serializable {
     private static final long serialVersionUID = 2966524253410979719L;
@@ -40,6 +38,11 @@ public class Scene implements Serializable {
      * 生效的version_id
      */
     private Long vidInUse;
+
+    /**
+     * 行业
+     */
+    private String business;
 
     /**
      * 目标系统
