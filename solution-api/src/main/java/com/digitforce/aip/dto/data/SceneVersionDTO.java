@@ -2,8 +2,6 @@ package com.digitforce.aip.dto.data;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 /**
  * 场景版本实体类
  *
@@ -20,6 +18,4 @@ public class SceneVersionDTO {
     private String algorithmInUse;
     private String createUser;
     private String updateUser;
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
 }

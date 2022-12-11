@@ -20,7 +20,7 @@ public class SceneDTO {
     private List<String> scenes;
     private Long id;
     private String name;
-    private Long vidInUse;
+    private SceneVersionDTO versionInUse;
     private SceneTypeEnum sceneType;
     private Integer solutionCount;
     private Integer servingCount;

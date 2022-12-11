@@ -31,7 +31,7 @@ public class SceneVersion extends AggregateRoot<Long> implements Serializable {
     private Long id;
 
     /**
-     * 场景名称
+     * 场景版本名称
      */
     private String name;
 
