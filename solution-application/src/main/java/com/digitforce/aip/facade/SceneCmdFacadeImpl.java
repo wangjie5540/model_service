@@ -68,7 +68,9 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
 
     @Override
     public Result modify(SceneModifyCmd sceneModifyCmd) {
-        // TODO
+        Scene scene = ConvertTool.convert(sceneModifyCmd, Scene.class);
+        scene.setUpdateUser(TenantContext.tenant().getUserAccount());
+        sceneService.updateById(scene);
         return Result.success();
     }
 }
