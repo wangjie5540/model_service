@@ -7,6 +7,7 @@ import com.digitforce.aip.dto.cmd.SceneModifyCmd;
 import com.digitforce.aip.dto.cmd.SceneStatusCmd;
 import com.digitforce.aip.entity.Scene;
 import com.digitforce.aip.entity.SceneVersion;
+import com.digitforce.aip.enums.SceneStatusEnum;
 import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.service.ISceneVersionService;
 import com.digitforce.framework.api.dto.Result;
@@ -49,13 +50,19 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
 
     @Override
     public Result publish(SceneStatusCmd sceneStatusCmd) {
-        // TODO
+        Scene scene = ConvertTool.convert(sceneStatusCmd, Scene.class);
+        scene.setStatus(SceneStatusEnum.ONLINE);
+        scene.setUpdateUser(TenantContext.tenant().getUserAccount());
+        sceneService.updateById(scene);
         return Result.success();
     }
 
     @Override
     public Result unPublish(SceneStatusCmd sceneStatusCmd) {
-        // TODO
+        Scene scene = ConvertTool.convert(sceneStatusCmd, Scene.class);
+        scene.setStatus(SceneStatusEnum.OFFLINE);
+        scene.setUpdateUser(TenantContext.tenant().getUserAccount());
+        sceneService.updateById(scene);
         return Result.success();
     }
 

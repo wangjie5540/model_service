@@ -3,6 +3,7 @@ package com.digitforce.aip.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.digitforce.aip.enums.SceneStatusEnum;
 import com.digitforce.aip.enums.SceneTypeEnum;
 import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
@@ -83,7 +84,7 @@ public class Scene extends AggregateRoot<Long> implements Serializable {
     /**
      * 场景状态
      */
-    private String status;
+    private SceneStatusEnum status;
 
     /**
      * 创建时间
