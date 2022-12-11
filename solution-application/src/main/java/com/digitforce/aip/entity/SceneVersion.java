@@ -3,6 +3,7 @@ package com.digitforce.aip.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,7 +21,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("scene_version")
-public class SceneVersion implements Serializable {
+public class SceneVersion extends AggregateRoot<Long> implements Serializable {
 
     private static final long serialVersionUID = 8452170699118419289L;
     /**

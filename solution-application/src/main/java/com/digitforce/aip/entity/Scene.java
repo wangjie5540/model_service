@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.digitforce.aip.enums.SceneTypeEnum;
+import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("scene")
-public class Scene implements Serializable {
+public class Scene extends AggregateRoot<Long> implements Serializable {
     private static final long serialVersionUID = 2966524253410979719L;
     /**
      * 主键id
@@ -93,6 +94,4 @@ public class Scene implements Serializable {
      * 创建时间
      */
     private LocalDateTime updateTime;
-
-
 }

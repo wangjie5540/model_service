@@ -3,6 +3,7 @@ package com.digitforce.aip.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,7 +21,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("solution_run")
-public class SolutionRun implements Serializable {
+public class SolutionRun extends AggregateRoot<Long> implements Serializable {
     private static final long serialVersionUID = 4239051849196607086L;
     /**
      * 主键id
@@ -62,6 +63,4 @@ public class SolutionRun implements Serializable {
      * 结束时间
      */
     private LocalDateTime finishTime;
-
-
 }

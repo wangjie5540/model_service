@@ -43,7 +43,7 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
 
     @Override
     public Result delete(SceneDeleteCmd sceneDeleteCmd) {
-        // TODO delete
+        sceneService.removeById(sceneDeleteCmd.getId());
         return Result.success();
     }
 
