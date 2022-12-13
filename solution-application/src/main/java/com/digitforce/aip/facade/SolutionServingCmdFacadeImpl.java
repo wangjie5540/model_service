@@ -10,6 +10,7 @@ import com.digitforce.aip.service.cmd.SolutionServingCmdService;
 import com.digitforce.aip.utils.ApplicationUtil;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,7 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
     private KafkaTemplate<String, Object> kafkaTemplate;
     @Resource
     private SolutionServingCmdService solutionServingCmdService;
-    @Resource
+    @Autowired(required = false)
     private KafkaProperties kafkaProperties;
 
     @Override

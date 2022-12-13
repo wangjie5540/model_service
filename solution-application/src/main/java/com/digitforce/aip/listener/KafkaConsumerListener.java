@@ -7,12 +7,15 @@ import com.digitforce.bdp.operatex.core.event.PublishEventData;
 import com.digitforce.bdp.operatex.core.event.TaskInstanceStateMessage;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.util.GsonUtil;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -20,7 +23,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Component
+// TODO 目前暂时不接入kafka，后续需要接入
+//@Component
 @Slf4j
 public class KafkaConsumerListener {
     @Resource

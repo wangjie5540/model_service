@@ -2,9 +2,6 @@ package com.digitforce.aip.config;
 
 import com.digitforce.aip.GlobalConstant;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.annotation.EnableKafka;
 
 import javax.annotation.Resource;
 
@@ -15,9 +12,10 @@ import javax.annotation.Resource;
  * @version 1.0.0
  * @since 2022/06/05 21:11
  */
-@Configuration
-@EnableConfigurationProperties(value = KafkaProperties.class)
-@EnableKafka
+// TODO 目前不需要接入kafka，后续需要接入时，再开启
+//@Configuration
+//@EnableConfigurationProperties(value = KafkaProperties.class)
+//@EnableKafka
 public class KafkaConfig implements InitializingBean {
     @Resource
     private KafkaProperties properties;
