@@ -19,6 +19,11 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.digitforce.component.config</groupId>
+            <artifactId>component-config-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.digitforce.component.dict</groupId>
             <artifactId>component-dict-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
