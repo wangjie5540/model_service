@@ -3,6 +3,7 @@ package com.digitforce.aip.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author wangtonggui
- * @since 2022-12-10
+ * @since 2022-12-14
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -33,6 +34,11 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
      * 租户id
      */
     private Integer tenantId;
+
+    /**
+     * 方案标题
+     */
+    private String title;
 
     /**
      * 模板主键id
@@ -52,17 +58,13 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     /**
      * 方案状态
      */
-    private String status;
+    private SolutionStatusEnum status;
 
     /**
-     * 通过方案创建的任务id
+     * 在kubeflow pipeline中添加的调度任务id
      */
-    private String jobId;
-
-    /**
-     * 方案标题
-     */
-    private String title;
+    @Deprecated
+    private String pJobId;
 
     /**
      * cron表达式

@@ -171,7 +171,6 @@ public class KubeflowHelper {
         HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs", host, port))
                 .body(generateBody(runName, experimentId, pipelineId, pipelineParameters));
         String body = httpRequest.execute().body();
-        log.info("kubeflow response. [body={}]", body);
         RunDetail runDetail = GsonUtil.gsonToBean(body, RunDetail.class);
         return runDetail.run.getId();
     }

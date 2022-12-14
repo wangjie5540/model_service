@@ -6,7 +6,6 @@ import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.ISolutionService;
-import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.framework.api.dto.Result;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,8 +22,6 @@ import javax.annotation.Resource;
 @RestController
 public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Resource
-    private SolutionCmdService solutionCmdService;
-    @Resource
     private ISolutionService solutionService;
     @Resource
     private ISolutionRunService solutionRunService;
@@ -32,43 +29,37 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result add(SolutionAddCmd solutionAddCmd) {
-        solutionCmdService.add(solutionAddCmd);
+        solutionService.createAndRun(solutionAddCmd);
         return Result.success();
     }
 
     @Override
     public Result publish(SolutionPublishCmd solutionPublishCmd) {
-        solutionCmdService.on(solutionPublishCmd.getId());
         return Result.success();
     }
 
     @Override
     public Result off(SolutionPublishCmd solutionPublishCmd) {
-        solutionCmdService.off(solutionPublishCmd.getId());
         return Result.success();
     }
 
     @Override
     public Result execute(SolutionPublishCmd solutionStatusCmd) {
-        solutionCmdService.execute(solutionStatusCmd.getId());
         return Result.success();
     }
 
     @Override
     public Result stop(SolutionPublishCmd solutionStatusCmd) {
-        solutionCmdService.stop(solutionStatusCmd.getId());
         return Result.success();
     }
 
     @Override
     public Result delete(SolutionDeleteCmd solutionDeleteCmd) {
-        solutionCmdService.delete(solutionDeleteCmd.getId());
         return Result.success();
     }
 
     @Override
     public Result modifyById(SolutionModifyCmd solutionModifyCmd) {
-        solutionCmdService.modifyById(solutionModifyCmd);
         return Result.success();
     }
 }
