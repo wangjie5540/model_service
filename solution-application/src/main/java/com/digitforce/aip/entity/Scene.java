@@ -77,6 +77,11 @@ public class Scene extends AggregateRoot<Long> implements Serializable {
     private Integer servingCount;
 
     /**
+     * 备注
+     */
+    private String remark;
+
+    /**
      * 场景描述
      */
     private String description;

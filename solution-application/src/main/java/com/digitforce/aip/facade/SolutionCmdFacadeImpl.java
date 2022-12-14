@@ -1,10 +1,11 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionBatchStatusCmd;
 import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
 import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
+import com.digitforce.aip.service.ISolutionRunService;
+import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.cmd.SolutionCmdService;
 import com.digitforce.framework.api.dto.Result;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +24,13 @@ import javax.annotation.Resource;
 public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Resource
     private SolutionCmdService solutionCmdService;
+    @Resource
+    private ISolutionService solutionService;
+    @Resource
+    private ISolutionRunService solutionRunService;
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = Exception.class)
     public Result add(SolutionAddCmd solutionAddCmd) {
         solutionCmdService.add(solutionAddCmd);
         return Result.success();
@@ -50,12 +55,6 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
-    public Result batchExecute(SolutionBatchStatusCmd solutionBatchStatusCmd) {
-        solutionCmdService.batchExecute(solutionBatchStatusCmd.getIds());
-        return Result.success();
-    }
-
-    @Override
     public Result stop(SolutionPublishCmd solutionStatusCmd) {
         solutionCmdService.stop(solutionStatusCmd.getId());
         return Result.success();
@@ -64,12 +63,6 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Override
     public Result delete(SolutionDeleteCmd solutionDeleteCmd) {
         solutionCmdService.delete(solutionDeleteCmd.getId());
-        return Result.success();
-    }
-
-    @Override
-    public Result batchDelete(SolutionBatchStatusCmd solutionBatchStatusCmd) {
-        solutionCmdService.batchDelete(solutionBatchStatusCmd.getIds());
         return Result.success();
     }
 

@@ -2,9 +2,9 @@ package com.digitforce.aip.facade;
 
 import cn.hutool.json.JSONUtil;
 import com.digitforce.aip.test.BaseTest;
-import com.digitforce.component.config.dto.data.ConfigItemDTO;
-import com.digitforce.component.config.dto.qry.ConfigQry;
-import com.digitforce.component.config.facade.qry.ConfigQryFacade;
+import com.digitforce.component.config.api.dto.data.ConfigItemDTO;
+import com.digitforce.component.config.api.dto.qry.ConfigQry;
+import com.digitforce.component.config.api.facade.qry.ConfigQryFacade;
 import com.digitforce.framework.api.dto.Result;
 import org.junit.Test;
 

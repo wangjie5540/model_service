@@ -2,7 +2,6 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionBatchStatusCmd;
 import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
 import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
@@ -44,18 +43,9 @@ public interface SolutionCmdFacade {
     @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result execute(@RequestBody SolutionPublishCmd solutionStatusCmd);
 
-    @PostMapping("/solution/batchExecute")
-    @Operation(summary = "批量执行方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result batchExecute(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
-
     @PostMapping("/solution/stop")
     @Operation(summary = "触发单次执行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result stop(@RequestBody SolutionPublishCmd solutionStatusCmd);
-
-
-    @PostMapping("/solution/batchDelete")
-    @Operation(summary = "批量删除方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
-    Result batchDelete(@RequestBody SolutionBatchStatusCmd solutionBatchStatusCmd);
 
     @PostMapping("/solution/modifyById")
     @Operation(summary = "编辑方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
