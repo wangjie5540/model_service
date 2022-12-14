@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
  * @since 2022-12-09
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @TableName("scene")
 public class Scene extends AggregateRoot<Long> implements Serializable {
     private static final long serialVersionUID = 2966524253410979719L;

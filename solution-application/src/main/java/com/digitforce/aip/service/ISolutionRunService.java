@@ -1,7 +1,8 @@
 package com.digitforce.aip.service;
 
-import com.digitforce.aip.entity.SolutionRun;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.digitforce.aip.entity.SolutionRun;
+import com.digitforce.aip.enums.RunStatusEnum;
 
 /**
  * <p>
@@ -12,5 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2022-12-10
  */
 public interface ISolutionRunService extends IService<SolutionRun> {
+    void createRun(String pipelineId, String pipelineName);
 
+    RunStatusEnum getRunStatus(String runId);
 }

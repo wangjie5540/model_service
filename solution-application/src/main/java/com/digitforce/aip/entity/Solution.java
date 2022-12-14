@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
  * @since 2022-12-10
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @TableName("solution")
 public class Solution extends AggregateRoot<Long> implements Serializable {
     private static final long serialVersionUID = 9085508804053336799L;

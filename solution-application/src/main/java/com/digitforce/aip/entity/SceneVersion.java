@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 场景表
+ * 场景版本表
  * </p>
  *
  * @author wangtonggui
  * @since 2022-12-09
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @TableName("scene_version")
 public class SceneVersion extends AggregateRoot<Long> implements Serializable {
 

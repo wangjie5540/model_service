@@ -1,6 +1,5 @@
 package com.digitforce.aip.config;
 
-import com.digitforce.aip.GlobalConstant;
 import org.springframework.beans.factory.InitializingBean;
 
 import javax.annotation.Resource;
@@ -22,7 +21,7 @@ public class KafkaConfig implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.setProperty(GlobalConstant.TASK_STATUS_TOPIC, properties.getTaskStatusTopic());
-        System.setProperty(GlobalConstant.TASK_INSTANCE_STATUS_TOPIC, properties.getTaskInstanceStatusTopic());
+//        System.setProperty(GlobalConstant.TASK_STATUS_TOPIC, properties.getTaskStatusTopic());
+//        System.setProperty(GlobalConstant.TASK_INSTANCE_STATUS_TOPIC, properties.getTaskInstanceStatusTopic());
     }
 }

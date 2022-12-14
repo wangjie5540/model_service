@@ -10,6 +10,7 @@ import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
+import com.digitforce.framework.tool.PageTool;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -31,6 +32,6 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         map.forEach(queryWrapper::like);
         Page<Scene> page = PageUtil.page(scenePageByQry);
         page = super.page(page, queryWrapper);
-        return PageView.of((int) page.getTotal(), page.getRecords());
+        return PageTool.pageView(page);
     }
 }

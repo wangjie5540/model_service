@@ -3,8 +3,8 @@ package com.digitforce.aip.facade;
 import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.dto.qry.PipelineGetByIdQry;
-import com.digitforce.aip.model.PageByPipelineVO;
 import com.digitforce.aip.model.Pipeline;
+import com.digitforce.aip.model.PipelinePage;
 import com.digitforce.framework.api.dto.Result;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,8 +33,8 @@ public class KubeflowPipelineQryFacadeImpl implements KubeflowPipelineQryFacade 
     @Override
     public Result<List<Pipeline>> listBy() {
         // TODO kubeflow使用pageToken进行分页，后续需要进行兼容性开发
-        PageByPipelineVO pageByPipelineVO = KubeflowHelper.pageByPipeline(kubeflowProperties.getHost(),
+        PipelinePage pipelinePage = KubeflowHelper.pageByPipeline(kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(), 1000);
-        return Result.success(pageByPipelineVO.getPipelines());
+        return Result.success(pipelinePage.getPipelines());
     }
 }

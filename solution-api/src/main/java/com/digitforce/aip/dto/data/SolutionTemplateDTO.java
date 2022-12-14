@@ -1,6 +1,5 @@
 package com.digitforce.aip.dto.data;
 
-import com.digitforce.aip.GlobalConstant;
 import com.digitforce.aip.enums.TemplateStatusEnum;
 import lombok.Data;
 
@@ -24,8 +23,6 @@ public class SolutionTemplateDTO {
     private Integer browseCount;
     private Integer applyCount;
     private PipelineDataSource dataSource;
-    // TODO 后续将迭代调度机制
-    private String schedule = GlobalConstant.DEFAULT_CRON;
     private PipelineParameterDTO pipelineParameter;
     private TemplateStatusEnum status;
     private String createUser;

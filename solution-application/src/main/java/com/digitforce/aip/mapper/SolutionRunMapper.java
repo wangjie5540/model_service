@@ -1,7 +1,8 @@
 package com.digitforce.aip.mapper;
 
-import com.digitforce.aip.entity.SolutionRun;
+import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.digitforce.aip.entity.SolutionRun;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author wangtonggui
  * @since 2022-12-10
  */
+@InterceptorIgnore(tenantLine = "true")
 public interface SolutionRunMapper extends BaseMapper<SolutionRun> {
 
 }
