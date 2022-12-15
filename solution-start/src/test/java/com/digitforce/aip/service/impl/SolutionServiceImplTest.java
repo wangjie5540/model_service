@@ -1,6 +1,7 @@
 package com.digitforce.aip.service.impl;
 
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.test.BaseTest;
 import org.junit.Test;
@@ -24,5 +25,11 @@ public class SolutionServiceImplTest extends BaseTest {
         solutionAddCmd.setSceneName("sceneName");
         solutionService.createAndRun(solutionAddCmd);
         TimeUnit.SECONDS.sleep(1000);
+    }
+
+    @Test
+    public void updateById() {
+        Solution solution = new Solution();
+        
     }
 }

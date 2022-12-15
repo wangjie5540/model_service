@@ -4,9 +4,10 @@ import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
 import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
-import com.digitforce.aip.service.ISolutionRunService;
+import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.tool.ConvertTool;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,8 +24,6 @@ import javax.annotation.Resource;
 public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Resource
     private ISolutionService solutionService;
-    @Resource
-    private ISolutionRunService solutionRunService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -35,6 +34,8 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
 
     @Override
     public Result publish(SolutionPublishCmd solutionPublishCmd) {
+        Solution solution = ConvertTool.convert(solutionPublishCmd, Solution.class);
+        solutionService.updateById(solution);
         return Result.success();
     }
 
