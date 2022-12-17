@@ -2,8 +2,6 @@ package com.digitforce.aip.test;
 
 import com.digitforce.bdp.operatex.core.api.taskDefine.TaskDefineQryFacade;
 import com.digitforce.bdp.operatex.core.vo.TaskDefineVO;
-import com.digitforce.component.dict.api.client.DictEntryQryFacade;
-import com.digitforce.component.dict.api.dto.DictEntryDTO;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.context.TenantContext;
 import org.junit.Before;
@@ -21,8 +19,6 @@ import java.util.List;
 @ActiveProfiles("dev")
 public class DictTest {
     @Resource
-    private DictEntryQryFacade dictEntryQryFacade;
-    @Resource
     private TaskDefineQryFacade taskDefineQryFacade;
 
     @Before
@@ -32,11 +28,6 @@ public class DictTest {
 
     @Test
     public void get() {
-        DictEntryDTO dictEntryDTO = new DictEntryDTO();
-        dictEntryDTO = new DictEntryDTO();
-        dictEntryDTO.setTypeKey("goods_property");
-        Result<List<DictEntryDTO>> listResult = dictEntryQryFacade.listByTypeKey(dictEntryDTO);
-        System.out.println(listResult);
     }
 
     @Test

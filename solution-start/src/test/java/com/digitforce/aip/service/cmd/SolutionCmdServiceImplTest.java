@@ -11,8 +11,6 @@ import com.digitforce.bdp.operatex.core.consts.TaskType;
 import com.digitforce.bdp.operatex.core.consts.algorithm.AlgorithmTaskDefineDTO;
 import com.digitforce.bdp.operatex.core.dto.TaskDefineDTO;
 import com.digitforce.bdp.operatex.core.vo.TaskDefineVO;
-import com.digitforce.component.dict.api.client.DictEntryQryFacade;
-import com.digitforce.component.dict.api.dto.DictEntryDTO;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.util.GsonUtil;
@@ -25,9 +23,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,8 +38,6 @@ public class SolutionCmdServiceImplTest {
     private TaskDefineQryFacade taskDefineQryFacade;
     @Resource
     private SolutionCmdService solutionCmdService;
-    @Resource
-    private DictEntryQryFacade dictEntryQryFacade;
     @Resource
     private KubeflowProperties kubeflowProperties;
 
@@ -116,9 +113,5 @@ public class SolutionCmdServiceImplTest {
 
     @Test
     public void dictTest() {
-        DictEntryDTO dictEntryDTO = new DictEntryDTO();
-        dictEntryDTO.setTypeKey("goods_property");
-        System.out.println(dictEntryQryFacade.listByTypeKey(dictEntryDTO));
-        //        System.out.println(dictEntryQryFacade.getBy(dictEntryDTO));
     }
 }
