@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SceneModifyCmd extends Command {
+    private Long id;
     private String name;
     private String algorithm;
     private String description;

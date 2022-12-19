@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class PageByPipelineVO {
+public class PipelinePage {
     private List<Pipeline> pipelines;
     private Integer totalSize;
     private String nextPageToken;

@@ -5,12 +5,10 @@ import lombok.Getter;
 
 @Getter
 public enum SolutionStatusEnum {
-    NOT_EXECUTE("未执行"),
     EXECUTING("执行中"),
-    STOPPING("停止中"),
-    FINISHED("执行完成"),
-    ONLINE("已上线"),
-    FAILED("执行失败");
+    READY("已就绪"),
+    PUBLISHED("已发布"),
+    ERROR("异常");
     final String cname;
 
     @JsonValue

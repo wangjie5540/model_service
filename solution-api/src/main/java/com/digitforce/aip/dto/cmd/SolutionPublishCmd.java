@@ -16,7 +16,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SolutionPublishCmd extends Command {
+    private static final long serialVersionUID = -1619922236953690802L;
     private Long id;
     private String cron;
-    private String cronDesc;
+    private Object cronDesc;
 }

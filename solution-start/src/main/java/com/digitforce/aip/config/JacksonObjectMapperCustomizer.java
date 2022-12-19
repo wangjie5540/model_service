@@ -1,5 +1,6 @@
 package com.digitforce.aip.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -35,6 +36,7 @@ public class JacksonObjectMapperCustomizer implements BeanPostProcessor {
             module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(timeFormatter));
 
             objectMapper.registerModule(new JavaTimeModule()); //默认的Java 8 Time库支持
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             objectMapper.registerModule(module);
         }
         return bean;

@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SolutionAddCmd extends Command {
+    private static final long serialVersionUID = -4779538904025837917L;
     private String title;
     private Long sceneId;
     private String sceneName;

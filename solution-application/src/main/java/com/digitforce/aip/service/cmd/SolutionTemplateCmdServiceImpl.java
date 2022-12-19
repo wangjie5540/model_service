@@ -6,7 +6,6 @@ import com.digitforce.aip.dto.cmd.SolutionTemplateModifyCmd;
 import com.digitforce.aip.enums.TemplateStatusEnum;
 import com.digitforce.aip.mapper.SolutionTemplateMapper;
 import com.digitforce.aip.repository.SolutionTemplateRepository;
-import com.digitforce.aip.validator.SolutionValidator;
 import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.operation.DefaultService;
@@ -29,8 +28,6 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class SolutionTemplateCmdServiceImpl extends DefaultService<SolutionTemplate> implements SolutionTemplateCmdService {
-    @Resource
-    private SolutionValidator solutionValidator;
     @Resource
     private SolutionTemplateRepository solutionTemplateRepository;
     @Resource
