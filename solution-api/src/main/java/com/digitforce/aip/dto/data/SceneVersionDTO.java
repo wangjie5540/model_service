@@ -1,5 +1,6 @@
 package com.digitforce.aip.dto.data;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -11,11 +12,18 @@ import lombok.Data;
  */
 @Data
 public class SceneVersionDTO {
+    @Schema(description = "场景版本id")
     private Long id;
+    @Schema(description = "场景版本名称")
     private String name;
+    @Schema(description = "kubeflow pipeline id")
     private String pipelineId;
+    @Schema(description = "kubeflow pipeline name")
     private String pipelineName;
+    @Schema(description = "应用的算法")
     private String algorithmInUse;
+    @Schema(description = "创建人")
     private String createUser;
+    @Schema(description = "更新人")
     private String updateUser;
 }
