@@ -1,13 +1,16 @@
 package com.digitforce.aip.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.Getter;
 
-@Getter
-public enum SceneStatusEnum {
-    //    DRAFT("草稿"),
-    ONLINE("已发布"),
-    OFFLINE("待发布");
+/**
+ * 行业枚举
+ *
+ * @author wangtonggui
+ * @version 1.0.0
+ * @since 2022/12/19 17:15
+ */
+public enum BusinessEnum {
+    SECURITIES("证券");
     final String cname;
 
     @JsonValue
@@ -15,7 +18,7 @@ public enum SceneStatusEnum {
         return cname;
     }
 
-    SceneStatusEnum(String cname) {
+    BusinessEnum(String cname) {
         this.cname = cname;
     }
 }
