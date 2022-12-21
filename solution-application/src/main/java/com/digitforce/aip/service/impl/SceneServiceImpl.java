@@ -14,6 +14,7 @@ import com.digitforce.framework.tool.PageTool;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>
@@ -29,7 +30,9 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     public PageView<Scene> page(ScenePageByQry scenePageByQry) {
         QueryWrapper<Scene> queryWrapper = new QueryWrapper<>(BeanUtil.toBean(scenePageByQry.getClause(), Scene.class));
         Map<String, Object> map = BeanUtil.beanToMap(scenePageByQry.getLikeClause(), false, true);
-        map.forEach(queryWrapper::like);
+        if (!Objects.isNull(map)) {
+            map.forEach(queryWrapper::like);
+        }
         Page<Scene> page = PageUtil.page(scenePageByQry);
         page = super.page(page, queryWrapper);
         return PageTool.pageView(page);
