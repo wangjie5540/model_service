@@ -1,0 +1,17 @@
+{
+  "sample-sample_selection_lookalike": {
+    "sample_select": {
+      "event_code": {
+        "buy": "fund_buy"
+      },
+      "pos_sample_proportion": 0.5
+    }
+  },
+  "feature_engineering-feature_create_lookalike": {
+    "feature_create": {
+      "event_code": {
+        "buy": "fund_buy"
+      }
+    }
+  }
+}

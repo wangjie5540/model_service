@@ -1,5 +1,6 @@
 package com.digitforce.aip.dto.cmd;
 
+import com.digitforce.aip.dto.data.PipelineParams;
 import com.digitforce.framework.api.dto.Command;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -22,8 +23,7 @@ public class SolutionAddCmd extends Command {
     private String sceneName;
     private String system;
     private String description;
-    private Object trainingSampleParams;
-    private Object modelHyperParams;
+    private PipelineParams pipelineParams;
     private boolean isAutoML;
     private String pipelineId;
     private String pipelineName;

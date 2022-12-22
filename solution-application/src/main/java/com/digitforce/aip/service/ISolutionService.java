@@ -2,6 +2,8 @@ package com.digitforce.aip.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
+import com.digitforce.aip.dto.cmd.SolutionUnPublishCmd;
 import com.digitforce.aip.entity.Solution;
 
 /**
@@ -14,4 +16,8 @@ import com.digitforce.aip.entity.Solution;
  */
 public interface ISolutionService extends IService<Solution> {
     void createAndRun(SolutionAddCmd solutionAddCmd);
+
+    void publish(SolutionPublishCmd solutionPublishCmd);
+
+    void unPublish(SolutionUnPublishCmd solutionUnPublishCmd);
 }
