@@ -9,8 +9,9 @@ import com.digitforce.component.dict.facade.qry.DictQryFacade;
 import com.digitforce.framework.api.dto.Result;
 import org.junit.Test;
 
-import javax.annotation.Resource;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 /**
  * 字典服务查询接口测试
@@ -27,8 +28,8 @@ public class DictQryFacadeTest extends BaseTest {
     @Test
     public void dictTree() {
         DictTreeQry dictTreeQry = new DictTreeQry();
-        dictTreeQry.setSystemCode("算法策略平台");
-        dictTreeQry.setNodeKey("test_dict");
+        dictTreeQry.setSystemCode("aip");
+        dictTreeQry.setNodeKey("automl_config");
         Result<List<DictTreeDTO>> listResult = dictQryFacade.queryDictTree(dictTreeQry);
         List<DictTreeDTO> data = listResult.getData();
         System.out.println(JSONUtil.toJsonPrettyStr(data));

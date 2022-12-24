@@ -1,5 +1,8 @@
 package com.digitforce.aip.service.impl;
 
+import cn.hutool.extra.template.Template;
+import cn.hutool.extra.template.TemplateEngine;
+import cn.hutool.extra.template.TemplateUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
@@ -46,8 +49,25 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
     @Override
     public void createAndRun(SolutionAddCmd solutionAddCmd) {
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
+        TemplateEngine engine = TemplateUtil.createEngine();
+        Template template = engine.getTemplate("{\n"
+            + "    \"sample_select\": {\n"
+            + "        \"event_code_buy\": \"${event_code_buy}\",\n"
+            + "        \"pos_sample_proportion\": ${sample_select__pos_sample_proportion}\n"
+            + "    },\n"
+            + "    \"feature_create\": {\n"
+            + "        \"event_code_buy\": \"${event_code_buy}\"\n"
+            + "    },\n"
+            + "    \"lookalike\": {\n"
+            + "        \"dnn_dropout\": ${lookalike__dnn_dropout},\n"
+            + "        \"batch_size\": ${lookalike__batch_size},\n"
+            + "        \"lr\": ${lookalike__lr}\n"
+            + "    }\n"
+            + "}");
+        String render = template.render(solutionAddCmd.getPipelineParams());
+        solution.setPipelineParams(render);
         super.save(solution);
-        solutionRunService.createRun(solution, solutionAddCmd.getPipelineParams(), SolutionRunTypeEnum.DEBUG);
+        solutionRunService.createRun(solution, render, SolutionRunTypeEnum.DEBUG);
     }
 
     @Override

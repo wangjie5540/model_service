@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.digitforce.aip.dto.data.PipelineParams;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
@@ -67,7 +66,7 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
      * pipeline params
      */
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private PipelineParams pipelineParams;
+    private Object pipelineParams;
 
     /**
      * 应用系统
