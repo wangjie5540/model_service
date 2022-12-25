@@ -1,8 +1,10 @@
 package com.digitforce.aip.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.digitforce.aip.enums.RunStatusEnum;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.framework.domain.TenantEntity;
@@ -50,6 +52,12 @@ public class SolutionRun extends TenantEntity<Long> implements Serializable {
      * pipeline name
      */
     private String pipelineName;
+
+    /**
+     * pipeline params
+     */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private String pipelineParams;
 
     /**
      * kubeflow-pipeline的运行id

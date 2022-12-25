@@ -1,8 +1,10 @@
 package com.digitforce.aip.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
@@ -51,6 +53,22 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     private String sceneName;
 
     /**
+     * kubeflow pipelineId
+     */
+    private String pipelineId;
+
+    /**
+     * kubeflow pipelineName
+     */
+    private String pipelineName;
+
+    /**
+     * pipeline params
+     */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private Object pipelineParams;
+
+    /**
      * 应用系统
      */
     private String system;
@@ -61,16 +79,13 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     private SolutionStatusEnum status;
 
     /**
-     * 在kubeflow pipeline中添加的调度任务id
-     */
-    @Deprecated
-    private String pJobId;
-
-    /**
      * cron表达式
      */
     private String cron;
 
+    /**
+     * cron描述
+     */
     private String cronDesc;
 
     /**

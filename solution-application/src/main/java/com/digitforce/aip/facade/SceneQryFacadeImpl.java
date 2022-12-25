@@ -1,8 +1,10 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.dto.data.SceneDTO;
+import com.digitforce.aip.dto.data.SceneDynamicFromDTO;
 import com.digitforce.aip.dto.data.SceneVersionDTO;
 import com.digitforce.aip.dto.qry.SceneGetByIdQry;
+import com.digitforce.aip.dto.qry.SceneGetFromQry;
 import com.digitforce.aip.dto.qry.ScenePageByQry;
 import com.digitforce.aip.entity.Scene;
 import com.digitforce.aip.entity.SceneVersion;
@@ -12,12 +14,12 @@ import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
-import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.annotation.Resource;
 
 /**
  * 场景查询实现类
@@ -28,8 +30,6 @@ import java.util.stream.Collectors;
  */
 @RestController
 public class SceneQryFacadeImpl implements SceneQryFacade {
-    // TODO 后续对接字典服务，获取适用系统信息
-    private final static List<String> sceneList = Lists.newArrayList("CJ", "CD");
     @Resource
     private ISceneService sceneService;
     @Resource
@@ -58,5 +58,11 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
         SceneDTO sceneDTO = ConvertTool.convert(scene, SceneDTO.class);
         sceneDTO.setVersionInUse(sceneVersionDTO);
         return Result.success(sceneDTO);
+    }
+
+    @Override
+    public Result<SceneDynamicFromDTO> getDynamicFormBySceneId(SceneGetFromQry sceneGetFromQry) {
+        SceneDynamicFromDTO sceneDynamicFromDTO = sceneService.getDynamicFormBySceneId(sceneGetFromQry.getSceneId());
+        return Result.success(sceneDynamicFromDTO);
     }
 }

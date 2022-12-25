@@ -30,7 +30,7 @@ public class KubeflowPipelineServiceImplTest extends BaseTest {
 
     @Test
     public void createRun() {
-        String runId = kubeflowPipelineService.createRun("3d49c45b-21bb-423f-bf62-59f31c496724", "test");
+        String runId = kubeflowPipelineService.createRun("3d49c45b-21bb-423f-bf62-59f31c496724", "test", "{}");
         Assert.assertNotNull(runId);
     }
 }

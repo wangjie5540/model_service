@@ -4,10 +4,11 @@ import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
 import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
-import com.digitforce.aip.entity.Solution;
+import com.digitforce.aip.dto.cmd.SolutionUnPublishCmd;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.framework.api.dto.Result;
-import com.digitforce.framework.tool.ConvertTool;
+import lombok.SneakyThrows;
+import org.quartz.Scheduler;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +26,9 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Resource
     private ISolutionService solutionService;
 
+    @Resource
+    private Scheduler scheduler;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result add(SolutionAddCmd solutionAddCmd) {
@@ -33,24 +37,17 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result publish(SolutionPublishCmd solutionPublishCmd) {
-        Solution solution = ConvertTool.convert(solutionPublishCmd, Solution.class);
-        solutionService.updateById(solution);
+        solutionService.publish(solutionPublishCmd);
         return Result.success();
     }
 
+    @SneakyThrows
     @Override
-    public Result off(SolutionPublishCmd solutionPublishCmd) {
-        return Result.success();
-    }
-
-    @Override
-    public Result execute(SolutionPublishCmd solutionStatusCmd) {
-        return Result.success();
-    }
-
-    @Override
-    public Result stop(SolutionPublishCmd solutionStatusCmd) {
+    @Transactional(rollbackFor = Exception.class)
+    public Result unPublish(SolutionUnPublishCmd solutionUnPublishCmd) {
+        solutionService.unPublish(solutionUnPublishCmd);
         return Result.success();
     }
 
