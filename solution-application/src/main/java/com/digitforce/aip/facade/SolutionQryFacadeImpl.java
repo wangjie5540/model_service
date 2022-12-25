@@ -1,10 +1,10 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.aip.domain.Solution;
 import com.digitforce.aip.dto.data.SolutionDTO;
 import com.digitforce.aip.dto.qry.SolutionGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionPageByQry;
-import com.digitforce.aip.service.qry.SolutionQueryService;
+import com.digitforce.aip.entity.Solution;
+import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
@@ -23,18 +23,18 @@ import javax.annotation.Resource;
 @RestController
 public class SolutionQryFacadeImpl implements SolutionQryFacade {
     @Resource
-    private SolutionQueryService solutionQueryService;
+    private ISolutionService solutionService;
 
     @Override
     public Result<SolutionDTO> getById(SolutionGetByIdQry solutionGetByIdQry) {
-        Solution solution = solutionQueryService.getById(solutionGetByIdQry.getId());
+        Solution solution = solutionService.getById(solutionGetByIdQry.getId());
         SolutionDTO solutionDTO = ConvertTool.convert(solution, SolutionDTO.class);
         return Result.success(solutionDTO);
     }
 
     @Override
     public Result<PageView<SolutionDTO>> pageBy(SolutionPageByQry solutionPageByQry) {
-        PageView<Solution> solutionPageView = solutionQueryService.pageBy(solutionPageByQry);
+        PageView<Solution> solutionPageView = solutionService.page(solutionPageByQry);
         PageView<SolutionDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
             SolutionDTO.class);
         return Result.success(solutionDTOPageView);

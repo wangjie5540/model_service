@@ -1,12 +1,16 @@
 package com.digitforce.aip.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
 import com.digitforce.aip.dto.cmd.SolutionUnPublishCmd;
+import com.digitforce.aip.dto.qry.SolutionPageByQry;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.enums.SolutionStatusEnum;
@@ -14,8 +18,11 @@ import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.quartz.SolutionQuartzJob;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.ISolutionService;
+import com.digitforce.aip.utils.PageUtil;
+import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
+import com.digitforce.framework.tool.PageTool;
 import lombok.SneakyThrows;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -27,6 +34,7 @@ import org.quartz.Scheduler;
 import org.quartz.TriggerBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Resource;
@@ -117,5 +125,18 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         updateById(solution);
         scheduler.deleteJob(
             JobKey.jobKey(solutionUnPublishCmd.getId().toString(), TenantContext.tenant().getTenantId().toString()));
+    }
+
+    @Override
+    public PageView<Solution> page(SolutionPageByQry solutionPageByQry) {
+        QueryWrapper<Solution> queryWrapper =
+            new QueryWrapper<>(BeanUtil.toBean(solutionPageByQry.getClause(), Solution.class));
+        Map<String, Object> map = BeanUtil.beanToMap(solutionPageByQry.getLikeClause(), false, true);
+        if (!Objects.isNull(map)) {
+            map.forEach(queryWrapper::like);
+        }
+        Page<Solution> page = PageUtil.page(solutionPageByQry);
+        page = super.page(page, queryWrapper);
+        return PageTool.pageView(page);
     }
 }

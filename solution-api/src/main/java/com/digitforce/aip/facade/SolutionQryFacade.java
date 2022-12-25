@@ -28,5 +28,4 @@ public interface SolutionQryFacade {
     @PostMapping("/solution/pageBy")
     @Operation(summary = "方案分页查询", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
     Result<PageView<SolutionDTO>> pageBy(@RequestBody SolutionPageByQry solutionPageByQry);
-
 }
