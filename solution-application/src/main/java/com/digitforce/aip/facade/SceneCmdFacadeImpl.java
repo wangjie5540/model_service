@@ -44,6 +44,13 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
 
     @Override
     public Result delete(SceneDeleteCmd sceneDeleteCmd) {
+        Scene scene = sceneService.getById(sceneDeleteCmd.getId());
+        if (scene == null) {
+            throw new RuntimeException("场景不存在");
+        }
+        if (scene.getStatus() == SceneStatusEnum.ONLINE) {
+            throw new RuntimeException("场景已上线，不能删除");
+        }
         sceneService.removeById(sceneDeleteCmd.getId());
         return Result.success();
     }

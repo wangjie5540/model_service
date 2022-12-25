@@ -5,10 +5,11 @@ import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
 import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
 import com.digitforce.aip.dto.cmd.SolutionUnPublishCmd;
+import com.digitforce.aip.entity.Solution;
+import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.framework.api.dto.Result;
 import lombok.SneakyThrows;
-import org.quartz.Scheduler;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,9 +26,6 @@ import javax.annotation.Resource;
 public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Resource
     private ISolutionService solutionService;
-
-    @Resource
-    private Scheduler scheduler;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -53,6 +51,15 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
 
     @Override
     public Result delete(SolutionDeleteCmd solutionDeleteCmd) {
+        Solution solution = solutionService.getById(solutionDeleteCmd.getId());
+        if (solution == null) {
+            throw new RuntimeException("方案不存在");
+        }
+        if (solution.getStatus() == SolutionStatusEnum.EXECUTING
+            || solution.getStatus() == SolutionStatusEnum.PUBLISHED) {
+            throw new RuntimeException("方案正在执行或已发布，不能删除");
+        }
+        solutionService.removeById(solutionDeleteCmd.getId());
         return Result.success();
     }
 
