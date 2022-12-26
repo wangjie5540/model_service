@@ -22,10 +22,9 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.annotation.Resource;
 
 /**
  * <p>
@@ -66,8 +65,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         configQry.setConfigKey(sceneVersion.getPipelineName());
         String configValue = configQryFacade.detail(configQry).getData().getConfigValue();
         Yaml yaml = new Yaml();
-        Map<String, Object> configMap = yaml.load(configValue);
-        Object dynamicForm = configMap.get("dynamicForm");
+        Map<String, Object> dynamicForm = yaml.load(configValue);
         String dynamicFormStr = objectMapper.writeValueAsString(dynamicForm);
         return objectMapper.readValue(dynamicFormStr, SceneDynamicFromDTO.class);
     }
