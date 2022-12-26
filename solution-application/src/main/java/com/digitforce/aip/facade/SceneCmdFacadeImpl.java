@@ -66,7 +66,13 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
 
     @Override
     public Result unPublish(SceneStatusCmd sceneStatusCmd) {
-        Scene scene = ConvertTool.convert(sceneStatusCmd, Scene.class);
+        Scene scene = sceneService.getById(sceneStatusCmd.getId());
+        if (scene == null) {
+            throw new RuntimeException("场景不存在");
+        }
+        if (scene.getStatus() == SceneStatusEnum.OFFLINE) {
+            throw new RuntimeException("场景已下线，不能重复下线");
+        }
         scene.setStatus(SceneStatusEnum.OFFLINE);
         scene.setUpdateUser(TenantContext.tenant().getUserAccount());
         sceneService.updateById(scene);

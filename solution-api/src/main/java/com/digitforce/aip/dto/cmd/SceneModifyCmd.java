@@ -10,5 +10,6 @@ public class SceneModifyCmd extends Command {
     private Long id;
     private String name;
     private String algorithm;
+    private String remark;
     private String description;
 }
