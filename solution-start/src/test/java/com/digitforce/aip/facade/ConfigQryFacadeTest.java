@@ -7,9 +7,6 @@ import com.digitforce.component.config.api.dto.qry.ConfigQry;
 import com.digitforce.component.config.api.facade.qry.ConfigQryFacade;
 import com.digitforce.framework.api.dto.Result;
 import org.junit.Test;
-import org.yaml.snakeyaml.Yaml;
-
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -25,13 +22,14 @@ public class ConfigQryFacadeTest extends BaseTest {
     public void detailTest() {
         ConfigQry configQry = new ConfigQry();
         configQry.setSystemCode(CommonConst.SYSTEM_CODE);
-        configQry.setConfigKey("lookalike");
+        configQry.setConfigKey("lookalike_pipeline_template");
         Result<ConfigItemDTO> detail = configQryFacade.detail(configQry);
         ConfigItemDTO data = detail.getData();
         String configValue = data.getConfigValue();
-        Yaml yaml = new Yaml();
-        Map<String, Object> load = yaml.load(configValue);
-        Object dynamicForm = load.get("dynamicForm");
-        System.out.println(dynamicForm);
+        System.out.println(configValue);
+//        Yaml yaml = new Yaml();
+//        Map<String, Object> load = yaml.load(configValue);
+//        Object dynamicForm = load.get("dynamicForm");
+//        System.out.println(dynamicForm);
     }
 }
