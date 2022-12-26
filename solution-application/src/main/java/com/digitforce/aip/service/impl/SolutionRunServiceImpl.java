@@ -10,7 +10,6 @@ import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.mapper.SolutionRunMapper;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.KubeflowPipelineService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +28,6 @@ import javax.annotation.Resource;
 public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, SolutionRun> implements ISolutionRunService {
     @Resource
     private KubeflowPipelineService kubeflowPipelineService;
-    @Resource
-    private ObjectMapper objectMapper;
 
     @Override
     @SneakyThrows
