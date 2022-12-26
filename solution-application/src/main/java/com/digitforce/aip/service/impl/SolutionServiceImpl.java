@@ -75,11 +75,11 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         ConfigItemDTO configItemDTO = detail.getData();
         TemplateEngine engine = TemplateUtil.createEngine();
         Template template = engine.getTemplate(configItemDTO.getConfigValue());
-        String render = template.render(solutionAddCmd.getPipelineParams());
-        solution.setPipelineParams(render);
+        String pipelineParams = template.render(solutionAddCmd.getPipelineParams());
+        solution.setPipelineParams(pipelineParams);
         super.save(solution);
         sceneMapper.increaseSolutionCount(solutionAddCmd.getSceneId());
-        solutionRunService.createRun(solution, render, SolutionRunTypeEnum.DEBUG);
+        solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG);
     }
 
     @Override
