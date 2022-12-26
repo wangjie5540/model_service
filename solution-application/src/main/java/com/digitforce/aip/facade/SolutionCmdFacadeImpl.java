@@ -56,7 +56,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
             throw new RuntimeException("方案不存在");
         }
         if (solution.getStatus() == SolutionStatusEnum.EXECUTING
-            || solution.getStatus() == SolutionStatusEnum.PUBLISHED) {
+                || solution.getStatus() == SolutionStatusEnum.PUBLISHED) {
             throw new RuntimeException("方案正在执行或已发布，不能删除");
         }
         solutionService.removeById(solutionDeleteCmd.getId());
