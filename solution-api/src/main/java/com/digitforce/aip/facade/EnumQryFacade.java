@@ -1,6 +1,7 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
+import com.digitforce.aip.enums.AlgorithmEnum;
 import com.digitforce.aip.enums.ApplySystemEnum;
 import com.digitforce.aip.enums.BusinessEnum;
 import com.digitforce.aip.enums.SceneStatusEnum;
@@ -38,4 +39,8 @@ public interface EnumQryFacade {
     @PostMapping("/solution/listApplySystemEnums")
     @Operation(summary = "获取适用系统枚举列表", tags = CommonConst.SWAGGER_TAG_ENUM_QRY)
     Result<List<ApplySystemEnum>> listApplySystemEnums();
+
+    @PostMapping("/solution/listAlgorithmEnums")
+    @Operation(summary = "获取算法名称枚举列表", tags = CommonConst.SWAGGER_TAG_ENUM_QRY)
+    Result<List<AlgorithmEnum>> listAlgorithmEnums();
 }
