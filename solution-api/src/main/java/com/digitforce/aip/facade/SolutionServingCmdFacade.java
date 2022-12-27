@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @version 1.0.0
  */
 @FeignClient("solution")
-@Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_CMD)
+@Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_CMD, description = "solutionServingCmd")
 public interface SolutionServingCmdFacade {
     @PostMapping("/solution/solutionServing/add")
     @Operation(summary = "添加方案服务", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_CMD)

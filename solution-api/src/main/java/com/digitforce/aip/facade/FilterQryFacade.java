@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  * @version 1.0.0
  */
 @FeignClient("solution")
-@Tag(name = CommonConst.SWAGGER_TAG_FILTER_QRY)
+@Tag(name = CommonConst.SWAGGER_TAG_FILTER_QRY, description = "filterQry")
 public interface FilterQryFacade {
     @PostMapping("/solution/filter/function/listBy")
     @Operation(summary = "获取function列表", tags = CommonConst.SWAGGER_TAG_FILTER_QRY)

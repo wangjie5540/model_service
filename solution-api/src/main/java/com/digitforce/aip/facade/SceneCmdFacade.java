@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 
 @FeignClient("solution")
-@Tag(name = CommonConst.SWAGGER_TAG_SCENE_CMD)
+@Tag(name = CommonConst.SWAGGER_TAG_SCENE_CMD, description = "sceneCmd")
 public interface SceneCmdFacade {
     @PostMapping("/solution/scene/add")
     @Operation(summary = "创建场景", tags = CommonConst.SWAGGER_TAG_SCENE_CMD)

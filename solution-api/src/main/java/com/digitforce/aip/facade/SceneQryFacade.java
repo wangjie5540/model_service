@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @version 1.0.0
  */
 @FeignClient("solution")
-@Tag(name = CommonConst.SWAGGER_TAG_SCENE_QRY)
+@Tag(name = CommonConst.SWAGGER_TAG_SCENE_QRY, description = "sceneQry")
 public interface SceneQryFacade {
     @PostMapping("/solution/scene/pageBy")
     @Operation(summary = "分页查询场景", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
