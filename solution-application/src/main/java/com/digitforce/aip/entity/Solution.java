@@ -66,7 +66,7 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
      * pipeline params
      */
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private Object pipelineParams;
+    private String pipelineParams;
 
     /**
      * 应用系统

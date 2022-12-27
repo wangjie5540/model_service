@@ -10,7 +10,6 @@ import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.mapper.SolutionRunMapper;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.KubeflowPipelineService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,22 +28,21 @@ import javax.annotation.Resource;
 public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, SolutionRun> implements ISolutionRunService {
     @Resource
     private KubeflowPipelineService kubeflowPipelineService;
-    @Resource
-    private ObjectMapper objectMapper;
 
     @Override
     @SneakyThrows
     @Transactional(rollbackFor = Exception.class)
-    public void createRun(Solution solution, String pipelineParams, SolutionRunTypeEnum type) {
+    public void createRun(Solution solution, SolutionRunTypeEnum type) {
         String runName = StrUtil.format("{}-{}", solution.getPipelineName(), IdUtil.getSnowflake().nextId());
-        String runId = kubeflowPipelineService.createRun(solution.getPipelineId(), runName, pipelineParams);
+        String runId = kubeflowPipelineService.createRun(solution.getPipelineId(), runName,
+                solution.getPipelineParams());
         SolutionRun solutionRun = new SolutionRun();
         solutionRun.setSolutionId(solution.getId());
         solutionRun.setPRunId(runId);
         solutionRun.setPRunName(runName);
         solutionRun.setPipelineId(solution.getPipelineId());
         solutionRun.setPipelineName(solution.getPipelineName());
-        solutionRun.setPipelineParams(pipelineParams);
+        solutionRun.setPipelineParams(solution.getPipelineParams());
         solutionRun.setType(type);
         super.save(solutionRun);
     }

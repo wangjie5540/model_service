@@ -1,59 +1,47 @@
-dynamicForm:
-  dataSource:
-    - table_name: algorithm.zq_fund_trade
-      table_cname: 基金交易表
-      columns:
-        - name: custom_id
-          cname: 客户号
-          type: string
-          required: true
-        - name: trade_date
-          cname: 交易日期
-          type: date
-          required: true
-        - name: trade_type
-          cname: 交易类型
-          type: string
-          required: true
-        - name: fund_code
-          cname: 基金代码
-          type: string
-          required: true
-  trainSample:
-    - label: 样本范围
-      itemList:
-        - type: select
-          attributeName: org_sample_range
-          prefixText: 过去
-          description: xxx
-          suffixText: 天的样本
-          optionType: 1
-          optionItems:
-            - label: 30天
-              value: 30
-            - label: 60天
-              value: 60
-            - label: 90天
-              value: 90
-    - label: 样本比例
-      itemList:
-        - type: select
-          attributeName: org_sample_ratio
-          prefixText: 正样本比例
-          suffixText: "%"
-          pattern: "/^1\\d{0,10}$/"
-          placeholder: 请输入正样本比例
-          errorMessage: 请输入正确的样本比例
-          required: true
-          multiple: false
-
-component:
-  sample-sample_selection_lookalike:
-    sample_select:
-      event_code:
-        buy: fund_buy
-      pos_sample_proportion: 0.5
-  feature_engineering-feature_create_lookalike:
-    feature_create:
-      event_code:
-        buy: fund_buy
+dataSource:
+  - table_name: algorithm.zq_fund_trade
+    table_cname: 基金交易表
+    columns:
+      - name: custom_id
+        cname: 客户号
+        type: string
+        required: true
+      - name: trade_date
+        cname: 交易日期
+        type: date
+        required: true
+      - name: trade_type
+        cname: 交易类型
+        type: string
+        required: true
+      - name: fund_code
+        cname: 基金代码
+        type: string
+        required: true
+trainSample:
+  - label: 样本范围
+    itemList:
+      - type: select
+        attributeName: org_sample_range
+        prefixText: 过去
+        description: xxx
+        suffixText: 天的样本
+        optionType: 1
+        optionItems:
+          - label: 30天
+            value: 30
+          - label: 60天
+            value: 60
+          - label: 90天
+            value: 90
+  - label: 样本比例
+    itemList:
+      - type: select
+        attributeName: org_sample_ratio
+        prefixText: 正样本比例
+        suffixText: "%"
+        pattern: "/^1\\d{0,10}$/"
+        placeholder: 请输入正样本比例
+        errorMessage: 请输入正确的样本比例
+        required: true
+        multiple: false

@@ -32,6 +32,6 @@ public interface SceneQryFacade {
     Result<SceneDTO> getById(@RequestBody SceneGetByIdQry sceneGetByIdQry);
 
     @PostMapping("/solution/scene/getDynamicFormBySceneId")
-    @Operation(summary = "方案分页查询", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
+    @Operation(summary = "根据场景id获取动态表单", tags = CommonConst.SWAGGER_TAG_SOLUTION_QRY)
     Result<SceneDynamicFromDTO> getDynamicFormBySceneId(@RequestBody SceneGetFromQry sceneGetFromQry);
 }
