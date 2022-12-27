@@ -19,7 +19,7 @@ import java.util.List;
  * @version 1.0.0
  */
 @FeignClient("solution")
-@Tag(name = CommonConst.SWAGGER_TAG_PIPELINE_QRY)
+@Tag(name = CommonConst.SWAGGER_TAG_PIPELINE_QRY, description = "pipelineQry")
 public interface KubeflowPipelineQryFacade {
     @PostMapping("/solution/pipeline/getById")
     @Operation(summary = "通过id获取pipeline", tags = CommonConst.SWAGGER_TAG_PIPELINE_QRY)

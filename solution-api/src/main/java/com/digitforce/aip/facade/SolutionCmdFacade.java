@@ -22,7 +22,7 @@ import javax.validation.Valid;
  * @version 1.0.0
  */
 @FeignClient("solution")
-@Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+@Tag(name = CommonConst.SWAGGER_TAG_SOLUTION_CMD, description = "solutionCmd")
 public interface SolutionCmdFacade {
     @PostMapping("/solution/add")
     @Operation(summary = "创建方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)

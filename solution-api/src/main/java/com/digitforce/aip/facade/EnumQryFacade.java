@@ -21,7 +21,7 @@ import java.util.List;
  * @since 2022/12/19 17:29
  */
 @FeignClient("solution")
-@Tag(name = CommonConst.SWAGGER_TAG_ENUM_QRY)
+@Tag(name = CommonConst.SWAGGER_TAG_ENUM_QRY, description = "enumQry")
 public interface EnumQryFacade {
     @PostMapping("/solution/listBusinessEnums")
     @Operation(summary = "获取行业枚举列表", tags = CommonConst.SWAGGER_TAG_ENUM_QRY)
