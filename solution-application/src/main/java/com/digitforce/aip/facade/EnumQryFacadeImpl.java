@@ -1,5 +1,6 @@
 package com.digitforce.aip.facade;
 
+import com.digitforce.aip.enums.AlgorithmEnum;
 import com.digitforce.aip.enums.ApplySystemEnum;
 import com.digitforce.aip.enums.BusinessEnum;
 import com.digitforce.aip.enums.SceneStatusEnum;
@@ -37,5 +38,10 @@ public class EnumQryFacadeImpl implements EnumQryFacade {
     @Override
     public Result<List<ApplySystemEnum>> listApplySystemEnums() {
         return Result.success(Lists.newArrayList(ApplySystemEnum.values()));
+    }
+
+    @Override
+    public Result<List<AlgorithmEnum>> listAlgorithmEnums() {
+        return Result.success(Lists.newArrayList(AlgorithmEnum.values()));
     }
 }
