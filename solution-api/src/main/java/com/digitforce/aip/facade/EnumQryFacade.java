@@ -32,7 +32,7 @@ public interface EnumQryFacade {
     Result<List<SceneTypeEnum>> listSceneTypeEnums();
 
     @PostMapping("/solution/listSceneStatusEnums")
-    @Operation(summary = "获取场景类型枚举列表", tags = CommonConst.SWAGGER_TAG_ENUM_QRY)
+    @Operation(summary = "获取场景状态枚举列表", tags = CommonConst.SWAGGER_TAG_ENUM_QRY)
     Result<List<SceneStatusEnum>> listSceneStatusEnums();
 
     @PostMapping("/solution/listApplySystemEnums")
