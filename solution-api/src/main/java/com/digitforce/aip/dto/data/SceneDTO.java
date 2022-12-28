@@ -22,6 +22,8 @@ public class SceneDTO {
     private String name;
     @Schema(description = "版本号")
     private SceneVersionDTO versionInUse;
+    @Schema(description = "算法")
+    private String algorithm;
     @Schema(description = "行业")
     private String business;
     @Schema(description = "场景类型")
