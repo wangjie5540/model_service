@@ -26,6 +26,8 @@ public class SceneDTO {
     private String algorithm;
     @Schema(description = "行业")
     private String business;
+    @Schema(description = "目标系统")
+    private String targetSystem;
     @Schema(description = "场景类型")
     private SceneTypeEnum sceneType;
     @Schema(description = "方案数量")
