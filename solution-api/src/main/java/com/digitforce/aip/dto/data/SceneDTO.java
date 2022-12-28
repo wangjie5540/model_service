@@ -32,7 +32,9 @@ public class SceneDTO {
     private Integer solutionCount;
     @Schema(description = "服务数量")
     private Integer servingCount;
-    @Schema(description = "描述")
+    @Schema(description = "备注")
+    private String remark;
+    @Schema(description = "富文本描述")
     private String description;
     @Schema(description = "状态")
     private SceneStatusEnum status;
