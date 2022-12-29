@@ -80,17 +80,9 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result modify(SceneModifyCmd sceneModifyCmd) {
-        Scene scene = sceneService.getById(sceneModifyCmd.getId());
-        if (scene == null) {
-            throw new RuntimeException("场景不存在");
-        }
-        if (scene.getStatus() == SceneStatusEnum.ONLINE) {
-            throw new RuntimeException("场景已上线，不能修改");
-        }
-        scene = ConvertTool.convert(sceneModifyCmd, Scene.class);
-        scene.setUpdateUser(TenantContext.tenant().getUserAccount());
-        sceneService.updateById(scene);
+        sceneService.updateScene(sceneModifyCmd);
         return Result.success();
     }
 }

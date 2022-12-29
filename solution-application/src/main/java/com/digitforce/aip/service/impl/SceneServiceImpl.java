@@ -5,10 +5,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.digitforce.aip.consts.CommonConst;
+import com.digitforce.aip.dto.cmd.SceneModifyCmd;
 import com.digitforce.aip.dto.data.SceneDynamicFromDTO;
 import com.digitforce.aip.dto.qry.ScenePageByQry;
 import com.digitforce.aip.entity.Scene;
 import com.digitforce.aip.entity.SceneVersion;
+import com.digitforce.aip.enums.SceneStatusEnum;
 import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.service.ISceneVersionService;
@@ -16,6 +18,8 @@ import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.component.config.api.dto.qry.ConfigQry;
 import com.digitforce.component.config.api.facade.qry.ConfigQryFacade;
 import com.digitforce.framework.api.dto.PageView;
+import com.digitforce.framework.context.TenantContext;
+import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -68,5 +72,23 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         Map<String, Object> dynamicForm = yaml.load(configValue);
         String dynamicFormStr = objectMapper.writeValueAsString(dynamicForm);
         return objectMapper.readValue(dynamicFormStr, SceneDynamicFromDTO.class);
+    }
+
+    @Override
+    public void updateScene(SceneModifyCmd sceneModifyCmd) {
+        Scene scene = getById(sceneModifyCmd.getId());
+        if (scene == null) {
+            throw new RuntimeException("场景不存在");
+        }
+        if (scene.getStatus() == SceneStatusEnum.ONLINE) {
+            throw new RuntimeException("场景已上线，不能修改");
+        }
+        SceneVersion sceneVersion = ConvertTool.convert(sceneModifyCmd.getSceneVersion(), SceneVersion.class);
+        sceneVersion.setId(scene.getVidInUse());
+        sceneVersion.setUpdateUser(TenantContext.tenant().getUserAccount());
+        scene = ConvertTool.convert(sceneModifyCmd, Scene.class);
+        scene.setUpdateUser(TenantContext.tenant().getUserAccount());
+        updateById(scene);
+        sceneVersionService.updateById(sceneVersion);
     }
 }
