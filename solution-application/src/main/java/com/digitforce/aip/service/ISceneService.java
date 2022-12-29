@@ -1,6 +1,7 @@
 package com.digitforce.aip.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.digitforce.aip.dto.cmd.SceneModifyCmd;
 import com.digitforce.aip.dto.data.SceneDynamicFromDTO;
 import com.digitforce.aip.dto.qry.ScenePageByQry;
 import com.digitforce.aip.entity.Scene;
@@ -18,4 +19,7 @@ public interface ISceneService extends IService<Scene> {
     PageView<Scene> page(ScenePageByQry scenePageByQry);
 
     SceneDynamicFromDTO getDynamicFormBySceneId(Long sceneId);
+
+    void updateScene(SceneModifyCmd sceneModifyCmd);
+
 }
