@@ -77,6 +77,8 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         Template template = engine.getTemplate(configItemDTO.getConfigValue());
         String pipelineParams = template.render(solutionAddCmd.getPipelineParams());
         solution.setPipelineParams(pipelineParams);
+        solution.setCreateUser(TenantContext.tenant().getUserAccount());
+        solution.setUpdateUser(TenantContext.tenant().getUserAccount());
         super.save(solution);
         sceneMapper.increaseSolutionCount(solutionAddCmd.getSceneId());
         solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG);
