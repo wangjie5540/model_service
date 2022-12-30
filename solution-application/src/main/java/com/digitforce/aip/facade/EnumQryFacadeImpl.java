@@ -5,6 +5,7 @@ import com.digitforce.aip.enums.ApplySystemEnum;
 import com.digitforce.aip.enums.BusinessEnum;
 import com.digitforce.aip.enums.SceneStatusEnum;
 import com.digitforce.aip.enums.SceneTypeEnum;
+import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.framework.api.dto.Result;
 import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,5 +44,10 @@ public class EnumQryFacadeImpl implements EnumQryFacade {
     @Override
     public Result<List<AlgorithmEnum>> listAlgorithmEnums() {
         return Result.success(Lists.newArrayList(AlgorithmEnum.values()));
+    }
+
+    @Override
+    public Result<List<SolutionStatusEnum>> listSolutionStatusEnums() {
+        return Result.success(Lists.newArrayList(SolutionStatusEnum.values()));
     }
 }

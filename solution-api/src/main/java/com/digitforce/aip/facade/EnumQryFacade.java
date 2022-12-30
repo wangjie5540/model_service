@@ -6,6 +6,7 @@ import com.digitforce.aip.enums.ApplySystemEnum;
 import com.digitforce.aip.enums.BusinessEnum;
 import com.digitforce.aip.enums.SceneStatusEnum;
 import com.digitforce.aip.enums.SceneTypeEnum;
+import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,4 +44,8 @@ public interface EnumQryFacade {
     @PostMapping("/solution/listAlgorithmEnums")
     @Operation(summary = "获取算法名称枚举列表", tags = CommonConst.SWAGGER_TAG_ENUM_QRY)
     Result<List<AlgorithmEnum>> listAlgorithmEnums();
+
+    @PostMapping("/solution/listSolutionStatusEnums")
+    @Operation(summary = "获取方案状态枚举列表", tags = CommonConst.SWAGGER_TAG_ENUM_QRY)
+    Result<List<SolutionStatusEnum>> listSolutionStatusEnums();
 }
