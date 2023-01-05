@@ -1,13 +1,7 @@
 package com.digitforce.aip.dto.cmd;
 
-import com.digitforce.aip.dto.data.TableSelection;
-import com.digitforce.aip.enums.ServingTypeEnum;
-import com.digitforce.framework.api.dto.Command;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import java.util.List;
 
 /**
  * 新增方案服务实体类
@@ -18,10 +12,10 @@ import java.util.List;
  */
 @Schema(description = "新增方案服务实体类")
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class SolutionServingAddCmd extends Command {
+public class SolutionServingAddCmd {
     private static final long serialVersionUID = 4184177917444677405L;
+    private String title;
+    private Long sceneId;
     private Long solutionId;
-    private List<TableSelection> selection;
-    private ServingTypeEnum servingType;
+    private Object formInfo;
 }
