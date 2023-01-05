@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 
 /**
  * 配置服务查询接口测试
- * 参考：<a href="http://dev-new.digitforce.com/idp-components/#/settingConfig">配置服务GUI</a>
+ * 参考：<a href="http://dev.digitforce.com/idp-components/#/settingConfig">配置服务GUI</a>
  */
 public class ConfigQryFacadeTest extends BaseTest {
     @Resource
