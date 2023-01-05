@@ -19,7 +19,6 @@ public class SolutionModifyCmd extends Command {
     private Long id;
     private String title;
     private String description;
-    private Object trainingSampleParams;
-    private Object modelHyperParams;
+    private Object formInfo;
     private boolean isAutoML;
 }

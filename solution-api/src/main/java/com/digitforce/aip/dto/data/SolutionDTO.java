@@ -14,6 +14,8 @@ public class SolutionDTO {
     private String title;
     @Schema(description = "方案描述")
     private String description;
+    @Schema(description = "表单信息")
+    private Object formInfo;
     @Schema(description = "场景id")
     private Long sceneId;
     @Schema(description = "场景名称")

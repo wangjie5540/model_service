@@ -94,6 +94,12 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     private String description;
 
     /**
+     * 表单信息
+     */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private Object formInfo;
+
+    /**
      * 创建用户
      */
     private String createUser;
