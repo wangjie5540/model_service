@@ -22,7 +22,7 @@ public class SolutionDTO {
     private String system;
     @Schema(description = "时间表达式")
     private String cron;
-    @Schema(description = "时间描述，用于前提反显")
+    @Schema(description = "时间描述，用于前端反显")
     private String cronDesc;
     @Schema(description = "状态")
     private SolutionStatusEnum status;
