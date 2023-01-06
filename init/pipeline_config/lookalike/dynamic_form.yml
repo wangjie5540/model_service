@@ -20,12 +20,14 @@ train:
           type: string
           required: true
   trainSample:
-    - label: 购买事件
+    - label: 事件选择
       itemList:
         - type: select
           attributeName: event_code_buy
-          prefixText: 选择购买事件
-          description: 请选择购买事件
+          prefixText: 购买事件
+          placeholder: 请选择购买事件
+          description: 介绍
+          required: true
           optionType: 1
           optionItems:
             - label: 购买
