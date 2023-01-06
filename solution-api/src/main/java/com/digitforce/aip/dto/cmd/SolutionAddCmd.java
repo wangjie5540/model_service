@@ -26,7 +26,7 @@ public class SolutionAddCmd extends Command {
     private String description;
     private Object formInfo;
     private Map<String, Object> pipelineParams;
-    private boolean isAutoML;
+    private boolean autoML;
     private String pipelineId;
     private String pipelineName;
 }

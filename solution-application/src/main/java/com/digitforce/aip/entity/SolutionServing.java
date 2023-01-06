@@ -1,13 +1,13 @@
 package com.digitforce.aip.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -19,12 +19,9 @@ import lombok.experimental.Accessors;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
 @TableName("solution_serving")
 public class SolutionServing implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 3551630260535762108L;
     /**
      * 方案服务id
      */
@@ -50,11 +47,6 @@ public class SolutionServing implements Serializable {
      * 方案id
      */
     private Long solutionId;
-
-    /**
-     * 筛选范围
-     */
-    private String selection;
 
     /**
      * 方案服务类型

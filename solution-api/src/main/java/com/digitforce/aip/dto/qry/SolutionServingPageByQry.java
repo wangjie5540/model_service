@@ -1,15 +1,14 @@
 package com.digitforce.aip.dto.qry;
 
-
+import com.digitforce.aip.dto.data.SolutionDTO;
 import com.digitforce.aip.dto.data.SolutionServingDTO;
 import com.digitforce.framework.api.dto.PageQuery;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-/**
- * 分页查询方案服务
- *
- * @author wangtonggui
- * @version 1.0.0
- * @since 2022/06/06 14:39
- */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class SolutionServingPageByQry extends PageQuery<SolutionServingDTO> {
+    private static final long serialVersionUID = -2354522192090216154L;
+    private SolutionDTO likeClause;
 }

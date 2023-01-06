@@ -3,9 +3,14 @@ package com.digitforce.aip.facade;
 import com.digitforce.aip.dto.data.SolutionServingDTO;
 import com.digitforce.aip.dto.qry.SolutionServingGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionServingPageByQry;
+import com.digitforce.aip.entity.SolutionServing;
+import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.tool.PageTool;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * 方案服务查询接口类
@@ -16,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
-//    @Resource
+    //    @Resource
 //    private SolutionServingQryService solutionServingQryService;
+    @Resource
+    private ISolutionServingService solutionServingService;
 
     @Override
     public Result<SolutionServingDTO> getById(SolutionServingGetByIdQry solutionServingGetByIdQry) {
@@ -29,12 +36,9 @@ public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
 
     @Override
     public Result<PageView<SolutionServingDTO>> pageBy(SolutionServingPageByQry solutionServingPageByQry) {
-//        PageQuery<SolutionServing> pageQuery = Convert.convert(new TypeReference<PageQuery<SolutionServing>>() {
-//        }, solutionServingPageByQry);
-//        PageView<SolutionServing> solutionServingPageView = solutionServingQryService.pageBy(pageQuery);
-//        PageView<SolutionServingDTO> solutionServingDTOPageView = PageTool.pageView(solutionServingPageView,
-//            SolutionServingDTO.class);
-//        return Result.success(solutionServingDTOPageView);
-        return null;
+        PageView<SolutionServing> solutionPageView = solutionServingService.page(solutionServingPageByQry);
+        PageView<SolutionServingDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
+            SolutionServingDTO.class);
+        return Result.success(solutionDTOPageView);
     }
 }
