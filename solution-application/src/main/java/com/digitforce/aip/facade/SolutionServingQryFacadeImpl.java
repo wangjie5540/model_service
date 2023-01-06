@@ -21,8 +21,6 @@ import javax.annotation.Resource;
  */
 @RestController
 public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
-    //    @Resource
-//    private SolutionServingQryService solutionServingQryService;
     @Resource
     private ISolutionServingService solutionServingService;
 
@@ -38,7 +36,7 @@ public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
     public Result<PageView<SolutionServingDTO>> pageBy(SolutionServingPageByQry solutionServingPageByQry) {
         PageView<SolutionServing> solutionPageView = solutionServingService.page(solutionServingPageByQry);
         PageView<SolutionServingDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
-            SolutionServingDTO.class);
+                SolutionServingDTO.class);
         return Result.success(solutionDTOPageView);
     }
 }
