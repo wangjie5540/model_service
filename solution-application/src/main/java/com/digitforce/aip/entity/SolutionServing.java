@@ -3,6 +3,7 @@ package com.digitforce.aip.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.digitforce.aip.enums.SceneTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -39,9 +40,19 @@ public class SolutionServing implements Serializable {
     private Integer tenantId;
 
     /**
-     * 方案模板id
+     * 场景id
      */
     private Long sceneId;
+
+    /**
+     * 场景名称
+     */
+    private Long sceneName;
+
+    /**
+     * 场景类型
+     */
+    private SceneTypeEnum sceneType;
 
     /**
      * 方案id
