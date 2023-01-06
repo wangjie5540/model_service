@@ -14,12 +14,12 @@ import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
 
 /**
  * 场景查询实现类
@@ -29,6 +29,7 @@ import javax.annotation.Resource;
  * @since 2022/05/31 17:08
  */
 @RestController
+@Slf4j
 public class SceneQryFacadeImpl implements SceneQryFacade {
     @Resource
     private ISceneService sceneService;
@@ -39,6 +40,7 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
     public Result<PageView<SceneDTO>> pageBy(ScenePageByQry scenePageByQry) {
         PageView<Scene> pageView = sceneService.page(scenePageByQry);
         List<Long> sceneIds = pageView.getList().stream().map(Scene::getVidInUse).collect(Collectors.toList());
+        log.info("sceneIds:{}", sceneIds);
         List<SceneVersion> sceneVersions = sceneVersionService.listByIds(sceneIds);
         PageView<SceneDTO> sceneDTOPageView = PageTool.pageView(pageView, SceneDTO.class);
         for (int i = 0; i < sceneVersions.size(); i++) {

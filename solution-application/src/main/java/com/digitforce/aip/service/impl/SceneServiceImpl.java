@@ -23,6 +23,7 @@ import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 
@@ -39,6 +40,7 @@ import java.util.Objects;
  * @since 2022-12-09
  */
 @Service
+@Slf4j
 public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements ISceneService {
     @Resource
     private ConfigQryFacade configQryFacade;
@@ -56,6 +58,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         }
         Page<Scene> page = PageUtil.page(scenePageByQry);
         page = super.page(page, queryWrapper);
+        log.info("page:{}", page.getRecords());
         return PageTool.pageView(page);
     }
 

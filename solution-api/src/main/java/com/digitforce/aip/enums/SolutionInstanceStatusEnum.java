@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
-public enum TemplateStatusEnum {
-    DRAFT("草稿"),
-    ONLINE("已发布"),
-    OFFLINE("未发布");
+public enum SolutionInstanceStatusEnum {
+    PREDICTING("预测中"),
+    FINISHED("完成"),
+    ERROR("异常"),
+    ;
     final String cname;
 
     @JsonValue
@@ -15,7 +16,7 @@ public enum TemplateStatusEnum {
         return cname;
     }
 
-    TemplateStatusEnum(String cname) {
+    SolutionInstanceStatusEnum(String cname) {
         this.cname = cname;
     }
 }
