@@ -28,12 +28,14 @@ train:
           description: 请选择购买事件
           optionType: 1
           optionItems:
+            - label: 购买
+              value: fund_buy
     - label: 样本范围
       itemList:
         - type: select
-          attributeName: org_sample_range
+          attributeName: sample_select__range
           prefixText: 过去
-          description: xxx
+          placeholder: 请选择样本范围
           suffixText: 天的样本
           optionType: 1
           optionItems:
@@ -46,7 +48,7 @@ train:
     - label: 样本比例
       itemList:
         - type: input
-          attributeName: org_sample_ratio
+          attributeName: sample_select__pos_sample_proportion
           prefixText: 正样本比例
           suffixText: "%"
           pattern: "^1\\d{0,10}$"
@@ -58,11 +60,25 @@ train:
     - label: 模型参数
       itemList:
         - type: input
+          attributeName: lookalike__dnn_dropout
+          prefixText: dnn_dropout
+          pattern: "^1\\d{0,10}$"
+          placeholder: 请输入
+          errorMessage: 请输入
+          required: true
+        - type: input
           attributeName: lookalike__batch_size
-          prefixText: 批次大小(batch_size)
+          prefixText: batch_size
           pattern: "^1\\d{0,10}$"
           placeholder: 请输入批次大小
           errorMessage: 请输入正确的批次大小
+          required: true
+        - type: input
+          attributeName: lookalike__lr
+          prefixText: 学习率(lr)
+          pattern: "^1\\d{0,10}$"
+          placeholder: 请输入学习率
+          errorMessage: 请输入正确的学习率
           required: true
 predict:
   - label: 预测结果筛选
