@@ -144,7 +144,7 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
     public PageView<Solution> page(SolutionPageByQry solutionPageByQry) {
         QueryWrapper<Solution> queryWrapper =
                 new QueryWrapper<>(BeanUtil.toBean(solutionPageByQry.getClause(), Solution.class));
-        Map<String, Object> map = BeanUtil.beanToMap(solutionPageByQry.getLikeClause(), false, true);
+        Map<String, Object> map = BeanUtil.beanToMap(solutionPageByQry.getLikeClause(), true, true);
         if (!Objects.isNull(map)) {
             map.forEach(queryWrapper::like);
         }

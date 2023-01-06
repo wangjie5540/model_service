@@ -4,7 +4,6 @@ import com.digitforce.aip.dto.data.ServingInstanceDTO;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
 import com.digitforce.aip.entity.ServingInstance;
 import com.digitforce.aip.service.IServingInstanceService;
-import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.PageTool;
@@ -21,8 +20,6 @@ import javax.annotation.Resource;
  */
 @RestController
 public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
-    @Resource
-    private ISolutionServingService solutionServingService;
     @Resource
     private IServingInstanceService servingInstanceService;
 

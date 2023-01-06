@@ -52,13 +52,12 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     @Override
     public PageView<Scene> page(ScenePageByQry scenePageByQry) {
         QueryWrapper<Scene> queryWrapper = new QueryWrapper<>(BeanUtil.toBean(scenePageByQry.getClause(), Scene.class));
-        Map<String, Object> map = BeanUtil.beanToMap(scenePageByQry.getLikeClause(), false, true);
+        Map<String, Object> map = BeanUtil.beanToMap(scenePageByQry.getLikeClause(), true, true);
         if (!Objects.isNull(map)) {
             map.forEach(queryWrapper::like);
         }
         Page<Scene> page = PageUtil.page(scenePageByQry);
         page = super.page(page, queryWrapper);
-        log.info("page:{}", page.getRecords());
         return PageTool.pageView(page);
     }
 
