@@ -1,5 +1,6 @@
 package com.digitforce.aip.dto.data;
 
+import com.digitforce.aip.enums.SceneTypeEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 public class SolutionServingDTO {
     private Long id;
     private String title;
+    private SceneTypeEnum sceneTypeEnum;
     private String sceneName;
     private String solutionTitle;
     private String system;
