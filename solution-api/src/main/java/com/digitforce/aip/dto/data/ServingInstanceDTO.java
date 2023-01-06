@@ -1,6 +1,6 @@
 package com.digitforce.aip.dto.data;
 
-import com.digitforce.aip.enums.ServingStatusEnum;
+import com.digitforce.aip.enums.ServingInstanceStatusEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,6 +9,6 @@ import java.time.LocalDateTime;
 public class ServingInstanceDTO {
     private Long id;
     private Long servingId;
-    private ServingStatusEnum status;
+    private ServingInstanceStatusEnum status;
     private LocalDateTime updateTime;
 }

@@ -3,6 +3,7 @@ package com.digitforce.aip.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.digitforce.aip.enums.ServingInstanceStatusEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -63,7 +64,7 @@ public class ServingInstance implements Serializable {
     /**
      * 状态
      */
-    private String status;
+    private ServingInstanceStatusEnum status;
 
     /**
      * 耗时秒数

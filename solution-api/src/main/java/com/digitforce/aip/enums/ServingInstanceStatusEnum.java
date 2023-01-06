@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
-public enum SolutionInstanceStatusEnum {
+public enum ServingInstanceStatusEnum {
     PREDICTING("预测中"),
     FINISHED("完成"),
     ERROR("异常"),
@@ -16,7 +16,7 @@ public enum SolutionInstanceStatusEnum {
         return cname;
     }
 
-    SolutionInstanceStatusEnum(String cname) {
+    ServingInstanceStatusEnum(String cname) {
         this.cname = cname;
     }
 }
