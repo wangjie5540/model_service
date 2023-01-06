@@ -26,12 +26,12 @@ import java.util.Objects;
  */
 @Service
 public class SolutionServingServiceImpl extends ServiceImpl<SolutionServingMapper, SolutionServing>
-    implements ISolutionServingService {
+        implements ISolutionServingService {
     @Override
     public PageView<SolutionServing> page(SolutionServingPageByQry solutionServingPageByQry) {
         QueryWrapper<SolutionServing> queryWrapper =
-            new QueryWrapper<>(BeanUtil.toBean(solutionServingPageByQry.getClause(), SolutionServing.class));
-        Map<String, Object> map = BeanUtil.beanToMap(solutionServingPageByQry.getLikeClause(), false, true);
+                new QueryWrapper<>(BeanUtil.toBean(solutionServingPageByQry.getClause(), SolutionServing.class));
+        Map<String, Object> map = BeanUtil.beanToMap(solutionServingPageByQry.getLikeClause(), true, true);
         if (!Objects.isNull(map)) {
             map.forEach(queryWrapper::like);
         }

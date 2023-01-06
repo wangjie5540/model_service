@@ -14,6 +14,7 @@ import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,8 +40,10 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
     @Override
     public Result<PageView<SceneDTO>> pageBy(ScenePageByQry scenePageByQry) {
         PageView<Scene> pageView = sceneService.page(scenePageByQry);
+        if (pageView.getCount() == 0) {
+            return Result.success(PageView.of(0, Lists.newArrayList()));
+        }
         List<Long> sceneIds = pageView.getList().stream().map(Scene::getVidInUse).collect(Collectors.toList());
-        log.info("sceneIds:{}", sceneIds);
         List<SceneVersion> sceneVersions = sceneVersionService.listByIds(sceneIds);
         PageView<SceneDTO> sceneDTOPageView = PageTool.pageView(pageView, SceneDTO.class);
         for (int i = 0; i < sceneVersions.size(); i++) {
