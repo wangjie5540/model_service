@@ -8,6 +8,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ServingInstancePageByQry extends PageQuery<ServingInstanceDTO> {
-    private static final long serialVersionUID = 4758082503941872108L;
+    private static final long serialVersionUID = -4913074952006696804L;
     private ServingInstanceDTO likeClause;
 }

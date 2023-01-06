@@ -6,14 +6,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
 import com.digitforce.aip.entity.ServingInstance;
+import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.mapper.ServingInstanceMapper;
 import com.digitforce.aip.service.IServingInstanceService;
+import com.digitforce.aip.service.KubeflowPipelineService;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.tool.PageTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,6 +31,16 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMapper, ServingInstance> implements IServingInstanceService {
+    @Resource
+    private KubeflowPipelineService kubeflowPipelineService;
+
+    @Override
+    public void createAndRun(SolutionServing solutionServing) {
+//        String runName = StrUtil.format("{}-{}", solution.getPipelineName(), IdUtil.getSnowflake().nextId());
+//        String runId = kubeflowPipelineService.createRun(solution.getPipelineId(), runName,
+//                solution.getPipelineParams());
+    }
+
     @Override
     public PageView<ServingInstance> page(ServingInstancePageByQry servingInstancePageByQry) {
         QueryWrapper<ServingInstance> queryWrapper =
