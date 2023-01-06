@@ -1,7 +1,6 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.dto.data.SolutionServingDTO;
-import com.digitforce.aip.dto.qry.SolutionServingGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionServingPageByQry;
 import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.service.ISolutionServingService;
@@ -23,14 +22,6 @@ import javax.annotation.Resource;
 public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
     @Resource
     private ISolutionServingService solutionServingService;
-
-    @Override
-    public Result<SolutionServingDTO> getById(SolutionServingGetByIdQry solutionServingGetByIdQry) {
-//        SolutionServing solutionServing = solutionServingQryService.getById(solutionServingGetByIdQry.getId());
-//        return Result.success(
-//            solutionServing == null ? null : ConvertTool.convert(solutionServing, SolutionServingDTO.class));
-        return null;
-    }
 
     @Override
     public Result<PageView<SolutionServingDTO>> pageBy(SolutionServingPageByQry solutionServingPageByQry) {
