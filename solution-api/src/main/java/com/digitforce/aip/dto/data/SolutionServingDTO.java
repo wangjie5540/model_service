@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class SolutionServingDTO {
     private Long id;
     private String title;
-    private SceneTypeEnum sceneTypeEnum;
+    private SceneTypeEnum sceneType;
     private String sceneName;
     private String solutionTitle;
     private String system;
