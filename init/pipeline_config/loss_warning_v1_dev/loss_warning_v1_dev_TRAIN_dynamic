@@ -45,14 +45,14 @@ trainSample:
   - label: 沉默流失定义
     itemList:
       - type: input
-        attributeName: $sample_select__active_before_days
+        attributeName: sample_select__active_before_days
         prefixText: 过去
         placeholder: 请输入天数
         suffixText: 天至少有一天活跃
         pattern: "^1\\d{0,10}$"
         required: true
       - type: input
-        attributeName: $sample_select__active_after_days
+        attributeName: sample_select__active_after_days
         prefixText: 未来
         placeholder: 请输入天数
         suffixText: 天连续不活跃
