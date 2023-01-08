@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("serving_instance")
+@TableName(value = "serving_instance", autoResultMap = true)
 public class ServingInstance implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,7 +28,7 @@ public class ServingInstance implements Serializable {
     /**
      * 主键id
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -60,6 +60,11 @@ public class ServingInstance implements Serializable {
      * kebeflow-pipeline的运行名称
      */
     private String pRunName;
+
+    /**
+     * kebeflow-pipeline运行参数
+     */
+    private String pipelineParams;
 
     /**
      * 状态

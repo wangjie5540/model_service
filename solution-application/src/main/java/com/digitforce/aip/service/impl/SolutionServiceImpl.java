@@ -1,31 +1,29 @@
 package com.digitforce.aip.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.extra.template.Template;
-import cn.hutool.extra.template.TemplateEngine;
-import cn.hutool.extra.template.TemplateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
 import com.digitforce.aip.dto.cmd.SolutionUnPublishCmd;
 import com.digitforce.aip.dto.qry.SolutionPageByQry;
+import com.digitforce.aip.entity.Scene;
+import com.digitforce.aip.entity.SceneVersion;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.enums.SolutionStatusEnum;
+import com.digitforce.aip.enums.StageEnum;
 import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.quartz.SolutionQuartzJob;
+import com.digitforce.aip.service.ISceneService;
+import com.digitforce.aip.service.ISceneVersionService;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.ISolutionService;
+import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.aip.utils.PageUtil;
-import com.digitforce.component.config.api.dto.data.ConfigItemDTO;
-import com.digitforce.component.config.api.dto.qry.ConfigQry;
-import com.digitforce.component.config.api.facade.qry.ConfigQryFacade;
 import com.digitforce.framework.api.dto.PageView;
-import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
@@ -40,9 +38,10 @@ import org.quartz.Scheduler;
 import org.quartz.TriggerBuilder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Objects;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -60,28 +59,31 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
     private Scheduler scheduler;
     @Resource
     private SceneMapper sceneMapper;
-
     @Resource
-    private ConfigQryFacade configQryFacade;
+    private ISceneService sceneService;
+    @Resource
+    private ISceneVersionService sceneVersionService;
+    @Resource
+    private TemplateComponent templateComponent;
 
     @Override
     public void createAndRun(SolutionAddCmd solutionAddCmd) {
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
-        // 获取pipeline的参数模板配置
-        ConfigQry configQry = new ConfigQry();
-        configQry.setConfigKey("lookalike_pipeline_template");
-        configQry.setSystemCode(CommonConst.SYSTEM_CODE);
-        Result<ConfigItemDTO> detail = configQryFacade.detail(configQry);
-        ConfigItemDTO configItemDTO = detail.getData();
-        TemplateEngine engine = TemplateUtil.createEngine();
-        Template template = engine.getTemplate(configItemDTO.getConfigValue());
-        String pipelineParams = template.render(solutionAddCmd.getPipelineParams());
-        solution.setPipelineParams(pipelineParams);
+        Scene scene = sceneService.getById(solutionAddCmd.getSceneId());
+        SceneVersion sceneVersion = sceneVersionService.getById(scene.getVidInUse());
+        String pipelineTemplate =
+            templateComponent.getPipelineTemplate(sceneVersion.getPipelineName(), StageEnum.TRAIN);
+        solution.setSceneType(scene.getSceneType());
+        solution.setPipelineTemplate(pipelineTemplate);
+        // TODO 这里需要替换
+        solution.setTemplateParams(solutionAddCmd.getTemplateParams() != null ?
+            solutionAddCmd.getTemplateParams() : solutionAddCmd.getPipelineParams());
         solution.setCreateUser(TenantContext.tenant().getUserAccount());
         solution.setUpdateUser(TenantContext.tenant().getUserAccount());
         super.save(solution);
+        // 增加统计数量
         sceneMapper.increaseSolutionCount(solutionAddCmd.getSceneId());
-        solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG);
+        solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG, solutionAddCmd.getPipelineParams());
     }
 
     @Override
@@ -114,12 +116,12 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("solutionId", solutionPublishCmd.getId());
         JobDetail jobDetail = JobBuilder.newJob(SolutionQuartzJob.class)
-                .withIdentity(solutionPublishCmd.getId().toString(), tenantId.toString())
-                .setJobData(jobDataMap)
-                .build();
+            .withIdentity(solutionPublishCmd.getId().toString(), tenantId.toString())
+            .setJobData(jobDataMap)
+            .build();
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(solutionPublishCmd.getCron());
         CronTrigger cronTrigger =
-                TriggerBuilder.newTrigger().withSchedule(cronScheduleBuilder).build();
+            TriggerBuilder.newTrigger().withSchedule(cronScheduleBuilder).build();
         scheduler.scheduleJob(jobDetail, cronTrigger);
     }
 
@@ -137,13 +139,13 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         solution.setStatus(SolutionStatusEnum.READY);
         updateById(solution);
         scheduler.deleteJob(JobKey.jobKey(solutionUnPublishCmd.getId().toString(),
-                TenantContext.tenant().getTenantId().toString()));
+            TenantContext.tenant().getTenantId().toString()));
     }
 
     @Override
     public PageView<Solution> page(SolutionPageByQry solutionPageByQry) {
         QueryWrapper<Solution> queryWrapper =
-                new QueryWrapper<>(BeanUtil.toBean(solutionPageByQry.getClause(), Solution.class));
+            new QueryWrapper<>(BeanUtil.toBean(solutionPageByQry.getClause(), Solution.class));
         Map<String, Object> map = BeanUtil.beanToMap(solutionPageByQry.getLikeClause(), true, true);
         if (!Objects.isNull(map)) {
             map.forEach(queryWrapper::like);

@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SceneDynamicFromDTO {
-    private TrainDynamicForm train;
+    private TrainDynamicFormDTO train;
     private Object predict;
 }

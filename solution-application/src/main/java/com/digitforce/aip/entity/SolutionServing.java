@@ -1,14 +1,17 @@
 package com.digitforce.aip.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.digitforce.aip.enums.SceneTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * <p>
@@ -20,13 +23,13 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("solution_serving")
+@TableName(value = "solution_serving", autoResultMap = true)
 public class SolutionServing implements Serializable {
-    private static final long serialVersionUID = 3551630260535762108L;
+    private static final long serialVersionUID = -4394811474561493119L;
     /**
      * 方案服务id
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -47,7 +50,35 @@ public class SolutionServing implements Serializable {
     /**
      * 场景名称
      */
-    private Long sceneName;
+    private String sceneName;
+
+    /**
+     * kubeflow pipelineId
+     */
+    private String pipelineId;
+
+    /**
+     * kubeflow pipelineName
+     */
+    private String pipelineName;
+
+
+    /**
+     * kubeflow pipeline需要的服务参数模板
+     */
+    private String pipelineTemplate;
+
+    /**
+     * 服务参数模板渲染需要的参数
+     */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private Map<String, Object> templateParams;
+
+    /**
+     * kubeflow pipeline参数
+     */
+    @Deprecated
+    private String pipelineParams;
 
     /**
      * 场景类型
@@ -63,6 +94,11 @@ public class SolutionServing implements Serializable {
      * 方案服务类型
      */
     private String servingType;
+
+    /**
+     * 表单信息
+     */
+    private String formInfo;
 
     /**
      * 创建用户
@@ -93,6 +129,4 @@ public class SolutionServing implements Serializable {
      * 更新时间
      */
     private LocalDateTime updateTime;
-
-
 }

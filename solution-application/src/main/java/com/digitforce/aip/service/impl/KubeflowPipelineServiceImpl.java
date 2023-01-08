@@ -25,18 +25,19 @@ public class KubeflowPipelineServiceImpl implements KubeflowPipelineService {
     @Override
     public Pipeline getPipelineById(String pipelineId) {
         return KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
-                kubeflowProperties.getPort(), pipelineId);
+            kubeflowProperties.getPort(), pipelineId);
     }
 
     @Override
-    public String createRun(String pipelineId, String runName, String pipelineParams) {
+    public String createRun(String pipelineId, String runName, String pipelineParams, String flag) {
         return KubeflowHelper.createRun(
-                kubeflowProperties.getHost(),
-                kubeflowProperties.getPort(),
-                kubeflowProperties.getExperimentId(),
-                pipelineId,
-                runName,
-                pipelineParams
+            kubeflowProperties.getHost(),
+            kubeflowProperties.getPort(),
+            kubeflowProperties.getExperimentId(),
+            pipelineId,
+            runName,
+            pipelineParams,
+            flag
         );
     }
 

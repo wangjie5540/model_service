@@ -11,8 +11,9 @@ import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Date;
+
+import javax.annotation.Resource;
 
 /**
  * quartz调用
@@ -32,6 +33,6 @@ public class SolutionQuartzJob extends QuartzJobBean {
     protected void executeInternal(@NotNull JobExecutionContext jobExecutionContext) throws JobExecutionException {
         Long solutionId = (Long) jobExecutionContext.getJobDetail().getJobDataMap().get("solutionId");
         Solution solution = solutionService.getById(solutionId);
-        solutionRunService.createRun(solution, SolutionRunTypeEnum.DEPLOY);
+        solutionRunService.createRun(solution, SolutionRunTypeEnum.DEPLOY, solution.getTemplateParams());
     }
 }

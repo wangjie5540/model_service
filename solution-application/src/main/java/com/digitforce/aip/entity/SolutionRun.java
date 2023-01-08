@@ -1,10 +1,8 @@
 package com.digitforce.aip.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.digitforce.aip.enums.RunStatusEnum;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.framework.domain.TenantEntity;
@@ -24,13 +22,13 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("solution_run")
+@TableName(value = "solution_run", autoResultMap = true)
 public class SolutionRun extends TenantEntity<Long> implements Serializable {
-    private static final long serialVersionUID = 4239051849196607086L;
+    private static final long serialVersionUID = 3263798452881753255L;
     /**
      * 主键id
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -56,7 +54,6 @@ public class SolutionRun extends TenantEntity<Long> implements Serializable {
     /**
      * pipeline params
      */
-    @TableField(typeHandler = JacksonTypeHandler.class)
     private String pipelineParams;
 
     /**
@@ -108,6 +105,4 @@ public class SolutionRun extends TenantEntity<Long> implements Serializable {
      * 更新时间
      */
     private LocalDateTime updateTime;
-
-
 }

@@ -3,6 +3,7 @@ package com.digitforce.aip.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
 import com.digitforce.aip.entity.ServingInstance;
+import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.framework.api.dto.PageView;
 
 /**
@@ -14,5 +15,7 @@ import com.digitforce.framework.api.dto.PageView;
  * @since 2022-12-28
  */
 public interface IServingInstanceService extends IService<ServingInstance> {
+    void createAndRun(SolutionServing solutionServing);
+
     PageView<ServingInstance> page(ServingInstancePageByQry servingInstancePageByQry);
 }
