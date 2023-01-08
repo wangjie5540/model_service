@@ -14,7 +14,7 @@ public interface KubeflowPipelineService {
 
     Pipeline getPipelineById(String pipelineId);
 
-    String createRun(String pipelineId, String runName, String pipelineParams);
+    String createRun(String pipelineId, String runName, String pipelineParams, String flag);
 
     RunStatusEnum getStatus(String runId);
 }

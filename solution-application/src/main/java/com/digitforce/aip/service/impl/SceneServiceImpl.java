@@ -1,6 +1,7 @@
 package com.digitforce.aip.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,6 +12,7 @@ import com.digitforce.aip.dto.qry.ScenePageByQry;
 import com.digitforce.aip.entity.Scene;
 import com.digitforce.aip.entity.SceneVersion;
 import com.digitforce.aip.enums.SceneStatusEnum;
+import com.digitforce.aip.enums.StageEnum;
 import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.service.ISceneVersionService;
@@ -21,15 +23,17 @@ import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 
-import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Objects;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -63,6 +67,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
 
     @Override
     @SneakyThrows
+    @Deprecated
     public SceneDynamicFromDTO getDynamicFormBySceneId(Long sceneId) {
         Scene scene = super.getById(sceneId);
         SceneVersion sceneVersion = sceneVersionService.getById(scene.getVidInUse());
@@ -74,6 +79,22 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         Map<String, Object> dynamicForm = yaml.load(configValue);
         String dynamicFormStr = objectMapper.writeValueAsString(dynamicForm);
         return objectMapper.readValue(dynamicFormStr, SceneDynamicFromDTO.class);
+    }
+
+    @Override
+    @SneakyThrows
+    public Map<String, Object> getDynamicForm(Long sceneId, StageEnum type) {
+        Scene scene = super.getById(sceneId);
+        SceneVersion sceneVersion = sceneVersionService.getById(scene.getVidInUse());
+        ConfigQry configQry = new ConfigQry();
+        configQry.setSystemCode(CommonConst.SYSTEM_CODE);
+        configQry.setConfigKey(StrUtil.format("{}_{}_dynamic", sceneVersion.getPipelineName(), type));
+        String configValue = configQryFacade.detail(configQry).getData().getConfigValue();
+        Yaml yaml = new Yaml();
+        Map<String, Object> dynamicForm = yaml.load(configValue);
+        String dynamicFormStr = objectMapper.writeValueAsString(dynamicForm);
+        return objectMapper.readValue(dynamicFormStr, new TypeReference<Map<String, Object>>() {
+        });
     }
 
     @Override

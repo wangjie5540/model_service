@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.digitforce.aip.enums.SceneTypeEnum;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * <p>
@@ -23,7 +25,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("solution")
+@TableName(value = "solution", autoResultMap = true)
 public class Solution extends AggregateRoot<Long> implements Serializable {
     private static final long serialVersionUID = 9085508804053336799L;
     /**
@@ -43,9 +45,14 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     private String title;
 
     /**
-     * 模板主键id
+     * 场景id
      */
     private Long sceneId;
+
+    /**
+     * 场景类型
+     */
+    private SceneTypeEnum sceneType;
 
     /**
      * 场景名称
@@ -63,10 +70,15 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     private String pipelineName;
 
     /**
-     * pipeline params
+     * pipeline 参数模板
+     */
+    private String pipelineTemplate;
+
+    /**
+     * pipeline 参数模板
      */
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private String pipelineParams;
+    private Map<String, Object> templateParams;
 
     /**
      * 应用系统
@@ -97,7 +109,7 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
      * 表单信息
      */
     @TableField(typeHandler = JacksonTypeHandler.class)
-    private Object formInfo;
+    private Map<String, Object> formInfo;
 
     /**
      * 创建用户

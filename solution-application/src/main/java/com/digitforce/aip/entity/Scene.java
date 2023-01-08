@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("scene")
+@TableName(value = "scene", autoResultMap = true)
 public class Scene extends AggregateRoot<Long> implements Serializable {
     private static final long serialVersionUID = 2966524253410979719L;
     /**

@@ -14,6 +14,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Map;
+
 /**
  * 场景查询类
  *
@@ -34,4 +36,8 @@ public interface SceneQryFacade {
     @PostMapping("/solution/scene/getDynamicFormBySceneId")
     @Operation(summary = "根据场景id获取动态表单", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
     Result<SceneDynamicFromDTO> getDynamicFormBySceneId(@RequestBody SceneGetFromQry sceneGetFromQry);
+
+    @PostMapping("/solution/scene/getDynamicForm")
+    @Operation(summary = "获取动态表单", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
+    Result<Map<String, Object>> getDynamicForm(@RequestBody SceneGetFromQry sceneGetFromQry);
 }
