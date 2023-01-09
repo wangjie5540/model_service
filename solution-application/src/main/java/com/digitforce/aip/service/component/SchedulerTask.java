@@ -15,6 +15,7 @@ import com.digitforce.aip.enums.ServingInstanceStatusEnum;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.ServingInstanceMapper;
+import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.mapper.SolutionRunMapper;
 import com.digitforce.aip.service.IModelPackageService;
 import com.digitforce.aip.service.IModelService;
@@ -46,6 +47,8 @@ public class SchedulerTask {
     private IServingInstanceService servingInstanceService;
     @Resource
     private SolutionRunMapper solutionRunMapper;
+    @Resource
+    private SolutionMapper solutionMapper;
     @Resource
     private ServingInstanceMapper servingInstanceMapper;
     @Resource
@@ -107,6 +110,48 @@ public class SchedulerTask {
             }
         });
         TenantContext.destroy();
+    }
+
+    @Scheduled(fixedRate = 20000)
+    public void patrolSolutionAutoMlStatus() {
+//        List<Solution> solutionList = solutionMapper.getSomeTuningRecordsWithoutTenant(20);
+//        solutionList.forEach(record -> {
+//            RunStatusEnum status = kubeflowPipelineService.getStatus(record.getPRunId());
+//            SolutionRun updateRecord = new SolutionRun();
+//            switch (status) {
+//                case Running:
+//                    return;
+//                case Succeeded:
+//                    ModelPackage modelPackage = parseModelPackage(record);
+//                    updateRecord.setPackageId(modelPackage.getId());
+//                    break;
+//                case Error:
+//                case Failed:
+//                    break;
+//                default:
+//                    log.error("未知的solution-run状态: {}", status);
+//            }
+//            updateRecord.setId(record.getId());
+//            updateRecord.setStatus(status);
+//            TenantContext.init(record.getTenantId());
+//            solutionRunService.updateById(updateRecord);
+//            if (record.getType() == SolutionRunTypeEnum.DEBUG) {
+//                Solution updateSolution = new Solution();
+//                updateSolution.setId(record.getSolutionId());
+//                switch (status) {
+//                    case Succeeded:
+//                        updateSolution.setStatus(SolutionStatusEnum.READY);
+//                        break;
+//                    case Failed:
+//                        updateSolution.setStatus(SolutionStatusEnum.ERROR);
+//                        break;
+//                    default:
+//                        log.error("unknown solutionRun status.[status={}]", record.getStatus());
+//                }
+//                solutionService.updateById(updateSolution);
+//            }
+//        });
+//        TenantContext.destroy();
     }
 
     @SneakyThrows

@@ -17,6 +17,7 @@ import com.digitforce.aip.enums.StageEnum;
 import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.quartz.SolutionQuartzJob;
+import com.digitforce.aip.service.AutoMLService;
 import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.service.ISceneVersionService;
 import com.digitforce.aip.service.ISolutionRunService;
@@ -38,10 +39,9 @@ import org.quartz.Scheduler;
 import org.quartz.TriggerBuilder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.annotation.Resource;
 
 /**
  * <p>
@@ -65,6 +65,8 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
     private ISceneVersionService sceneVersionService;
     @Resource
     private TemplateComponent templateComponent;
+    @Resource
+    private AutoMLService autoMLService;
 
     @Override
     public void createAndRun(SolutionAddCmd solutionAddCmd) {
@@ -72,18 +74,21 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         Scene scene = sceneService.getById(solutionAddCmd.getSceneId());
         SceneVersion sceneVersion = sceneVersionService.getById(scene.getVidInUse());
         String pipelineTemplate =
-            templateComponent.getPipelineTemplate(sceneVersion.getPipelineName(), StageEnum.TRAIN);
+                templateComponent.getPipelineTemplate(sceneVersion.getPipelineName(), StageEnum.TRAIN);
         solution.setSceneType(scene.getSceneType());
         solution.setPipelineTemplate(pipelineTemplate);
-        // TODO 这里需要替换
-        solution.setTemplateParams(solutionAddCmd.getTemplateParams() != null ?
-            solutionAddCmd.getTemplateParams() : solutionAddCmd.getPipelineParams());
+        solution.setTemplateParams(solutionAddCmd.getTemplateParams());
         solution.setCreateUser(TenantContext.tenant().getUserAccount());
         solution.setUpdateUser(TenantContext.tenant().getUserAccount());
         super.save(solution);
         // 增加统计数量
         sceneMapper.increaseSolutionCount(solutionAddCmd.getSceneId());
-        solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG, solutionAddCmd.getPipelineParams());
+        if (solutionAddCmd.isAutoML()) {
+            // TODO 构造参数
+            String autoMlRunId = autoMLService.createTask(null);
+        } else {
+            solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG, solutionAddCmd.getTemplateParams());
+        }
     }
 
     @Override
@@ -116,12 +121,12 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("solutionId", solutionPublishCmd.getId());
         JobDetail jobDetail = JobBuilder.newJob(SolutionQuartzJob.class)
-            .withIdentity(solutionPublishCmd.getId().toString(), tenantId.toString())
-            .setJobData(jobDataMap)
-            .build();
+                .withIdentity(solutionPublishCmd.getId().toString(), tenantId.toString())
+                .setJobData(jobDataMap)
+                .build();
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(solutionPublishCmd.getCron());
         CronTrigger cronTrigger =
-            TriggerBuilder.newTrigger().withSchedule(cronScheduleBuilder).build();
+                TriggerBuilder.newTrigger().withSchedule(cronScheduleBuilder).build();
         scheduler.scheduleJob(jobDetail, cronTrigger);
     }
 
@@ -139,13 +144,13 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         solution.setStatus(SolutionStatusEnum.READY);
         updateById(solution);
         scheduler.deleteJob(JobKey.jobKey(solutionUnPublishCmd.getId().toString(),
-            TenantContext.tenant().getTenantId().toString()));
+                TenantContext.tenant().getTenantId().toString()));
     }
 
     @Override
     public PageView<Solution> page(SolutionPageByQry solutionPageByQry) {
         QueryWrapper<Solution> queryWrapper =
-            new QueryWrapper<>(BeanUtil.toBean(solutionPageByQry.getClause(), Solution.class));
+                new QueryWrapper<>(BeanUtil.toBean(solutionPageByQry.getClause(), Solution.class));
         Map<String, Object> map = BeanUtil.beanToMap(solutionPageByQry.getLikeClause(), true, true);
         if (!Objects.isNull(map)) {
             map.forEach(queryWrapper::like);
