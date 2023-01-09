@@ -7,4 +7,5 @@ public enum RunStatusEnum {
     Running,
     Succeeded,
     Failed,
+    Error,
 }

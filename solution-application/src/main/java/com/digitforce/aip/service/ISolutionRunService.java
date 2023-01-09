@@ -3,7 +3,6 @@ package com.digitforce.aip.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionRun;
-import com.digitforce.aip.enums.RunStatusEnum;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 
 import java.util.Map;
@@ -18,6 +17,4 @@ import java.util.Map;
  */
 public interface ISolutionRunService extends IService<SolutionRun> {
     void createRun(Solution solution, SolutionRunTypeEnum type, Map<String, Object> templateParams);
-
-    RunStatusEnum getRunStatus(String runId);
 }

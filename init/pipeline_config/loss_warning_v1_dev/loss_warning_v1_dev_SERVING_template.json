@@ -1,7 +1,7 @@
 {
   "model-predict": {
-    "predict_table_name": "algorithm.aip_zq_liushi_custom_feature_predict",
-    "model_and_metrics_data_hdfs_path": "/user/ai/aip/zq/loss_warning/model/${serving_instance_id}"
+    "type": "pk",
+    "model_hdfs_path": "/user/ai/aip/tmp/model.pk"
   },
   "feature_create_predict": {
     "active_before_days": 3,
