@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionRun;
 import com.digitforce.aip.enums.PipelineRunFlagEnum;
-import com.digitforce.aip.enums.RunStatusEnum;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.mapper.SolutionRunMapper;
 import com.digitforce.aip.service.ISolutionRunService;
@@ -16,9 +15,8 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * <p>
@@ -49,17 +47,12 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
         String pipelineParams = templateComponent.getPipelineParams(solution.getPipelineTemplate(), templateParams);
         String pRunName = StrUtil.format("{}-{}", solution.getPipelineName(), solutionRunId);
         String pRunId = kubeflowPipelineService.createRun(solution.getPipelineId(), pRunName, pipelineParams,
-            PipelineRunFlagEnum.TRAIN.name());
+                PipelineRunFlagEnum.TRAIN.name());
         solutionRun = new SolutionRun();
         solutionRun.setId(solutionRunId);
         solutionRun.setPRunId(pRunId);
         solutionRun.setPRunName(pRunName);
         solutionRun.setPipelineParams(pipelineParams);
         super.updateById(solutionRun);
-    }
-
-    @Override
-    public RunStatusEnum getRunStatus(String runId) {
-        return kubeflowPipelineService.getStatus(runId);
     }
 }

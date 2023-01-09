@@ -21,14 +21,14 @@ import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.annotation.Resource;
 
 /**
  * <p>
@@ -41,7 +41,7 @@ import javax.annotation.Resource;
 @Service
 @Slf4j
 public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMapper, ServingInstance>
-    implements IServingInstanceService {
+        implements IServingInstanceService {
     @Resource
     private KubeflowPipelineService kubeflowPipelineService;
     @Resource
@@ -70,15 +70,16 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         servingInstance.setStatus(ServingInstanceStatusEnum.PREDICTING);
         super.save(servingInstance);
         Long servingInstanceId = servingInstance.getId();
-        Map<String, Object> templateParams = solutionServing.getTemplateParams();
+        Map<String, Object> templateParams = solutionServing.getTemplateParams() == null ? Maps.newHashMap() :
+                solutionServing.getTemplateParams();
         // TODO 使用servingInstanceId目前是不能索引到训练产生的模型的，需要修改
 //        templateParams.put("serving_instance_id", servingInstanceId.toString());
         templateParams.put("serving_instance_id", solutionRun.getId().toString());
         String pipelineParams = templateComponent.getPipelineParams(solutionServing.getPipelineTemplate(),
-            templateParams);
+                templateParams);
         String pRunName = String.format("%s-%s", solution.getPipelineName(), servingInstanceId);
         String pRunId = kubeflowPipelineService.createRun(solution.getPipelineId(), pRunName, pipelineParams,
-            PipelineRunFlagEnum.PREDICT.name());
+                PipelineRunFlagEnum.PREDICT.name());
         servingInstance = new ServingInstance();
         servingInstance.setId(servingInstanceId);
         servingInstance.setPRunId(pRunId);
@@ -89,7 +90,7 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
     @Override
     public PageView<ServingInstance> page(ServingInstancePageByQry servingInstancePageByQry) {
         QueryWrapper<ServingInstance> queryWrapper =
-            new QueryWrapper<>(BeanUtil.toBean(servingInstancePageByQry.getClause(), ServingInstance.class));
+                new QueryWrapper<>(BeanUtil.toBean(servingInstancePageByQry.getClause(), ServingInstance.class));
         Map<String, Object> map = BeanUtil.beanToMap(servingInstancePageByQry.getLikeClause(), true, true);
         if (!Objects.isNull(map)) {
             map.forEach(queryWrapper::like);
