@@ -11,10 +11,11 @@ import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.PageTool;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 方案服务查询接口类
@@ -33,14 +34,14 @@ public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
     @Override
     public Result<PageView<SolutionServingDTO>> pageBy(SolutionServingPageByQry solutionServingPageByQry) {
         PageView<SolutionServing> solutionPageView = solutionServingService.page(solutionServingPageByQry);
-        List<Long> solutionIds =
-            solutionPageView.getList().stream().map(SolutionServing::getSolutionId).collect(Collectors.toList());
-        List<Solution> solutionList = solutionService.listByIds(solutionIds);
+        List<Long> solutionIds = solutionPageView.getList().stream()
+                .map(SolutionServing::getSolutionId).collect(Collectors.toList());
+        Map<Long, Solution> solutionMap = solutionService.listByIds(solutionIds).stream()
+                .collect(Collectors.toMap(Solution::getId, Function.identity()));
         PageView<SolutionServingDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
-            SolutionServingDTO.class);
-        for (int i = 0; i < solutionDTOPageView.getCount(); i++) {
-            SolutionServingDTO solutionServingDTO = solutionDTOPageView.getList().get(i);
-            Solution solution = solutionList.get(i);
+                SolutionServingDTO.class);
+        for (SolutionServingDTO solutionServingDTO : solutionDTOPageView.getList()) {
+            Solution solution = solutionMap.get(solutionServingDTO.getSolutionId());
             solutionServingDTO.setSceneName(solution.getSceneName());
             solutionServingDTO.setSolutionTitle(solution.getTitle());
             solutionServingDTO.setSystem(solution.getSystem());
