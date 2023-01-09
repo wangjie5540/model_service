@@ -91,6 +91,11 @@ public class SolutionServing implements Serializable {
     private Long solutionId;
 
     /**
+     * 方案标题
+     */
+    private String solutionTitle;
+
+    /**
      * 方案服务类型
      */
     private String servingType;

@@ -42,10 +42,11 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
         solutionServing.setPipelineId(solution.getPipelineId());
         solutionServing.setPipelineName(solution.getPipelineName());
         solutionServing.setPipelineTemplate(
-            templateComponent.getPipelineTemplate(solution.getPipelineName(), StageEnum.SERVING));
+                templateComponent.getPipelineTemplate(solution.getPipelineName(), StageEnum.SERVING));
         solutionServing.setTemplateParams(solutionServingAddCmd.getTemplateParams());
         solutionServing.setSceneName(solution.getSceneName());
         solutionServing.setSceneType(solution.getSceneType());
+        solutionServing.setSolutionTitle(solution.getTitle());
         solutionServing.setCreateUser(TenantContext.tenant().getUserAccount());
         solutionServing.setUpdateUser(TenantContext.tenant().getUserAccount());
         solutionServingService.save(solutionServing);
