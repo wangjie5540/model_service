@@ -57,6 +57,11 @@ public class SolutionRun extends TenantEntity<Long> implements Serializable {
     private String pipelineParams;
 
     /**
+     * 模型包id
+     */
+    private Long packageId;
+
+    /**
      * kubeflow-pipeline的运行id
      */
     private String pRunId;
