@@ -9,6 +9,7 @@ import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.PageTool;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -36,14 +37,15 @@ public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
         PageView<SolutionServing> solutionPageView = solutionServingService.page(solutionServingPageByQry);
         List<Long> solutionIds = solutionPageView.getList().stream()
                 .map(SolutionServing::getSolutionId).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(solutionIds)) {
+            return Result.success(PageTool.pageView(solutionPageView, SolutionServingDTO.class));
+        }
         Map<Long, Solution> solutionMap = solutionService.listByIds(solutionIds).stream()
                 .collect(Collectors.toMap(Solution::getId, Function.identity()));
         PageView<SolutionServingDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
                 SolutionServingDTO.class);
         for (SolutionServingDTO solutionServingDTO : solutionDTOPageView.getList()) {
             Solution solution = solutionMap.get(solutionServingDTO.getSolutionId());
-            solutionServingDTO.setSceneName(solution.getSceneName());
-            solutionServingDTO.setSolutionTitle(solution.getTitle());
             solutionServingDTO.setSystem(solution.getSystem());
             solutionServingDTO.setCronDesc(solution.getCronDesc());
         }
