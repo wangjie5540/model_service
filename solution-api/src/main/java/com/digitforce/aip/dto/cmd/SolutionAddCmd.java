@@ -21,7 +21,7 @@ public class SolutionAddCmd {
     private String sceneName;
     private String system;
     private String description;
-    private Object formInfo;
+    private Map<String, Object> formInfo;
     private Map<String, Object> templateParams;
     private boolean autoML;
     private String pipelineId;

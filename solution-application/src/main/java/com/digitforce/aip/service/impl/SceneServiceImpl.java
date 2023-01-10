@@ -11,7 +11,6 @@ import com.digitforce.aip.dto.data.SceneDynamicFromDTO;
 import com.digitforce.aip.dto.qry.ScenePageByQry;
 import com.digitforce.aip.entity.Scene;
 import com.digitforce.aip.entity.SceneVersion;
-import com.digitforce.aip.enums.SceneStatusEnum;
 import com.digitforce.aip.enums.StageEnum;
 import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.service.ISceneService;
@@ -101,9 +100,6 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         Scene scene = getById(sceneModifyCmd.getId());
         if (scene == null) {
             throw new RuntimeException("场景不存在");
-        }
-        if (scene.getStatus() == SceneStatusEnum.ONLINE) {
-            throw new RuntimeException("场景已上线，不能修改");
         }
         scene = ConvertTool.convert(sceneModifyCmd, Scene.class);
         scene.setUpdateUser(TenantContext.tenant().getUserAccount());
