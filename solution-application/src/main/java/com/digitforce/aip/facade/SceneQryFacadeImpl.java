@@ -1,7 +1,6 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.dto.data.SceneDTO;
-import com.digitforce.aip.dto.data.SceneDynamicFromDTO;
 import com.digitforce.aip.dto.data.SceneVersionDTO;
 import com.digitforce.aip.dto.qry.SceneGetByIdQry;
 import com.digitforce.aip.dto.qry.SceneGetFromQry;
@@ -18,11 +17,10 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
 
 /**
  * 场景查询实现类
@@ -65,13 +63,6 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
         SceneDTO sceneDTO = ConvertTool.convert(scene, SceneDTO.class);
         sceneDTO.setVersionInUse(sceneVersionDTO);
         return Result.success(sceneDTO);
-    }
-
-    @Override
-    public Result<SceneDynamicFromDTO> getDynamicFormBySceneId(SceneGetFromQry sceneGetFromQry) {
-        // TODO 后续将删除此接口
-        SceneDynamicFromDTO sceneDynamicFromDTO = sceneService.getDynamicFormBySceneId(sceneGetFromQry.getSceneId());
-        return Result.success(sceneDynamicFromDTO);
     }
 
     @Override
