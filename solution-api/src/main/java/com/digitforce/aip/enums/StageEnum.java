@@ -9,5 +9,6 @@ package com.digitforce.aip.enums;
  */
 public enum StageEnum {
     TRAIN,
+    AUTOML,
     SERVING,
 }

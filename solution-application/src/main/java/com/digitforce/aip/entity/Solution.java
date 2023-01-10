@@ -60,6 +60,11 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     private String sceneName;
 
     /**
+     * 自动调参任务的runId
+     */
+    private String aRunId;
+
+    /**
      * kubeflow pipelineId
      */
     private String pipelineId;
@@ -70,9 +75,14 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     private String pipelineName;
 
     /**
-     * pipeline 参数模板
+     * pipeline 训练参数模板
      */
-    private String pipelineTemplate;
+    private String trainTemplate;
+
+    /**
+     * pipeline 自动调参模板
+     */
+    private String automlTemplate;
 
     /**
      * pipeline 参数模板
@@ -135,6 +145,4 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
      * 更新时间
      */
     private LocalDateTime updateTime;
-
-
 }

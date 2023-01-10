@@ -11,10 +11,9 @@ import com.digitforce.aip.test.BaseTest;
 import com.google.common.collect.Maps;
 import org.junit.Test;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Resource;
 
 public class SolutionServiceImplTest extends BaseTest {
     @Resource
@@ -39,7 +38,7 @@ public class SolutionServiceImplTest extends BaseTest {
         map.put("lookalike__dnn_dropout", 0.2);
         map.put("lookalike__batch_size", 256);
         map.put("lookalike__lr", 0.01);
-        solutionAddCmd.setPipelineParams(map);
+        solutionAddCmd.setTemplateParams(map);
         solutionService.createAndRun(solutionAddCmd);
         TimeUnit.SECONDS.sleep(1000);
     }
@@ -54,19 +53,19 @@ public class SolutionServiceImplTest extends BaseTest {
     public void pipelineTemplateTest() {
         TemplateEngine engine = TemplateUtil.createEngine();
         Template template = engine.getTemplate("{\n"
-            + "    \"sample_select\": {\n"
-            + "        \"event_code_buy\": \"${event_code_buy}\",\n"
-            + "        \"pos_sample_proportion\": ${sample_select__pos_sample_proportion}\n"
-            + "    },\n"
-            + "    \"feature_create\": {\n"
-            + "        \"event_code_buy\": \"${event_code_buy}\"\n"
-            + "    },\n"
-            + "    \"lookalike\": {\n"
-            + "        \"dnn_dropout\": ${lookalike__dnn_dropout},\n"
-            + "        \"batch_size\": ${lookalike__batch_size},\n"
-            + "        \"lr\": ${lookalike__lr}\n"
-            + "    }\n"
-            + "}");
+                + "    \"sample_select\": {\n"
+                + "        \"event_code_buy\": \"${event_code_buy}\",\n"
+                + "        \"pos_sample_proportion\": ${sample_select__pos_sample_proportion}\n"
+                + "    },\n"
+                + "    \"feature_create\": {\n"
+                + "        \"event_code_buy\": \"${event_code_buy}\"\n"
+                + "    },\n"
+                + "    \"lookalike\": {\n"
+                + "        \"dnn_dropout\": ${lookalike__dnn_dropout},\n"
+                + "        \"batch_size\": ${lookalike__batch_size},\n"
+                + "        \"lr\": ${lookalike__lr}\n"
+                + "    }\n"
+                + "}");
         Map<String, Object> map = Maps.newHashMap();
         map.put("event_code_buy", "buy");
         map.put("sample_select__pos_sample_proportion", 0.5);
