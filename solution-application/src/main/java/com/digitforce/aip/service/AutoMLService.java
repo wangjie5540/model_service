@@ -1,6 +1,5 @@
 package com.digitforce.aip.service;
 
-import com.digitforce.aip.entity.dto.cmd.AutomlParams;
 import com.digitforce.aip.entity.dto.data.BestParameter;
 import com.digitforce.aip.enums.AutoMLRunStatusEnum;
 
@@ -12,7 +11,7 @@ import java.util.List;
  * @author wangtonggui
  */
 public interface AutoMLService {
-    String createTask(AutomlParams automlParams);
+    String createTask(String templateParams);
 
     AutoMLRunStatusEnum getStatus(String runId);
 

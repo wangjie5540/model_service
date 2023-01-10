@@ -69,24 +69,31 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
     private AutoMLService autoMLService;
 
     @Override
+    @SneakyThrows
     public void createAndRun(SolutionAddCmd solutionAddCmd) {
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
         Scene scene = sceneService.getById(solutionAddCmd.getSceneId());
         SceneVersion sceneVersion = sceneVersionService.getById(scene.getVidInUse());
-        String pipelineTemplate =
-                templateComponent.getPipelineTemplate(sceneVersion.getPipelineName(), StageEnum.TRAIN);
         solution.setSceneType(scene.getSceneType());
-        solution.setPipelineTemplate(pipelineTemplate);
+        solution.setTrainTemplate(templateComponent.getPipelineTemplate(sceneVersion.getPipelineName(),
+                StageEnum.TRAIN));
         solution.setTemplateParams(solutionAddCmd.getTemplateParams());
         solution.setCreateUser(TenantContext.tenant().getUserAccount());
         solution.setUpdateUser(TenantContext.tenant().getUserAccount());
+        if (solutionAddCmd.isAutoML()) {
+            solution.setStatus(SolutionStatusEnum.TUNING);
+            solution.setAutomlTemplate(templateComponent.getPipelineTemplate(sceneVersion.getPipelineName(),
+                    StageEnum.AUTOML));
+            solutionAddCmd.getTemplateParams().put("pipeline_id", sceneVersion.getPipelineId());
+            String automlParams = templateComponent.getPipelineParams(solution.getAutomlTemplate(),
+                    solutionAddCmd.getTemplateParams());
+            String autoMlRunId = autoMLService.createTask(automlParams);
+            solution.setARunId(autoMlRunId);
+        }
         super.save(solution);
         // 增加统计数量
         sceneMapper.increaseSolutionCount(solutionAddCmd.getSceneId());
-        if (solutionAddCmd.isAutoML()) {
-            // TODO 构造参数
-            String autoMlRunId = autoMLService.createTask(null);
-        } else {
+        if (!solutionAddCmd.isAutoML()) {
             solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG, solutionAddCmd.getTemplateParams());
         }
     }

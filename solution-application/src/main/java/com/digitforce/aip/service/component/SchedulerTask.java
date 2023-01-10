@@ -9,6 +9,8 @@ import com.digitforce.aip.entity.ModelPackage;
 import com.digitforce.aip.entity.ServingInstance;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionRun;
+import com.digitforce.aip.entity.dto.data.BestParameter;
+import com.digitforce.aip.enums.AutoMLRunStatusEnum;
 import com.digitforce.aip.enums.ResourceTypeEnum;
 import com.digitforce.aip.enums.RunStatusEnum;
 import com.digitforce.aip.enums.ServingInstanceStatusEnum;
@@ -17,6 +19,7 @@ import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.ServingInstanceMapper;
 import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.mapper.SolutionRunMapper;
+import com.digitforce.aip.service.AutoMLService;
 import com.digitforce.aip.service.IModelPackageService;
 import com.digitforce.aip.service.IModelService;
 import com.digitforce.aip.service.IServingInstanceService;
@@ -34,6 +37,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -65,6 +69,8 @@ public class SchedulerTask {
     private IModelPackageService modelPackageService;
     @Resource
     private IModelService modelService;
+    @Resource
+    private AutoMLService autoMLService;
 
     /**
      * 每5秒检测一次solution-run的状态，并进行更新
@@ -114,8 +120,30 @@ public class SchedulerTask {
 
     @Scheduled(fixedRate = 20000)
     public void patrolSolutionAutoMlStatus() {
-//        List<Solution> solutionList = solutionMapper.getSomeTuningRecordsWithoutTenant(20);
+        List<Solution> solutionList = solutionMapper.getSomeTuningRecordsWithoutTenant(20);
+        solutionList.forEach(record -> {
+            // 检测自动调参是否完成
+            AutoMLRunStatusEnum status = autoMLService.getStatus(record.getARunId());
+            switch (status) {
+                case Success:
+                    // TODO 保存最优模型
+                    List<BestParameter> autoMLResult = autoMLService.getAutoMLResult(record.getARunId());
+                    Map<String, Object> templateParams = record.getTemplateParams();
+                    autoMLResult.forEach(bestParameter -> {
+                        templateParams.put(StrUtil.format("{}__{}", "model", bestParameter.getName()),
+                                bestParameter.getValue());
+                    });
+                    Solution solution = new Solution();
+                    solution.setId(record.getId());
+                    solution.setTemplateParams(templateParams);
+                    break;
+                default:
+                    return;
+            }
+        });
 //        solutionList.forEach(record -> {
+//            // 检测自动调参任务状态
+//
 //            RunStatusEnum status = kubeflowPipelineService.getStatus(record.getPRunId());
 //            SolutionRun updateRecord = new SolutionRun();
 //            switch (status) {

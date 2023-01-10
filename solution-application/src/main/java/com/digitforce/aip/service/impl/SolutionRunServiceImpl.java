@@ -44,7 +44,7 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
         super.save(solutionRun);
         Long solutionRunId = solutionRun.getId();
         templateParams.put("solution_run_id", solutionRunId.toString());
-        String pipelineParams = templateComponent.getPipelineParams(solution.getPipelineTemplate(), templateParams);
+        String pipelineParams = templateComponent.getPipelineParams(solution.getTrainTemplate(), templateParams);
         String pRunName = StrUtil.format("{}-{}", solution.getPipelineName(), solutionRunId);
         String pRunId = kubeflowPipelineService.createRun(solution.getPipelineId(), pRunName, pipelineParams,
                 PipelineRunFlagEnum.TRAIN.name());

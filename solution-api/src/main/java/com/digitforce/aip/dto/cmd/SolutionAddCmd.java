@@ -22,11 +22,6 @@ public class SolutionAddCmd {
     private String system;
     private String description;
     private Object formInfo;
-    /**
-     * TODO 后续要废弃，因为pipeline_params由前端传递的不全，需要由后端自己组装
-     */
-    @Deprecated
-    private Map<String, Object> pipelineParams;
     private Map<String, Object> templateParams;
     private boolean autoML;
     private String pipelineId;
