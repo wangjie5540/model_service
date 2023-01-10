@@ -2,7 +2,6 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.data.SceneDTO;
-import com.digitforce.aip.dto.data.SceneDynamicFromDTO;
 import com.digitforce.aip.dto.qry.SceneGetByIdQry;
 import com.digitforce.aip.dto.qry.SceneGetFromQry;
 import com.digitforce.aip.dto.qry.ScenePageByQry;
@@ -32,10 +31,6 @@ public interface SceneQryFacade {
     @PostMapping("/solution/scene/getById")
     @Operation(summary = "根据id获取场景信息", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
     Result<SceneDTO> getById(@RequestBody SceneGetByIdQry sceneGetByIdQry);
-
-    @PostMapping("/solution/scene/getDynamicFormBySceneId")
-    @Operation(summary = "根据场景id获取动态表单", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
-    Result<SceneDynamicFromDTO> getDynamicFormBySceneId(@RequestBody SceneGetFromQry sceneGetFromQry);
 
     @PostMapping("/solution/scene/getDynamicForm")
     @Operation(summary = "获取动态表单", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
