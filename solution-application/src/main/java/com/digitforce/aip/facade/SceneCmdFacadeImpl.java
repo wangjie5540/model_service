@@ -11,6 +11,7 @@ import com.digitforce.aip.enums.SceneStatusEnum;
 import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.service.ISceneVersionService;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,10 +47,10 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
     public Result delete(SceneDeleteCmd sceneDeleteCmd) {
         Scene scene = sceneService.getById(sceneDeleteCmd.getId());
         if (scene == null) {
-            throw new RuntimeException("场景不存在");
+            throw new BizException("场景不存在");
         }
         if (scene.getStatus() == SceneStatusEnum.ONLINE) {
-            throw new RuntimeException("场景已上线，不能删除");
+            throw new BizException("场景已上线，不能删除");
         }
         sceneService.removeById(sceneDeleteCmd.getId());
         return Result.success();
@@ -68,10 +69,10 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
     public Result unPublish(SceneStatusCmd sceneStatusCmd) {
         Scene scene = sceneService.getById(sceneStatusCmd.getId());
         if (scene == null) {
-            throw new RuntimeException("场景不存在");
+            throw new BizException("场景不存在");
         }
         if (scene.getStatus() == SceneStatusEnum.OFFLINE) {
-            throw new RuntimeException("场景已下线，不能重复下线");
+            throw new BizException("场景已下线，不能重复下线");
         }
         scene.setStatus(SceneStatusEnum.OFFLINE);
         scene.setUpdateUser(TenantContext.tenant().getUserAccount());

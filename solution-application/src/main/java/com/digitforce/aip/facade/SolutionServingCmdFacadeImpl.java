@@ -8,6 +8,7 @@ import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,7 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
         SolutionServing solutionServing = ConvertTool.convert(solutionServingAddCmd, SolutionServing.class);
         Solution solution = solutionService.getById(solutionServingAddCmd.getSolutionId());
         if (solution == null) {
-            throw new RuntimeException("方案不存在");
+            throw new BizException("方案不存在");
         }
         solutionServing.setPipelineId(solution.getPipelineId());
         solutionServing.setPipelineName(solution.getPipelineName());

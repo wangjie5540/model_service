@@ -32,7 +32,7 @@ public class SolutionServiceImplTest extends BaseTest {
         solutionAddCmd.setDescription("lookalike方案描述");
         solutionAddCmd.setPipelineId("cd9a12b9-8407-42bb-bce3-c5bcf166e2c3");
         solutionAddCmd.setPipelineName("lookalike");
-        solutionAddCmd.setAutoML(false);
+        solutionAddCmd.setAutoml(false);
         Map<String, Object> map = Maps.newHashMap();
         map.put("event_code_buy", "fund_buy");
         map.put("sample_select__pos_sample_proportion", 0.5);
