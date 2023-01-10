@@ -30,10 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.annotation.Resource;
 
 /**
  * <p>
@@ -106,12 +105,14 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         if (scene.getStatus() == SceneStatusEnum.ONLINE) {
             throw new RuntimeException("场景已上线，不能修改");
         }
-        SceneVersion sceneVersion = ConvertTool.convert(sceneModifyCmd.getSceneVersion(), SceneVersion.class);
-        sceneVersion.setId(scene.getVidInUse());
-        sceneVersion.setUpdateUser(TenantContext.tenant().getUserAccount());
         scene = ConvertTool.convert(sceneModifyCmd, Scene.class);
         scene.setUpdateUser(TenantContext.tenant().getUserAccount());
         updateById(scene);
-        sceneVersionService.updateById(sceneVersion);
+        if (sceneModifyCmd.getSceneVersion() != null) {
+            SceneVersion sceneVersion = ConvertTool.convert(sceneModifyCmd.getSceneVersion(), SceneVersion.class);
+            sceneVersion.setId(scene.getVidInUse());
+            sceneVersion.setUpdateUser(TenantContext.tenant().getUserAccount());
+            sceneVersionService.updateById(sceneVersion);
+        }
     }
 }
