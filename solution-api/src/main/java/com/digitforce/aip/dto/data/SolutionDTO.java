@@ -17,7 +17,7 @@ public class SolutionDTO {
     @Schema(description = "表单信息")
     private Object formInfo;
     @Schema(description = "自动调参开关")
-    private Boolean autoML;
+    private Boolean automl;
     @Schema(description = "场景Id")
     private Long sceneId;
     @Schema(description = "场景名称")

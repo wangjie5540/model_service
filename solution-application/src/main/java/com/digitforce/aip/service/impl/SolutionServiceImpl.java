@@ -80,7 +80,7 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         solution.setTemplateParams(solutionAddCmd.getTemplateParams());
         solution.setCreateUser(TenantContext.tenant().getUserAccount());
         solution.setUpdateUser(TenantContext.tenant().getUserAccount());
-        if (solutionAddCmd.isAutoML()) {
+        if (solutionAddCmd.isAutoml()) {
             solution.setStatus(SolutionStatusEnum.TUNING);
             solution.setAutomlTemplate(templateComponent.getPipelineTemplate(sceneVersion.getPipelineName(),
                     StageEnum.AUTOML));
@@ -93,7 +93,7 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         super.save(solution);
         // 增加统计数量
         sceneMapper.increaseSolutionCount(solutionAddCmd.getSceneId());
-        if (!solutionAddCmd.isAutoML()) {
+        if (!solutionAddCmd.isAutoml()) {
             solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG, solutionAddCmd.getTemplateParams());
         }
     }

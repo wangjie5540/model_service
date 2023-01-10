@@ -22,7 +22,7 @@ public class SolutionAddCmd {
     private String description;
     private Map<String, Object> formInfo;
     private Map<String, Object> templateParams;
-    private boolean autoML;
+    private boolean automl;
     private String pipelineId;
     private String pipelineName;
 }
