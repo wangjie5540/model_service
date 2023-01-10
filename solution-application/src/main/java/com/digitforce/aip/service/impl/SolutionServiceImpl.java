@@ -25,6 +25,7 @@ import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
+import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
@@ -103,15 +104,15 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         Solution solution = ConvertTool.convert(solutionPublishCmd, Solution.class);
         Solution savedSolution = getById(solution.getId());
         if (Objects.isNull(savedSolution)) {
-            throw new RuntimeException("方案不存在");
+            throw new BizException("方案不存在");
         }
         switch (savedSolution.getStatus()) {
             case PUBLISHED:
-                throw new RuntimeException("方案已发布");
+                throw new BizException("方案已发布");
             case EXECUTING:
-                throw new RuntimeException("方案正在执行");
+                throw new BizException("方案正在执行");
             case ERROR:
-                throw new RuntimeException("方案执行失败");
+                throw new BizException("方案执行失败");
             case READY:
                 solution.setStatus(SolutionStatusEnum.PUBLISHED);
                 updateById(solution);
@@ -143,10 +144,10 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
     public void unPublish(SolutionUnPublishCmd solutionUnPublishCmd) {
         Solution solution = getById(solutionUnPublishCmd.getId());
         if (Objects.isNull(solution)) {
-            throw new RuntimeException("方案不存在");
+            throw new BizException("方案不存在");
         }
         if (solution.getStatus() != SolutionStatusEnum.PUBLISHED) {
-            throw new RuntimeException("方案未发布");
+            throw new BizException("方案未发布");
         }
         solution = ConvertTool.convert(solutionUnPublishCmd, Solution.class);
         solution.setStatus(SolutionStatusEnum.READY);

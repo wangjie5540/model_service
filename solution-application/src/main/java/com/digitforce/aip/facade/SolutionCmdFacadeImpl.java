@@ -9,6 +9,7 @@ import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.api.exception.BizException;
 import lombok.SneakyThrows;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,11 +54,11 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     public Result delete(SolutionDeleteCmd solutionDeleteCmd) {
         Solution solution = solutionService.getById(solutionDeleteCmd.getId());
         if (solution == null) {
-            throw new RuntimeException("方案不存在");
+            throw new BizException("方案不存在");
         }
         if (solution.getStatus() == SolutionStatusEnum.EXECUTING
                 || solution.getStatus() == SolutionStatusEnum.PUBLISHED) {
-            throw new RuntimeException("方案正在执行或已发布，不能删除");
+            throw new BizException("方案正在执行或已发布，不能删除");
         }
         solutionService.removeById(solutionDeleteCmd.getId());
         return Result.success();

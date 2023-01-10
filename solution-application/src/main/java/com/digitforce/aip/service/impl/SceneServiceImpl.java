@@ -19,6 +19,7 @@ import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.component.config.api.dto.qry.ConfigQry;
 import com.digitforce.component.config.api.facade.qry.ConfigQryFacade;
 import com.digitforce.framework.api.dto.PageView;
+import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
@@ -99,7 +100,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     public void updateScene(SceneModifyCmd sceneModifyCmd) {
         Scene scene = getById(sceneModifyCmd.getId());
         if (scene == null) {
-            throw new RuntimeException("场景不存在");
+            throw new BizException("场景不存在");
         }
         scene = ConvertTool.convert(sceneModifyCmd, Scene.class);
         scene.setUpdateUser(TenantContext.tenant().getUserAccount());
