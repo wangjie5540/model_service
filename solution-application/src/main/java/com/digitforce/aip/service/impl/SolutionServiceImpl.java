@@ -127,6 +127,7 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         Integer tenantId = TenantContext.tenant().getTenantId();
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("solutionId", solutionPublishCmd.getId());
+        jobDataMap.put("tenantId", TenantContext.tenantId());
         JobDetail jobDetail = JobBuilder.newJob(SolutionQuartzJob.class)
                 .withIdentity(solutionPublishCmd.getId().toString(), tenantId.toString())
                 .setJobData(jobDataMap)

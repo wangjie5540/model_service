@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 import org.junit.Test;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -79,5 +80,11 @@ public class SolutionServiceImplTest extends BaseTest {
     @Test
     public void starrocksTest() {
         System.out.println(olapMapper.getColumn("aip", "item", "item_id"));
+    }
+
+    @Test
+    public void list() {
+        List<Solution> list = solutionService.list();
+        System.out.println(list);
     }
 }
