@@ -1,9 +1,11 @@
 package com.digitforce.aip.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.digitforce.aip.dto.qry.SolutionRunPageByQry;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionRun;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
+import com.digitforce.framework.api.dto.PageView;
 
 import java.util.Map;
 
@@ -17,4 +19,6 @@ import java.util.Map;
  */
 public interface ISolutionRunService extends IService<SolutionRun> {
     void createRun(Solution solution, SolutionRunTypeEnum type, Map<String, Object> templateParams);
+
+    PageView<SolutionRun> page(SolutionRunPageByQry solutionRunPageByQry);
 }
