@@ -27,7 +27,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "solution", autoResultMap = true)
 public class Solution extends AggregateRoot<Long> implements Serializable {
-    private static final long serialVersionUID = 9085508804053336799L;
+    private static final long serialVersionUID = -5749822666609826153L;
     /**
      * 方案主键id
      */

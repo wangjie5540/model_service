@@ -110,13 +110,13 @@ public class AutoMLServiceImplTest extends BaseTest {
 
     @Test
     public void getStatus() {
-        AutoMLRunStatusEnum status = autoMLService.getStatus("509d2a76-0499-48e6-ae15-42015c4313bf");
+        AutoMLRunStatusEnum status = autoMLService.getStatus("ae1f8809-b339-450a-a19a-7cd111561304");
         System.out.println(status);
     }
 
     @Test
     public void getAutoMLResult() {
-        List<BestParameter> bestParameters = autoMLService.getAutoMLResult("509d2a76-0499-48e6-ae15-42015c4313bf");
+        List<BestParameter> bestParameters = autoMLService.getAutoMLResult("ae1f8809-b339-450a-a19a-7cd111561304");
         System.out.println(bestParameters);
     }
 
