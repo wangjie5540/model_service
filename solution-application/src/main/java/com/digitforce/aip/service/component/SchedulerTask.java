@@ -80,6 +80,7 @@ public class SchedulerTask {
     public void patrolSolutionRunStatus() {
         List<SolutionRun> solutionRunList = solutionRunMapper.getSomeRunningRecordsWithoutTenant(20);
         solutionRunList.forEach(record -> {
+            TenantContext.init(record.getTenantId());
             RunStatusEnum status = kubeflowPipelineService.getStatus(record.getPRunId());
             SolutionRun updateRecord = new SolutionRun();
             switch (status) {
@@ -97,7 +98,6 @@ public class SchedulerTask {
             }
             updateRecord.setId(record.getId());
             updateRecord.setStatus(status);
-            TenantContext.init(record.getTenantId());
             solutionRunService.updateById(updateRecord);
             if (record.getType() == SolutionRunTypeEnum.DEBUG) {
                 Solution updateSolution = new Solution();
