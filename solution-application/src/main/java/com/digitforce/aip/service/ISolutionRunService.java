@@ -1,10 +1,13 @@
 package com.digitforce.aip.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.digitforce.aip.dto.qry.SolutionRunPageByQry;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionRun;
-import com.digitforce.aip.enums.RunStatusEnum;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
+import com.digitforce.framework.api.dto.PageView;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -15,7 +18,7 @@ import com.digitforce.aip.enums.SolutionRunTypeEnum;
  * @since 2022-12-10
  */
 public interface ISolutionRunService extends IService<SolutionRun> {
-    void createRun(Solution solution, String pipelineParams, SolutionRunTypeEnum type);
+    void createRun(Solution solution, SolutionRunTypeEnum type, Map<String, Object> templateParams);
 
-    RunStatusEnum getRunStatus(String runId);
+    PageView<SolutionRun> page(SolutionRunPageByQry solutionRunPageByQry);
 }

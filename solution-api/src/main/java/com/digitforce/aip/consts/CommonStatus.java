@@ -11,8 +11,8 @@ public enum CommonStatus implements Typable<Integer> {
     ON(1, "启用"),
     OFF(4, "停用");
 
-    private int code;
-    private String desc;
+    private final int code;
+    private final String desc;
 
     CommonStatus(Integer code, String desc) {
         this.code = code;
@@ -29,6 +29,7 @@ public enum CommonStatus implements Typable<Integer> {
         return desc;
     }
 
+    @Override
     public boolean isValid(Integer code) {
         return types.containsKey(code);
     }

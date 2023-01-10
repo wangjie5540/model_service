@@ -1,9 +1,6 @@
 package com.digitforce.aip.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.extra.template.Template;
-import cn.hutool.extra.template.TemplateEngine;
-import cn.hutool.extra.template.TemplateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,15 +8,24 @@ import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
 import com.digitforce.aip.dto.cmd.SolutionUnPublishCmd;
 import com.digitforce.aip.dto.qry.SolutionPageByQry;
+import com.digitforce.aip.entity.Scene;
+import com.digitforce.aip.entity.SceneVersion;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.enums.SolutionStatusEnum;
+import com.digitforce.aip.enums.StageEnum;
+import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.mapper.SolutionMapper;
 import com.digitforce.aip.quartz.SolutionQuartzJob;
+import com.digitforce.aip.service.AutoMLService;
+import com.digitforce.aip.service.ISceneService;
+import com.digitforce.aip.service.ISceneVersionService;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.ISolutionService;
+import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
+import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
@@ -34,10 +40,9 @@ import org.quartz.Scheduler;
 import org.quartz.TriggerBuilder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.annotation.Resource;
 
 /**
  * <p>
@@ -53,29 +58,45 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
     private ISolutionRunService solutionRunService;
     @Resource
     private Scheduler scheduler;
+    @Resource
+    private SceneMapper sceneMapper;
+    @Resource
+    private ISceneService sceneService;
+    @Resource
+    private ISceneVersionService sceneVersionService;
+    @Resource
+    private TemplateComponent templateComponent;
+    @Resource
+    private AutoMLService autoMLService;
 
     @Override
+    @SneakyThrows
     public void createAndRun(SolutionAddCmd solutionAddCmd) {
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
-        TemplateEngine engine = TemplateUtil.createEngine();
-        Template template = engine.getTemplate("{\n"
-            + "    \"sample_select\": {\n"
-            + "        \"event_code_buy\": \"${event_code_buy}\",\n"
-            + "        \"pos_sample_proportion\": ${sample_select__pos_sample_proportion}\n"
-            + "    },\n"
-            + "    \"feature_create\": {\n"
-            + "        \"event_code_buy\": \"${event_code_buy}\"\n"
-            + "    },\n"
-            + "    \"lookalike\": {\n"
-            + "        \"dnn_dropout\": ${lookalike__dnn_dropout},\n"
-            + "        \"batch_size\": ${lookalike__batch_size},\n"
-            + "        \"lr\": ${lookalike__lr}\n"
-            + "    }\n"
-            + "}");
-        String render = template.render(solutionAddCmd.getPipelineParams());
-        solution.setPipelineParams(render);
+        Scene scene = sceneService.getById(solutionAddCmd.getSceneId());
+        SceneVersion sceneVersion = sceneVersionService.getById(scene.getVidInUse());
+        solution.setSceneType(scene.getSceneType());
+        solution.setTrainTemplate(templateComponent.getPipelineTemplate(sceneVersion.getPipelineName(),
+                StageEnum.TRAIN));
+        solution.setTemplateParams(solutionAddCmd.getTemplateParams());
+        solution.setCreateUser(TenantContext.tenant().getUserAccount());
+        solution.setUpdateUser(TenantContext.tenant().getUserAccount());
+        if (solutionAddCmd.isAutoml()) {
+            solution.setStatus(SolutionStatusEnum.TUNING);
+            solution.setAutomlTemplate(templateComponent.getPipelineTemplate(sceneVersion.getPipelineName(),
+                    StageEnum.AUTOML));
+            solutionAddCmd.getTemplateParams().put("pipeline_id", sceneVersion.getPipelineId());
+            String automlParams = templateComponent.getPipelineParams(solution.getAutomlTemplate(),
+                    solutionAddCmd.getTemplateParams());
+            String autoMlRunId = autoMLService.createTask(automlParams);
+            solution.setARunId(autoMlRunId);
+        }
         super.save(solution);
-        solutionRunService.createRun(solution, render, SolutionRunTypeEnum.DEBUG);
+        // 增加统计数量
+        sceneMapper.increaseSolutionCount(solutionAddCmd.getSceneId());
+        if (!solutionAddCmd.isAutoml()) {
+            solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG, solutionAddCmd.getTemplateParams());
+        }
     }
 
     @Override
@@ -83,15 +104,15 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         Solution solution = ConvertTool.convert(solutionPublishCmd, Solution.class);
         Solution savedSolution = getById(solution.getId());
         if (Objects.isNull(savedSolution)) {
-            throw new RuntimeException("方案不存在");
+            throw new BizException("方案不存在");
         }
         switch (savedSolution.getStatus()) {
             case PUBLISHED:
-                throw new RuntimeException("方案已发布");
+                throw new BizException("方案已发布");
             case EXECUTING:
-                throw new RuntimeException("方案正在执行");
+                throw new BizException("方案正在执行");
             case ERROR:
-                throw new RuntimeException("方案执行失败");
+                throw new BizException("方案执行失败");
             case READY:
                 solution.setStatus(SolutionStatusEnum.PUBLISHED);
                 updateById(solution);
@@ -107,31 +128,39 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         Integer tenantId = TenantContext.tenant().getTenantId();
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("solutionId", solutionPublishCmd.getId());
+        jobDataMap.put("tenantId", TenantContext.tenantId());
         JobDetail jobDetail = JobBuilder.newJob(SolutionQuartzJob.class)
-            .withIdentity(solutionPublishCmd.getId().toString(), tenantId.toString())
-            .setJobData(jobDataMap)
-            .build();
+                .withIdentity(solutionPublishCmd.getId().toString(), tenantId.toString())
+                .setJobData(jobDataMap)
+                .build();
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(solutionPublishCmd.getCron());
         CronTrigger cronTrigger =
-            TriggerBuilder.newTrigger().withSchedule(cronScheduleBuilder).build();
+                TriggerBuilder.newTrigger().withSchedule(cronScheduleBuilder).build();
         scheduler.scheduleJob(jobDetail, cronTrigger);
     }
 
     @SneakyThrows
     @Override
     public void unPublish(SolutionUnPublishCmd solutionUnPublishCmd) {
-        Solution solution = ConvertTool.convert(solutionUnPublishCmd, Solution.class);
+        Solution solution = getById(solutionUnPublishCmd.getId());
+        if (Objects.isNull(solution)) {
+            throw new BizException("方案不存在");
+        }
+        if (solution.getStatus() != SolutionStatusEnum.PUBLISHED) {
+            throw new BizException("方案未发布");
+        }
+        solution = ConvertTool.convert(solutionUnPublishCmd, Solution.class);
         solution.setStatus(SolutionStatusEnum.READY);
         updateById(solution);
-        scheduler.deleteJob(
-            JobKey.jobKey(solutionUnPublishCmd.getId().toString(), TenantContext.tenant().getTenantId().toString()));
+        scheduler.deleteJob(JobKey.jobKey(solutionUnPublishCmd.getId().toString(),
+                TenantContext.tenant().getTenantId().toString()));
     }
 
     @Override
     public PageView<Solution> page(SolutionPageByQry solutionPageByQry) {
         QueryWrapper<Solution> queryWrapper =
-            new QueryWrapper<>(BeanUtil.toBean(solutionPageByQry.getClause(), Solution.class));
-        Map<String, Object> map = BeanUtil.beanToMap(solutionPageByQry.getLikeClause(), false, true);
+                new QueryWrapper<>(BeanUtil.toBean(solutionPageByQry.getClause(), Solution.class));
+        Map<String, Object> map = BeanUtil.beanToMap(solutionPageByQry.getLikeClause(), true, true);
         if (!Objects.isNull(map)) {
             map.forEach(queryWrapper::like);
         }

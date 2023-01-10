@@ -20,8 +20,8 @@ public class SceneVersionDTO {
     private String pipelineId;
     @Schema(description = "kubeflow pipeline name")
     private String pipelineName;
-    @Schema(description = "应用的算法")
-    private String algorithmInUse;
+    @Schema(description = "核心算法")
+    private String algorithm;
     @Schema(description = "创建人")
     private String createUser;
     @Schema(description = "更新人")

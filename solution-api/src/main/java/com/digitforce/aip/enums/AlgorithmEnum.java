@@ -10,7 +10,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * @since 2022/12/19 17:15
  */
 public enum AlgorithmEnum {
-    DSSM("DSSM");
+    DSSM("DSSM"),
+    KMEANS("KMEANS"),
+    DEEPFM("DEEPFM"),
+    XGBOOST("XGBOOST"),
+    ;
     final String cname;
 
     @JsonValue

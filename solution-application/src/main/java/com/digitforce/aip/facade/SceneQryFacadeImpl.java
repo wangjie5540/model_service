@@ -1,7 +1,6 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.dto.data.SceneDTO;
-import com.digitforce.aip.dto.data.SceneDynamicFromDTO;
 import com.digitforce.aip.dto.data.SceneVersionDTO;
 import com.digitforce.aip.dto.qry.SceneGetByIdQry;
 import com.digitforce.aip.dto.qry.SceneGetFromQry;
@@ -14,12 +13,14 @@ import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 场景查询实现类
@@ -29,6 +30,7 @@ import javax.annotation.Resource;
  * @since 2022/05/31 17:08
  */
 @RestController
+@Slf4j
 public class SceneQryFacadeImpl implements SceneQryFacade {
     @Resource
     private ISceneService sceneService;
@@ -38,6 +40,9 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
     @Override
     public Result<PageView<SceneDTO>> pageBy(ScenePageByQry scenePageByQry) {
         PageView<Scene> pageView = sceneService.page(scenePageByQry);
+        if (pageView.getCount() == 0) {
+            return Result.success(PageView.of(0, Lists.newArrayList()));
+        }
         List<Long> sceneIds = pageView.getList().stream().map(Scene::getVidInUse).collect(Collectors.toList());
         List<SceneVersion> sceneVersions = sceneVersionService.listByIds(sceneIds);
         PageView<SceneDTO> sceneDTOPageView = PageTool.pageView(pageView, SceneDTO.class);
@@ -61,8 +66,8 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
     }
 
     @Override
-    public Result<SceneDynamicFromDTO> getDynamicFormBySceneId(SceneGetFromQry sceneGetFromQry) {
-        SceneDynamicFromDTO sceneDynamicFromDTO = sceneService.getDynamicFormBySceneId(sceneGetFromQry.getSceneId());
-        return Result.success(sceneDynamicFromDTO);
+    public Result<Map<String, Object>> getDynamicForm(SceneGetFromQry sceneGetFromQry) {
+        Map<String, Object> form = sceneService.getDynamicForm(sceneGetFromQry.getSceneId(), sceneGetFromQry.getType());
+        return Result.success(form);
     }
 }

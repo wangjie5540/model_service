@@ -1,12 +1,13 @@
 package com.digitforce.aip.config;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-
-import java.util.Properties;
+import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
  * 定时任务配置（单机部署建议删除此类和qrtz数据库表，默认走内存会最高效）
@@ -16,7 +17,7 @@ import javax.sql.DataSource;
 @Configuration
 public class ScheduleConfig {
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource) {
+    public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource, ApplicationContext applicationContext) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setDataSource(dataSource);
 
@@ -51,7 +52,9 @@ public class ScheduleConfig {
         factory.setOverwriteExistingJobs(true);
         // 设置自动启动，默认为true
         factory.setAutoStartup(true);
-
+        SpringBeanJobFactory jobFactory = new SpringBeanJobFactory();
+        jobFactory.setApplicationContext(applicationContext);
+        factory.setJobFactory(jobFactory);
         return factory;
     }
 }

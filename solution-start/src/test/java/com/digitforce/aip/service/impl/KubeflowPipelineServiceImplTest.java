@@ -1,6 +1,7 @@
 package com.digitforce.aip.service.impl;
 
 import com.digitforce.aip.config.KubeflowProperties;
+import com.digitforce.aip.enums.PipelineRunFlagEnum;
 import com.digitforce.aip.model.Pipeline;
 import com.digitforce.aip.model.PipelinePage;
 import com.digitforce.aip.service.KubeflowPipelineService;
@@ -30,7 +31,8 @@ public class KubeflowPipelineServiceImplTest extends BaseTest {
 
     @Test
     public void createRun() {
-        String runId = kubeflowPipelineService.createRun("3d49c45b-21bb-423f-bf62-59f31c496724", "test", "{}");
+        String runId = kubeflowPipelineService.createRun("3d49c45b-21bb-423f-bf62-59f31c496724", "test", "{}",
+            PipelineRunFlagEnum.TRAIN.name());
         Assert.assertNotNull(runId);
     }
 }

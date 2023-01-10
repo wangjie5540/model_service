@@ -1,14 +1,15 @@
 package com.digitforce.aip.dto.cmd;
 
-import com.digitforce.framework.api.dto.Command;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class SceneModifyCmd extends Command {
+public class SceneModifyCmd implements Serializable {
+    private static final long serialVersionUID = -232458767993813648L;
     private Long id;
     private String name;
-    private String algorithm;
+    private SceneVersionModifyCmd sceneVersion;
+    private String remark;
     private String description;
 }

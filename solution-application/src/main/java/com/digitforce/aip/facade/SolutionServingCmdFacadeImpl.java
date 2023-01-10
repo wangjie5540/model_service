@@ -1,17 +1,16 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.aip.config.KafkaProperties;
-import com.digitforce.aip.domain.SolutionServing;
-import com.digitforce.aip.domain.SolutionServingStatusDTO;
 import com.digitforce.aip.dto.cmd.SolutionServingAddCmd;
-import com.digitforce.aip.dto.cmd.SolutionServingDeleteCmd;
-import com.digitforce.aip.enums.StatusChangeEnum;
-import com.digitforce.aip.service.cmd.SolutionServingCmdService;
-import com.digitforce.aip.utils.ApplicationUtil;
+import com.digitforce.aip.entity.Solution;
+import com.digitforce.aip.entity.SolutionServing;
+import com.digitforce.aip.enums.StageEnum;
+import com.digitforce.aip.service.ISolutionService;
+import com.digitforce.aip.service.ISolutionServingService;
+import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.api.exception.BizException;
+import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,35 +26,31 @@ import javax.annotation.Resource;
 @RestController
 public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
     @Resource
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    private ISolutionServingService solutionServingService;
     @Resource
-    private SolutionServingCmdService solutionServingCmdService;
-    @Autowired(required = false)
-    private KafkaProperties kafkaProperties;
+    private ISolutionService solutionService;
+    @Resource
+    private TemplateComponent templateComponent;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public Result add(SolutionServingAddCmd solutionServingAddCmd) {
         SolutionServing solutionServing = ConvertTool.convert(solutionServingAddCmd, SolutionServing.class);
-        if (solutionServing.getSelection() != null) {
-            solutionServing.getSelection().forEach(tableSelection -> tableSelection.setFilterSql(ApplicationUtil.filterToSql(tableSelection.getFilter())));
+        Solution solution = solutionService.getById(solutionServingAddCmd.getSolutionId());
+        if (solution == null) {
+            throw new BizException("方案不存在");
         }
-        solutionServingCmdService.save(solutionServing);
-        SolutionServingStatusDTO solutionServingStatusDTO = new SolutionServingStatusDTO();
-        solutionServingStatusDTO.setStatus(StatusChangeEnum.ADD);
-        solutionServingStatusDTO.setSolutionServing(solutionServing);
-        kafkaTemplate.send(kafkaProperties.getSolutionServingStatusTopic(), solutionServingStatusDTO);
-        return Result.success(solutionServing.getId());
-    }
-
-    @Override
-    public Result delete(SolutionServingDeleteCmd solutionServingDeleteCmd) {
-        SolutionServing solutionServing = solutionServingCmdService.getById(solutionServingDeleteCmd.getServingId());
-        solutionServingCmdService.removeById(solutionServingDeleteCmd.getServingId());
-        SolutionServingStatusDTO solutionServingStatusDTO = new SolutionServingStatusDTO();
-        solutionServingStatusDTO.setStatus(StatusChangeEnum.DELETE);
-        solutionServingStatusDTO.setSolutionServing(solutionServing);
-        kafkaTemplate.send(kafkaProperties.getSolutionServingStatusTopic(), solutionServingStatusDTO);
+        solutionServing.setPipelineId(solution.getPipelineId());
+        solutionServing.setPipelineName(solution.getPipelineName());
+        solutionServing.setPipelineTemplate(
+                templateComponent.getPipelineTemplate(solution.getPipelineName(), StageEnum.SERVING));
+        solutionServing.setTemplateParams(solutionServingAddCmd.getTemplateParams());
+        solutionServing.setSceneName(solution.getSceneName());
+        solutionServing.setSceneType(solution.getSceneType());
+        solutionServing.setSolutionTitle(solution.getTitle());
+        solutionServing.setCreateUser(TenantContext.tenant().getUserAccount());
+        solutionServing.setUpdateUser(TenantContext.tenant().getUserAccount());
+        solutionServingService.save(solutionServing);
         return Result.success();
     }
 }

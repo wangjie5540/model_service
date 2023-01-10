@@ -1,0 +1,14 @@
+{
+    "sample_select": {
+        "event_code_buy": "${event_code_buy}",
+        "pos_sample_proportion": ${sample_select__pos_sample_proportion}
+    },
+    "feature_create": {
+        "event_code_buy": "${event_code_buy}"
+    },
+    "lookalike": {
+        "dnn_dropout": ${lookalike__dnn_dropout},
+        "batch_size": ${lookalike__batch_size},
+        "lr": ${lookalike__lr}
+    }
+}

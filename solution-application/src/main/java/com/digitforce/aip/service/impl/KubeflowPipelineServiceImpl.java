@@ -5,7 +5,6 @@ import com.digitforce.aip.config.KubeflowProperties;
 import com.digitforce.aip.enums.RunStatusEnum;
 import com.digitforce.aip.model.Pipeline;
 import com.digitforce.aip.model.PipelinePage;
-import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.KubeflowPipelineService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,6 @@ import javax.annotation.Resource;
 public class KubeflowPipelineServiceImpl implements KubeflowPipelineService {
     @Resource
     private KubeflowProperties kubeflowProperties;
-    @Resource
-    private ISolutionRunService solutionRunService;
 
     @Override
     public PipelinePage pageByPipeline(Integer pageSize) {
@@ -32,14 +29,15 @@ public class KubeflowPipelineServiceImpl implements KubeflowPipelineService {
     }
 
     @Override
-    public String createRun(String pipelineId, String runName, String pipelineParams) {
+    public String createRun(String pipelineId, String runName, String pipelineParams, String flag) {
         return KubeflowHelper.createRun(
             kubeflowProperties.getHost(),
             kubeflowProperties.getPort(),
             kubeflowProperties.getExperimentId(),
             pipelineId,
             runName,
-            pipelineParams
+            pipelineParams,
+            flag
         );
     }
 

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("scene_version")
+@TableName(value = "scene_version", autoResultMap = true)
 public class SceneVersion extends AggregateRoot<Long> implements Serializable {
 
     private static final long serialVersionUID = 8452170699118419289L;

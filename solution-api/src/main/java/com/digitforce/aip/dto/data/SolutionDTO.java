@@ -14,7 +14,11 @@ public class SolutionDTO {
     private String title;
     @Schema(description = "方案描述")
     private String description;
-    @Schema(description = "场景id")
+    @Schema(description = "表单信息")
+    private Object formInfo;
+    @Schema(description = "自动调参开关")
+    private Boolean automl;
+    @Schema(description = "场景Id")
     private Long sceneId;
     @Schema(description = "场景名称")
     private String sceneName;
@@ -22,7 +26,7 @@ public class SolutionDTO {
     private String system;
     @Schema(description = "时间表达式")
     private String cron;
-    @Schema(description = "时间描述，用于前提反显")
+    @Schema(description = "时间描述，用于前端反显")
     private String cronDesc;
     @Schema(description = "状态")
     private SolutionStatusEnum status;

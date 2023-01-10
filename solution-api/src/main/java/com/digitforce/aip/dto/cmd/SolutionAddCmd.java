@@ -1,9 +1,7 @@
 package com.digitforce.aip.dto.cmd;
 
-import com.digitforce.framework.api.dto.Command;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.Map;
 
@@ -16,16 +14,15 @@ import java.util.Map;
  */
 @Schema(description = "新增方案实体类")
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class SolutionAddCmd extends Command {
-    private static final long serialVersionUID = -4779538904025837917L;
+public class SolutionAddCmd {
     private String title;
     private Long sceneId;
     private String sceneName;
     private String system;
     private String description;
-    private Map<String, Object> pipelineParams;
-    private boolean isAutoML;
+    private Map<String, Object> formInfo;
+    private Map<String, Object> templateParams;
+    private boolean automl;
     private String pipelineId;
     private String pipelineName;
 }

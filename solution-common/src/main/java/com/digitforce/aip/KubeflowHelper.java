@@ -159,7 +159,8 @@ public class KubeflowHelper {
         String experimentId,
         String pipelineId,
         String runName,
-        String globalParams
+        String globalParams,
+        String flag
     ) {
         login(host, port);
         List<Map<String, Object>> pipelineParameters = new ArrayList<>();
@@ -167,6 +168,10 @@ public class KubeflowHelper {
         // 所有的pipeline都需要传递json字符串形式的global_params参数
         parameter.put("name", "global_params");
         parameter.put("value", globalParams);
+        pipelineParameters.add(parameter);
+        parameter = new HashMap<>();
+        parameter.put("name", "flag");
+        parameter.put("value", flag);
         pipelineParameters.add(parameter);
         HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs", host, port))
             .body(generateBody(runName, experimentId, pipelineId, pipelineParameters));
