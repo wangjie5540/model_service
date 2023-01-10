@@ -20,7 +20,6 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <excludes>
-                        <exclude>*.xml</exclude>
                         <exclude>*.properties</exclude>
                         <exclude>*.yml</exclude>
                     </excludes>
