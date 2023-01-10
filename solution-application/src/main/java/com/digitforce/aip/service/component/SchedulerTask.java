@@ -118,68 +118,29 @@ public class SchedulerTask {
         TenantContext.destroy();
     }
 
-    //    @Scheduled(fixedRate = 20000)
-    public void patrolSolutionAutoMlStatus() {
+    @Scheduled(fixedRate = 20000)
+    public void patrolSolutionAutoMLStatus() {
         List<Solution> solutionList = solutionMapper.getSomeTuningRecordsWithoutTenant(20);
         solutionList.forEach(record -> {
+            TenantContext.init(record.getTenantId());
             // 检测自动调参是否完成
             AutoMLRunStatusEnum status = autoMLService.getStatus(record.getARunId());
-            switch (status) {
-                case Success:
-                    // TODO 保存最优模型
-                    List<BestParameter> autoMLResult = autoMLService.getAutoMLResult(record.getARunId());
-                    Map<String, Object> templateParams = record.getTemplateParams();
-                    autoMLResult.forEach(bestParameter -> {
-                        templateParams.put(StrUtil.format("{}__{}", "model", bestParameter.getName()),
-                                bestParameter.getValue());
-                    });
-                    Solution solution = new Solution();
-                    solution.setId(record.getId());
-                    solution.setTemplateParams(templateParams);
-                    break;
-                default:
-                    return;
+            if (status == AutoMLRunStatusEnum.Success) {
+                List<BestParameter> autoMLResult = autoMLService.getAutoMLResult(record.getARunId());
+                Map<String, Object> templateParams = solutionService.getById(record.getId()).getTemplateParams();
+                autoMLResult.forEach(bestParameter -> {
+                    templateParams.put(StrUtil.format("{}__{}", "model", bestParameter.getName()),
+                            bestParameter.getValue());
+                });
+                Solution solution = new Solution();
+                solution.setId(record.getId());
+                solution.setTemplateParams(templateParams);
+                solution.setStatus(SolutionStatusEnum.EXECUTING);
+                solutionService.updateById(solution);
+                solutionRunService.createRun(record, SolutionRunTypeEnum.DEBUG, templateParams);
             }
         });
-//        solutionList.forEach(record -> {
-//            // 检测自动调参任务状态
-//
-//            RunStatusEnum status = kubeflowPipelineService.getStatus(record.getPRunId());
-//            SolutionRun updateRecord = new SolutionRun();
-//            switch (status) {
-//                case Running:
-//                    return;
-//                case Succeeded:
-//                    ModelPackage modelPackage = parseModelPackage(record);
-//                    updateRecord.setPackageId(modelPackage.getId());
-//                    break;
-//                case Error:
-//                case Failed:
-//                    break;
-//                default:
-//                    log.error("未知的solution-run状态: {}", status);
-//            }
-//            updateRecord.setId(record.getId());
-//            updateRecord.setStatus(status);
-//            TenantContext.init(record.getTenantId());
-//            solutionRunService.updateById(updateRecord);
-//            if (record.getType() == SolutionRunTypeEnum.DEBUG) {
-//                Solution updateSolution = new Solution();
-//                updateSolution.setId(record.getSolutionId());
-//                switch (status) {
-//                    case Succeeded:
-//                        updateSolution.setStatus(SolutionStatusEnum.READY);
-//                        break;
-//                    case Failed:
-//                        updateSolution.setStatus(SolutionStatusEnum.ERROR);
-//                        break;
-//                    default:
-//                        log.error("unknown solutionRun status.[status={}]", record.getStatus());
-//                }
-//                solutionService.updateById(updateSolution);
-//            }
-//        });
-//        TenantContext.destroy();
+        TenantContext.destroy();
     }
 
     @SneakyThrows

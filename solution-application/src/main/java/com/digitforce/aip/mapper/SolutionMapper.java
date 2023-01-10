@@ -18,6 +18,6 @@ import java.util.List;
  */
 public interface SolutionMapper extends BaseMapper<Solution> {
     @InterceptorIgnore(tenantLine = "true")
-    @Select("select * from solution_run where status = 'TUNING' limit #{count}")
+    @Select("select * from solution where status = 'TUNING' limit #{count}")
     List<Solution> getSomeTuningRecordsWithoutTenant(@Param("count") int count);
 }

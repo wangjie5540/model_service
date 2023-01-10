@@ -15,7 +15,6 @@ import java.util.Map;
 @Schema(description = "新增方案实体类")
 @Data
 public class SolutionAddCmd {
-    private static final long serialVersionUID = -4779538904025837917L;
     private String title;
     private Long sceneId;
     private String sceneName;
