@@ -134,6 +134,11 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     /**
      * 删除标志
      */
+    private Boolean autoML;
+
+    /**
+     * 删除标志
+     */
     private Boolean deleted;
 
     /**
