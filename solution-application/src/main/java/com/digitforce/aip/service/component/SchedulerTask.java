@@ -118,7 +118,7 @@ public class SchedulerTask {
         TenantContext.destroy();
     }
 
-    @Scheduled(fixedRate = 20000)
+    //    @Scheduled(fixedRate = 20000)
     public void patrolSolutionAutoMlStatus() {
         List<Solution> solutionList = solutionMapper.getSomeTuningRecordsWithoutTenant(20);
         solutionList.forEach(record -> {

@@ -7,6 +7,7 @@ public class CommonConst {
     public static final String SWAGGER_TAG_PIPELINE_QRY = "kubeflow-pipeline查询接口";
     public static final String SWAGGER_TAG_SCENE_CMD = "场景命令接口";
     public static final String SWAGGER_TAG_SCENE_QRY = "场景查询接口";
+    public static final String SWAGGER_TAG_MODEL_QRY = "模型查询接口";
     public static final String SWAGGER_TAG_FILTER_QRY = "filter相关接口";
     public static final String SWAGGER_TAG_SOLUTION_CMD = "方案命令接口";
     public static final String SWAGGER_TAG_SOLUTION_QRY = "方案查询接口";

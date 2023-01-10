@@ -119,4 +119,87 @@ public class AutoMLServiceImplTest extends BaseTest {
         List<BestParameter> bestParameters = autoMLService.getAutoMLResult("509d2a76-0499-48e6-ae15-42015c4313bf");
         System.out.println(bestParameters);
     }
+
+    @Test
+    public void print() {
+        String automlParams = "{\n" +
+                "  \"automl_params\": {\n" +
+                "    \"experiment_name\": \"server-test-loss-warning\",\n" +
+                "    \"namespace\": \"kubeflow-user-example-com\",\n" +
+                "    \"algorithm_spec\": {\n" +
+                "      \"algorithm_name\": \"random\"\n" +
+                "    },\n" +
+                "    \"objective_spec\": {\n" +
+                "      \"type\": \"maximize\",\n" +
+                "      \"goal\": 0.99,\n" +
+                "      \"objective_metric_name\": \"test-auc\",\n" +
+                "      \"additional_metric_names\": [\n" +
+                "        \"test-logloss\"\n" +
+                "      ]\n" +
+                "    },\n" +
+                "    \"parameters\": [\n" +
+                "      {\n" +
+                "        \"feasible_space\": {\n" +
+                "          \"list\": [\n" +
+                "            \"5\",\n" +
+                "            \"4\",\n" +
+                "            \"3\"\n" +
+                "          ]\n" +
+                "        },\n" +
+                "        \"name\": \"max_depth\",\n" +
+                "        \"parameter_type\": \"categorical\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"feasible_space\": {\n" +
+                "          \"list\": [\n" +
+                "            \"128\",\n" +
+                "            \"256\"\n" +
+                "          ]\n" +
+                "        },\n" +
+                "        \"name\": \"n_estimators\",\n" +
+                "        \"parameter_type\": \"categorical\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"feasible_space\": {\n" +
+                "          \"list\": [\n" +
+                "            \"0.1\",\n" +
+                "            \"0.05\",\n" +
+                "            \"0.01\"\n" +
+                "          ]\n" +
+                "        },\n" +
+                "        \"name\": \"learning_rate\",\n" +
+                "        \"parameter_type\": \"categorical\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"feasible_space\": {\n" +
+                "          \"list\": [\n" +
+                "            \"0.1\",\n" +
+                "            \"1\",\n" +
+                "            \"100\"\n" +
+                "          ]\n" +
+                "        },\n" +
+                "        \"name\": \"scale_pos_weight\",\n" +
+                "        \"parameter_type\": \"categorical\"\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  \"pipeline_id\": \"298f656a-4f58-4398-8db0-4e3bd7436fc7\",\n" +
+                "  \"pipeline_params\": {\n" +
+                "    \"global_params\": {\n" +
+                "      \"sample_select\": {\n" +
+                "        \"active_before_days\": 3,\n" +
+                "        \"active_after_days\": 5\n" +
+                "      },\n" +
+                "      \"model\": {\n" +
+                "      },\n" +
+                "      \"feature_create\": {\n" +
+                "        \"active_before_days\": 3,\n" +
+                "        \"active_after_days\": 5\n" +
+                "      }\n" +
+                "    },\n" +
+                "    \"flag\": \"AUTOML\"\n" +
+                "  }\n" +
+                "}";
+        System.out.println(automlParams);
+    }
 }
