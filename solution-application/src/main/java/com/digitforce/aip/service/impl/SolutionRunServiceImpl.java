@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * <p>
@@ -68,10 +67,6 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
     public PageView<SolutionRun> page(SolutionRunPageByQry solutionRunPageByQry) {
         QueryWrapper<SolutionRun> queryWrapper =
                 new QueryWrapper<>(BeanUtil.toBean(solutionRunPageByQry.getClause(), SolutionRun.class));
-        Map<String, Object> map = BeanUtil.beanToMap(solutionRunPageByQry.getLikeClause(), true, true);
-        if (!Objects.isNull(map)) {
-            map.forEach(queryWrapper::like);
-        }
         Page<SolutionRun> page = PageUtil.page(solutionRunPageByQry);
         page = super.page(page, queryWrapper);
         return PageTool.pageView(page);
