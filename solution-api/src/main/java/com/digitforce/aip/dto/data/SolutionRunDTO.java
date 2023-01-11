@@ -10,4 +10,5 @@ public class SolutionRunDTO {
     private Long solutionId;
     private RunStatusEnum status;
     private LocalDateTime createTime;
+    private Float effect;
 }
