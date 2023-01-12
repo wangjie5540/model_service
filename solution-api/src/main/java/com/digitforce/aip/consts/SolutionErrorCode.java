@@ -10,7 +10,9 @@ import com.digitforce.framework.api.exception.ErrorCode;
  * @since 2022/06/05 15:16
  */
 public enum SolutionErrorCode implements ErrorCode {
-    NOT_FOUND_ERROR("NOT_FOUND", "方案没有找到");
+    SCENE_NAME_DUPLICATE("SCENE_NAME_DUPLICATE", "场景名称重复"),
+    SOLUTION_NOT_FOUND("SOLUTION_NOT_FOUND", "方案没有找到"),
+    ;
 
     private final String errCode;
     private final String errDesc;
