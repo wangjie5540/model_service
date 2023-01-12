@@ -1,6 +1,7 @@
 package com.digitforce.aip.facade;
 
 
+import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.cmd.SceneAddCmd;
 import com.digitforce.aip.dto.cmd.SceneDeleteCmd;
 import com.digitforce.aip.dto.cmd.SceneModifyCmd;
@@ -14,6 +15,7 @@ import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,7 +41,11 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
         sceneVersionService.save(sceneVersion);
         // 添加场景
         scene.setVidInUse(sceneVersion.getId());
-        sceneService.save(scene);
+        try {
+            sceneService.save(scene);
+        } catch (DuplicateKeyException e) {
+            throw BizException.of(SolutionErrorCode.SCENE_NAME_DUPLICATE);
+        }
         return Result.success();
     }
 
