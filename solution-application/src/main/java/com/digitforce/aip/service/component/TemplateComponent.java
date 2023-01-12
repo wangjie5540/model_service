@@ -5,16 +5,17 @@ import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
 import com.digitforce.aip.consts.CommonConst;
+import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.enums.StageEnum;
 import com.digitforce.component.config.api.dto.data.ConfigItemDTO;
 import com.digitforce.component.config.api.dto.qry.ConfigQry;
 import com.digitforce.component.config.api.facade.qry.ConfigQryFacade;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.api.exception.BizException;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * 模板组件
@@ -37,9 +38,13 @@ public class TemplateComponent {
 
 
     public String getPipelineParams(String pipelineTemplate, Map<String, Object> templateParams) {
-        TemplateEngine engine = TemplateUtil.createEngine();
-        Template template = engine.getTemplate(pipelineTemplate);
-        return template.render(templateParams);
+        try {
+            TemplateEngine engine = TemplateUtil.createEngine();
+            Template template = engine.getTemplate(pipelineTemplate);
+            return template.render(templateParams);
+        } catch (Exception e) {
+            throw BizException.of(SolutionErrorCode.TEMPLATE_PARAMS_ERROR);
+        }
     }
 
     public String getPipelineTemplate(String pipelineName, StageEnum stage) {

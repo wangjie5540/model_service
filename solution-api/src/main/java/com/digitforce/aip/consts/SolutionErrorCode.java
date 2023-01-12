@@ -11,6 +11,7 @@ import com.digitforce.framework.api.exception.ErrorCode;
  */
 public enum SolutionErrorCode implements ErrorCode {
     SCENE_NAME_DUPLICATE("SCENE_NAME_DUPLICATE", "场景名称重复"),
+    TEMPLATE_PARAMS_ERROR("TEMPLATE_PARAMS_ERROR", "模板参数错误，渲染异常"),
     SOLUTION_NOT_FOUND("SOLUTION_NOT_FOUND", "方案没有找到"),
     ;
 
