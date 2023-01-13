@@ -5,7 +5,6 @@ import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.entity.Solution;
-import com.digitforce.aip.mapper.OlapMapper;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.test.BaseTest;
 import com.google.common.collect.Maps;
@@ -19,8 +18,6 @@ import java.util.concurrent.TimeUnit;
 public class SolutionServiceImplTest extends BaseTest {
     @Resource
     private ISolutionService solutionService;
-    @Resource
-    private OlapMapper olapMapper;
 
     @Test
     public void createAndRun() throws InterruptedException {
@@ -75,11 +72,6 @@ public class SolutionServiceImplTest extends BaseTest {
         map.put("lookalike__lr", 0.01);
         String render = template.render(map);
         System.out.println(render);
-    }
-
-    @Test
-    public void starrocksTest() {
-        System.out.println(olapMapper.getColumn("aip", "item", "item_id"));
     }
 
     @Test

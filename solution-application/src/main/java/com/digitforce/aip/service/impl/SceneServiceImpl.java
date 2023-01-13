@@ -2,6 +2,7 @@ package com.digitforce.aip.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -11,7 +12,10 @@ import com.digitforce.aip.dto.data.SceneDynamicFromDTO;
 import com.digitforce.aip.dto.qry.ScenePageByQry;
 import com.digitforce.aip.entity.Scene;
 import com.digitforce.aip.entity.SceneVersion;
+import com.digitforce.aip.entity.StarrocksColumn;
 import com.digitforce.aip.enums.StageEnum;
+import com.digitforce.aip.mapper.OlapColumnMapper;
+import com.digitforce.aip.mapper.OlapMapper;
 import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.service.ISceneVersionService;
@@ -31,8 +35,11 @@ import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -51,6 +58,10 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     private ISceneVersionService sceneVersionService;
     @Resource
     private ObjectMapper objectMapper;
+    @Resource
+    private OlapColumnMapper olapColumnMapper;
+    @Resource
+    private OlapMapper olapMapper;
 
     @Override
     public PageView<Scene> page(ScenePageByQry scenePageByQry) {
@@ -92,7 +103,51 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         Yaml yaml = new Yaml();
         Map<String, Object> dynamicForm = yaml.load(configValue);
         String dynamicFormStr = objectMapper.writeValueAsString(dynamicForm);
-        return objectMapper.readValue(dynamicFormStr, new TypeReference<Map<String, Object>>() {
+        Map<String, Object> dynamicFormMap = objectMapper.readValue(dynamicFormStr, new TypeReference<Map<String,
+                Object>>() {
+        });
+        mergeDynamicFormDataSource(dynamicFormMap);
+        return dynamicFormMap;
+    }
+
+    @SuppressWarnings("all")
+    private void mergeDynamicFormDataSource(Map<String, Object> dynamicFormMap) {
+        List<Map<String, Object>> dataSourceList = (List<Map<String, Object>>) dynamicFormMap.get("dataSource");
+        if (Objects.isNull(dataSourceList) || dataSourceList.isEmpty()) {
+            return;
+        }
+        dataSourceList.forEach(dataSource -> {
+            String tableName = (String) dataSource.get("table_name");
+            String justTable = tableName.split("\\.")[1];
+            List<StarrocksColumn> starrocksColumns = olapColumnMapper.selectList(
+                    new LambdaQueryWrapper<StarrocksColumn>().eq(StarrocksColumn::getTableName, justTable));
+            Set<String> columnSet =
+                    starrocksColumns.stream().map(StarrocksColumn::getColumnName).collect(Collectors.toSet());
+            List<Map<String, Object>> columns = (List<Map<String, Object>>) dataSource.get("columns");
+            columns.forEach(column -> {
+                if (!columnSet.contains(column.get("name"))) {
+                    column.put("missing", true);
+                }
+            });
+            List<String> colmnNames =
+                    columns.stream().map(column -> (String) column.get("name")).collect(Collectors.toList());
+            String columnJoin = StrUtil.join(",", colmnNames);
+            Map<String, Object> record = olapMapper.selectOne(tableName, columnJoin);
+            if (Objects.isNull(record)) {
+                columns.forEach(column -> {
+                    column.put("missing", true);
+                });
+            } else {
+                record.forEach((key, value) -> {
+                    if (Objects.isNull(value)) {
+                        columns.forEach(column -> {
+                            if (key.equals(column.get("name"))) {
+                                column.put("missing", true);
+                            }
+                        });
+                    }
+                });
+            }
         });
     }
 
