@@ -31,7 +31,7 @@ public class ModelQryFacadeImpl implements ModelQryFacade {
     }
 
     @Override
-    public Result<PageView<ModelDTO>> pageBy(ModelPageByQry modelPageByQry) {
+    public Result<PageView<ModelDTO>> modelPageBy(ModelPageByQry modelPageByQry) {
         PageView<Model> solutionPageView = modelService.page(modelPageByQry);
         PageView<ModelDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
                 ModelDTO.class);

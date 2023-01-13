@@ -34,7 +34,7 @@ spring:
             connection-timeout: 30000
             connection-test-query: SELECT 1
         olap:
-          url: jdbc:mysql://${digitforce.olap.fe-addr}?failOverReadOnly=false
+          url: jdbc:mysql://${digitforce.olap.fe-addr}/information_schema?failOverReadOnly=false
           username: ${digitforce.olap.username}
           password: ${digitforce.olap.password}
           driver-class-name: ${digitforce.olap.driver:com.mysql.cj.jdbc.Driver}
