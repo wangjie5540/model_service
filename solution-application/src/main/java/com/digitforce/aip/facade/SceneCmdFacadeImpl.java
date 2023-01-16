@@ -1,6 +1,7 @@
 package com.digitforce.aip.facade;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.cmd.SceneAddCmd;
 import com.digitforce.aip.dto.cmd.SceneDeleteCmd;
@@ -8,9 +9,11 @@ import com.digitforce.aip.dto.cmd.SceneModifyCmd;
 import com.digitforce.aip.dto.cmd.SceneStatusCmd;
 import com.digitforce.aip.entity.Scene;
 import com.digitforce.aip.entity.SceneVersion;
+import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.enums.SceneStatusEnum;
 import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.service.ISceneVersionService;
+import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
@@ -27,6 +30,8 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
     private ISceneService sceneService;
     @Resource
     private ISceneVersionService sceneVersionService;
+    @Resource
+    private ISolutionService solutionService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -53,10 +58,14 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
     public Result delete(SceneDeleteCmd sceneDeleteCmd) {
         Scene scene = sceneService.getById(sceneDeleteCmd.getId());
         if (scene == null) {
-            throw new BizException("场景不存在");
+            throw BizException.of(SolutionErrorCode.SCENE_NOT_EXIST);
         }
         if (scene.getStatus() == SceneStatusEnum.ONLINE) {
-            throw new BizException("场景已上线，不能删除");
+            throw BizException.of(SolutionErrorCode.SCENE_IS_ONLINE);
+        }
+        long count = solutionService.count(new LambdaQueryWrapper<Solution>().eq(Solution::getSceneId, scene.getId()));
+        if (count > 0) {
+            throw BizException.of(SolutionErrorCode.SCENE_HAS_SOLUTION);
         }
         sceneService.removeById(sceneDeleteCmd.getId());
         return Result.success();
