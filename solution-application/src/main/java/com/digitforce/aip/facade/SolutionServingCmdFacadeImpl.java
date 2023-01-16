@@ -1,8 +1,10 @@
 package com.digitforce.aip.facade;
 
+import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.cmd.SolutionServingAddCmd;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionServing;
+import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.enums.StageEnum;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.ISolutionServingService;
@@ -38,7 +40,10 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
         SolutionServing solutionServing = ConvertTool.convert(solutionServingAddCmd, SolutionServing.class);
         Solution solution = solutionService.getById(solutionServingAddCmd.getSolutionId());
         if (solution == null) {
-            throw new BizException("方案不存在");
+            throw BizException.of(SolutionErrorCode.SOLUTION_NOT_FOUND);
+        }
+        if (solution.getStatus() != SolutionStatusEnum.PUBLISHED) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_NOT_PUBLISHED);
         }
         solutionServing.setPipelineId(solution.getPipelineId());
         solutionServing.setPipelineName(solution.getPipelineName());
