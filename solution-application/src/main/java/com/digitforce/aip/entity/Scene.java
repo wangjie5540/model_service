@@ -100,7 +100,7 @@ public class Scene implements Serializable {
      * 删除标志
      */
     @TableLogic(value = "0", delval = "id")
-    private String deleted;
+    private Long deleted;
 
     /**
      * 创建时间
