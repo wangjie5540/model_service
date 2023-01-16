@@ -2,10 +2,10 @@ package com.digitforce.aip.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.digitforce.aip.enums.SceneStatusEnum;
 import com.digitforce.aip.enums.SceneTypeEnum;
-import com.digitforce.framework.domain.AggregateRoot;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,15 +21,20 @@ import java.time.LocalDateTime;
  * @since 2022-12-09
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @TableName(value = "scene", autoResultMap = true)
-public class Scene extends AggregateRoot<Long> implements Serializable {
+public class Scene implements Serializable {
     private static final long serialVersionUID = 2966524253410979719L;
     /**
      * 主键id
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
+
+    /**
+     * 租户id
+     */
+    private Integer tenantId;
 
     /**
      * 场景名称
@@ -90,6 +95,12 @@ public class Scene extends AggregateRoot<Long> implements Serializable {
      * 场景状态
      */
     private SceneStatusEnum status;
+
+    /**
+     * 删除标志
+     */
+    @TableLogic(value = "0", delval = "id")
+    private String deleted;
 
     /**
      * 创建时间
