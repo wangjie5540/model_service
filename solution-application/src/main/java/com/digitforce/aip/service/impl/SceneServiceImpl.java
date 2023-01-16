@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.digitforce.aip.consts.CommonConst;
+import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.cmd.SceneModifyCmd;
 import com.digitforce.aip.dto.data.SceneDynamicFromDTO;
 import com.digitforce.aip.dto.qry.ScenePageByQry;
@@ -106,7 +107,11 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         Map<String, Object> dynamicFormMap = objectMapper.readValue(dynamicFormStr, new TypeReference<Map<String,
                 Object>>() {
         });
-        mergeDynamicFormDataSource(dynamicFormMap);
+        try {
+            mergeDynamicFormDataSource(dynamicFormMap);
+        } catch (Exception e) {
+            throw BizException.of(SolutionErrorCode.SCENE_DATASOURCE_ERROR);
+        }
         return dynamicFormMap;
     }
 
