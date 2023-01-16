@@ -3,9 +3,9 @@ package com.digitforce.aip.service.impl;
 import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.entity.Solution;
-import com.digitforce.aip.mapper.OlapMapper;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.test.BaseTest;
 import com.google.common.collect.Maps;
@@ -19,8 +19,6 @@ import java.util.concurrent.TimeUnit;
 public class SolutionServiceImplTest extends BaseTest {
     @Resource
     private ISolutionService solutionService;
-    @Resource
-    private OlapMapper olapMapper;
 
     @Test
     public void createAndRun() throws InterruptedException {
@@ -78,13 +76,14 @@ public class SolutionServiceImplTest extends BaseTest {
     }
 
     @Test
-    public void starrocksTest() {
-        System.out.println(olapMapper.getColumn("aip", "item", "item_id"));
-    }
-
-    @Test
     public void list() {
         List<Solution> list = solutionService.list();
         System.out.println(list);
+    }
+
+    @Test
+    public void count() {
+        long count = solutionService.count(new LambdaQueryWrapper<Solution>().eq(Solution::getSceneId, 30L));
+        System.out.println(count);
     }
 }

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class SolutionRunDTO {
     private Long solutionId;
+    private Long packageId;
     private RunStatusEnum status;
     private LocalDateTime createTime;
-    private Float effect;
 }

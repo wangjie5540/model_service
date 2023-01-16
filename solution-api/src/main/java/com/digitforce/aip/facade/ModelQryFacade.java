@@ -28,5 +28,5 @@ public interface ModelQryFacade {
 
     @PostMapping("/solution/model/pageBy")
     @Operation(summary = "分页查询模型详情", tags = CommonConst.SWAGGER_TAG_MODEL_QRY)
-    Result<PageView<ModelDTO>> pageBy(@RequestBody ModelPageByQry modelPageByQry);
+    Result<PageView<ModelDTO>> modelPageBy(@RequestBody ModelPageByQry modelPageByQry);
 }
