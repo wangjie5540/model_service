@@ -26,6 +26,7 @@ import com.digitforce.aip.service.IServingInstanceService;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.KubeflowPipelineService;
+import com.digitforce.aip.utils.ApplicationUtil;
 import com.digitforce.framework.context.TenantContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -191,6 +192,8 @@ public class SchedulerTask {
             switch (status) {
                 case Succeeded:
                     updateRecord.setStatus(ServingInstanceStatusEnum.FINISHED);
+                    updateRecord.setResult(ApplicationUtil.generateServingResultUrl(record.getTenantId(),
+                            record.getId()));
                     break;
                 case Error:
                 case Failed:
