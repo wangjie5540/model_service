@@ -17,6 +17,7 @@ public enum SolutionErrorCode implements ErrorCode {
     SCENE_NOT_EXIST("SCENE_NOT_EXIST", "该场景不存在"),
     TEMPLATE_PARAMS_ERROR("TEMPLATE_PARAMS_ERROR", "模板参数错误，渲染异常"),
     SOLUTION_NOT_FOUND("SOLUTION_NOT_FOUND", "方案没有找到"),
+    SOLUTION_NOT_PUBLISHED("SOLUTION_NOT_PUBLISHED", "方案未发布"),
     ;
 
     private final String errCode;
