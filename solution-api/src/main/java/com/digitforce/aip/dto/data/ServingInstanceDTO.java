@@ -11,4 +11,5 @@ public class ServingInstanceDTO {
     private Long servingId;
     private ServingInstanceStatusEnum status;
     private LocalDateTime updateTime;
+    private String result;
 }
