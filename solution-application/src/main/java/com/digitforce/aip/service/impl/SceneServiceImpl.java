@@ -160,14 +160,15 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     public void updateScene(SceneModifyCmd sceneModifyCmd) {
         Scene scene = getById(sceneModifyCmd.getId());
         if (scene == null) {
-            throw new BizException("场景不存在");
+            throw BizException.of(SolutionErrorCode.SCENE_NOT_EXIST);
         }
+        Long vidInUse = scene.getVidInUse();
         scene = ConvertTool.convert(sceneModifyCmd, Scene.class);
         scene.setUpdateUser(TenantContext.tenant().getUserAccount());
         updateById(scene);
         if (sceneModifyCmd.getSceneVersion() != null) {
             SceneVersion sceneVersion = ConvertTool.convert(sceneModifyCmd.getSceneVersion(), SceneVersion.class);
-            sceneVersion.setId(scene.getVidInUse());
+            sceneVersion.setId(vidInUse);
             sceneVersion.setUpdateUser(TenantContext.tenant().getUserAccount());
             sceneVersionService.updateById(sceneVersion);
         }
