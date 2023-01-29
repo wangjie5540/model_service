@@ -11,6 +11,7 @@ import com.digitforce.framework.api.exception.ErrorCode;
  */
 public enum SolutionErrorCode implements ErrorCode {
     SCENE_NAME_DUPLICATE("SCENE_NAME_DUPLICATE", "场景名称重复"),
+    SCENE_CONFIG_ERROR("SCENE_CONFIG_ERROR", "场景配置异常"),
     SCENE_DATASOURCE_ERROR("SCENE_DATASOURCE_ERROR", "场景数据源配置异常"),
     SCENE_HAS_SOLUTION("SCENE_HAS_SOLUTION", "该场景下存在方案，无法删除"),
     SCENE_IS_ONLINE("SCENE_IS_ONLINE", "该场景已上线，无法删除"),
