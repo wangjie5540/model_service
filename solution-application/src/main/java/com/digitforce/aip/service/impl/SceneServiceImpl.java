@@ -100,7 +100,12 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         ConfigQry configQry = new ConfigQry();
         configQry.setSystemCode(CommonConst.SYSTEM_CODE);
         configQry.setConfigKey(StrUtil.format("{}_{}_dynamic", sceneVersion.getPipelineName(), type));
-        String configValue = configQryFacade.detail(configQry).getData().getConfigValue();
+        String configValue;
+        try {
+            configValue = configQryFacade.detail(configQry).getData().getConfigValue();
+        } catch (Exception e) {
+            throw BizException.of(SolutionErrorCode.SCENE_CONFIG_ERROR);
+        }
         Yaml yaml = new Yaml();
         Map<String, Object> dynamicForm = yaml.load(configValue);
         String dynamicFormStr = objectMapper.writeValueAsString(dynamicForm);
