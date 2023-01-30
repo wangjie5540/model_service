@@ -17,8 +17,10 @@ import com.digitforce.aip.service.IServingInstanceService;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.KubeflowPipelineService;
 import com.digitforce.aip.service.component.TemplateComponent;
+import com.digitforce.aip.utils.ApplicationUtil;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
+import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
 import com.google.common.collect.Maps;
@@ -72,9 +74,9 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         Long servingInstanceId = servingInstance.getId();
         Map<String, Object> templateParams = solutionServing.getTemplateParams() == null ? Maps.newHashMap() :
                 solutionServing.getTemplateParams();
-        // TODO 使用servingInstanceId目前是不能索引到训练产生的模型的，需要修改
-//        templateParams.put("serving_instance_id", servingInstanceId.toString());
-        templateParams.put("serving_instance_id", solutionRun.getId().toString());
+        // 填充预测模板参数
+        templateParams.put("result_file_name",
+                ApplicationUtil.generateServingResultFileName(TenantContext.tenantId(), servingInstance.getId()));
         String pipelineParams = templateComponent.getPipelineParams(solutionServing.getPipelineTemplate(),
                 templateParams);
         String pRunName = String.format("%s-%s", solution.getPipelineName(), servingInstanceId);

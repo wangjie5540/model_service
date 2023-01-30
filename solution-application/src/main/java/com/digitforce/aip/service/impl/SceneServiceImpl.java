@@ -100,7 +100,12 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         ConfigQry configQry = new ConfigQry();
         configQry.setSystemCode(CommonConst.SYSTEM_CODE);
         configQry.setConfigKey(StrUtil.format("{}_{}_dynamic", sceneVersion.getPipelineName(), type));
-        String configValue = configQryFacade.detail(configQry).getData().getConfigValue();
+        String configValue;
+        try {
+            configValue = configQryFacade.detail(configQry).getData().getConfigValue();
+        } catch (Exception e) {
+            throw BizException.of(SolutionErrorCode.SCENE_CONFIG_ERROR);
+        }
         Yaml yaml = new Yaml();
         Map<String, Object> dynamicForm = yaml.load(configValue);
         String dynamicFormStr = objectMapper.writeValueAsString(dynamicForm);
@@ -160,14 +165,15 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     public void updateScene(SceneModifyCmd sceneModifyCmd) {
         Scene scene = getById(sceneModifyCmd.getId());
         if (scene == null) {
-            throw new BizException("场景不存在");
+            throw BizException.of(SolutionErrorCode.SCENE_NOT_EXIST);
         }
+        Long vidInUse = scene.getVidInUse();
         scene = ConvertTool.convert(sceneModifyCmd, Scene.class);
         scene.setUpdateUser(TenantContext.tenant().getUserAccount());
         updateById(scene);
         if (sceneModifyCmd.getSceneVersion() != null) {
             SceneVersion sceneVersion = ConvertTool.convert(sceneModifyCmd.getSceneVersion(), SceneVersion.class);
-            sceneVersion.setId(scene.getVidInUse());
+            sceneVersion.setId(vidInUse);
             sceneVersion.setUpdateUser(TenantContext.tenant().getUserAccount());
             sceneVersionService.updateById(sceneVersion);
         }

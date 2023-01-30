@@ -18,4 +18,5 @@ public class CommonConst {
     public static final String SWAGGER_TAG_SERVING_INSTANCE_QRY = "服务实例查询接口";
     public static final String SWAGGER_TAG_ENUM_QRY = "枚举查询接口";
     public static final String SYSTEM_CODE = "aip";
+    public static final String COS_BASE_URL = "https://algorithm-1308011215.cos.ap-beijing.myqcloud.com";
 }
