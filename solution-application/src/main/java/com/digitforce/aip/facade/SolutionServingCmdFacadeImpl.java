@@ -60,7 +60,7 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
         solutionServing.setUpdateUser(TenantContext.tenant().getUserAccount());
         solutionServingService.save(solutionServing);
         // 增加统计数量
-        sceneMapper.increaseSolutionCount(solution.getSceneId());
+        sceneMapper.increaseServingCount(solution.getSceneId());
         return Result.success();
     }
 }
