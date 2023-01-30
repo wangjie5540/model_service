@@ -47,6 +47,8 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
         SolutionRun solutionRun = ConvertTool.convert(solution, SolutionRun.class);
         solutionRun.setSolutionId(solution.getId());
         solutionRun.setId(null);
+        solutionRun.setCreateTime(null);
+        solutionRun.setUpdateTime(null);
         solutionRun.setType(type);
         super.save(solutionRun);
         Long solutionRunId = solutionRun.getId();
