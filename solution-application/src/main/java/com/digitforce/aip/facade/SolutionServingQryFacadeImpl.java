@@ -26,8 +26,8 @@ public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
     @Override
     public Result<PageView<SolutionServingDTO>> pageBy(SolutionServingPageByQry solutionServingPageByQry) {
         PageView<SolutionServing> solutionServingPageView = solutionServingService.page(solutionServingPageByQry);
-        PageView<SolutionServingDTO> solutionDTOPageView = PageTool.pageView(solutionServingPageView,
+        PageView<SolutionServingDTO> solutionServingDTOPageView = PageTool.pageView(solutionServingPageView,
                 SolutionServingDTO.class);
-        return Result.success(solutionDTOPageView);
+        return Result.success(solutionServingDTOPageView);
     }
 }
