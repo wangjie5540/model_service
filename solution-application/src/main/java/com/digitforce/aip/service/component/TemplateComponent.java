@@ -37,6 +37,13 @@ public class TemplateComponent {
     }
 
 
+    /**
+     * 渲染pipeline参数
+     *
+     * @param pipelineTemplate 模板
+     * @param templateParams   模板参数
+     * @return pipeline参数
+     */
     public String getPipelineParams(String pipelineTemplate, Map<String, Object> templateParams) {
         try {
             TemplateEngine engine = TemplateUtil.createEngine();
