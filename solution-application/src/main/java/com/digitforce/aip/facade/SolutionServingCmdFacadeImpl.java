@@ -6,6 +6,7 @@ import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.enums.StageEnum;
+import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.aip.service.component.TemplateComponent;
@@ -33,6 +34,8 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
     private ISolutionService solutionService;
     @Resource
     private TemplateComponent templateComponent;
+    @Resource
+    private SceneMapper sceneMapper;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
@@ -56,6 +59,8 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
         solutionServing.setCreateUser(TenantContext.tenant().getUserAccount());
         solutionServing.setUpdateUser(TenantContext.tenant().getUserAccount());
         solutionServingService.save(solutionServing);
+        // 增加统计数量
+        sceneMapper.increaseSolutionCount(solution.getSceneId());
         return Result.success();
     }
 }
