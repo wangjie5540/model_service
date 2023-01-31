@@ -2,6 +2,7 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.data.SolutionServingDTO;
+import com.digitforce.aip.dto.qry.SolutionServingGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionServingPageByQry;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
@@ -23,4 +24,8 @@ public interface SolutionServingQryFacade {
     @PostMapping("/solution/solutionServing/pageBy")
     @Operation(summary = "方案服务分页查询", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_QRY)
     Result<PageView<SolutionServingDTO>> pageBy(@RequestBody SolutionServingPageByQry solutionServingPageByQry);
+
+    @PostMapping("/solution/solutionServing/getById")
+    @Operation(summary = "根据Id获取方案服务", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_QRY)
+    Result<SolutionServingDTO> getById(@RequestBody SolutionServingGetByIdQry solutionServingGetByIdQry);
 }
