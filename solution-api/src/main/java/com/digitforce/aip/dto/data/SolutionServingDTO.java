@@ -26,8 +26,8 @@ public class SolutionServingDTO {
     private Long solutionId;
     @Schema(description = "场景id")
     private Long sceneId;
-    @Schema(description = "预测时间")
-    private String cronDesc;
+    @Schema(description = "表单信息")
+    private Object formInfo;
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
 }
