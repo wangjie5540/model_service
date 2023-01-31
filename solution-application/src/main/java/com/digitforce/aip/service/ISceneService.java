@@ -8,8 +8,6 @@ import com.digitforce.aip.entity.Scene;
 import com.digitforce.aip.enums.StageEnum;
 import com.digitforce.framework.api.dto.PageView;
 
-import java.util.Map;
-
 /**
  * <p>
  * 场景表 服务类
@@ -23,7 +21,7 @@ public interface ISceneService extends IService<Scene> {
 
     SceneDynamicFromDTO getDynamicFormBySceneId(Long sceneId);
 
-    Map<String, Object> getDynamicForm(Long sceneId, StageEnum type);
+    Object getDynamicForm(Long sceneId, StageEnum type);
 
     void updateScene(SceneModifyCmd sceneModifyCmd);
 }
