@@ -17,6 +17,7 @@ public enum SolutionErrorCode implements ErrorCode {
     SCENE_IS_ONLINE("SCENE_IS_ONLINE", "该场景已上线，无法删除"),
     SCENE_NOT_EXIST("SCENE_NOT_EXIST", "该场景不存在"),
     TEMPLATE_PARAMS_ERROR("TEMPLATE_PARAMS_ERROR", "模板参数错误，渲染异常"),
+    TEMPLATE_NOT_EXIST("TEMPLATE_NOT_EXIST", "模板不存在"),
     SOLUTION_NOT_FOUND("SOLUTION_NOT_FOUND", "方案没有找到"),
     SOLUTION_NOT_PUBLISHED("SOLUTION_NOT_PUBLISHED", "方案未发布"),
     ;
