@@ -43,4 +43,18 @@ public class KubeflowHelperTest {
                 123, triggerRunCmd);
         System.out.println(runId);
     }
+
+    @Test
+    public void createRun() {
+        String train = KubeflowHelper.createRun(
+                kubeflowProperties.getHost(),
+                kubeflowProperties.getPort(),
+                kubeflowProperties.getExperimentId(),
+                "6f6da3aa-423c-4104-9d30-6832af2aca2a",
+                "wtg-test-run1",
+                "{}",
+                "TRAIN"
+        );
+        System.out.println(train);
+    }
 }

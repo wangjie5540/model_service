@@ -60,6 +60,9 @@ public class TemplateComponent {
         configQry.setSystemCode(CommonConst.SYSTEM_CODE);
         Result<ConfigItemDTO> detail = configQryFacade.detail(configQry);
         ConfigItemDTO configItemDTO = detail.getData();
+        if (configItemDTO == null) {
+            throw BizException.of(SolutionErrorCode.TEMPLATE_NOT_EXIST);
+        }
         return configItemDTO.getConfigValue();
     }
 }
