@@ -88,8 +88,13 @@ public class SchedulerTask {
                 case Running:
                     return;
                 case Succeeded:
-                    ModelPackage modelPackage = parseModelPackage(record);
-                    updateRecord.setPackageId(modelPackage.getId());
+                    try {
+                        ModelPackage modelPackage = parseModelPackage(record);
+                        updateRecord.setPackageId(modelPackage.getId());
+                    } catch (Exception e) {
+                        log.error("解析modelPackage失败", e);
+                        status = RunStatusEnum.Failed;
+                    }
                     break;
                 case Error:
                 case Failed:
