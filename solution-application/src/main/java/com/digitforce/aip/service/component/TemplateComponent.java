@@ -1,9 +1,6 @@
 package com.digitforce.aip.service.component;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.template.Template;
-import cn.hutool.extra.template.TemplateEngine;
-import cn.hutool.extra.template.TemplateUtil;
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.enums.StageEnum;
@@ -12,9 +9,12 @@ import com.digitforce.component.config.api.dto.qry.ConfigQry;
 import com.digitforce.component.config.api.facade.qry.ConfigQryFacade;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.api.exception.BizException;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.StringWriter;
 import java.util.Map;
 
 /**
@@ -31,9 +31,7 @@ public class TemplateComponent {
 
     public String getPipelineParams(String pipelineName, StageEnum stage, Map<String, Object> templateParams) {
         String pipelineTemplate = getPipelineTemplate(pipelineName, stage);
-        TemplateEngine engine = TemplateUtil.createEngine();
-        Template template = engine.getTemplate(pipelineTemplate);
-        return template.render(templateParams);
+        return getPipelineParams(pipelineTemplate, templateParams);
     }
 
 
@@ -45,10 +43,14 @@ public class TemplateComponent {
      * @return pipeline参数
      */
     public String getPipelineParams(String pipelineTemplate, Map<String, Object> templateParams) {
+        Configuration configuration = new Configuration(Configuration.VERSION_2_3_30);
+        configuration.setNumberFormat("0.#####");
         try {
-            TemplateEngine engine = TemplateUtil.createEngine();
-            Template template = engine.getTemplate(pipelineTemplate);
-            return template.render(templateParams);
+            Template template = new Template("template", pipelineTemplate,
+                    configuration);
+            StringWriter writer = new StringWriter();
+            template.process(templateParams, writer);
+            return writer.toString();
         } catch (Exception e) {
             throw BizException.of(SolutionErrorCode.TEMPLATE_PARAMS_ERROR);
         }

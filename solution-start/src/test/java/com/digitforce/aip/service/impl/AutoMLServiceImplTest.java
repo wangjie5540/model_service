@@ -104,6 +104,7 @@ public class AutoMLServiceImplTest extends BaseTest {
                 "    \"flag\": \"AUTOML\"\n" +
                 "  }\n" +
                 "}";
+        System.out.println(automlParams);
         String taskId = autoMLService.createTask(automlParams);
         log.info("taskId: {}", taskId);
     }
