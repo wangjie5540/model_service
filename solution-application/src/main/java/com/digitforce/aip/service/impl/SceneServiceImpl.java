@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -116,6 +117,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
             try {
                 mergeDynamicFormDataSource(dynamicFormMap);
             } catch (Exception e) {
+                log.error(SolutionErrorCode.SCENE_DATASOURCE_ERROR.getErrDesc(), e);
                 throw BizException.of(SolutionErrorCode.SCENE_DATASOURCE_ERROR);
             }
             return dynamicFormMap;
@@ -144,7 +146,15 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
                 }
             });
             List<String> colmnNames =
-                    columns.stream().map(column -> (String) column.get("name")).collect(Collectors.toList());
+                    columns.stream().filter(new Predicate<Map<String, Object>>() {
+                        @Override
+                        public boolean test(Map<String, Object> stringObjectMap) {
+                            return !(boolean) stringObjectMap.getOrDefault("missing", false);
+                        }
+                    }).map(column -> (String) column.get("name")).collect(Collectors.toList());
+            if (colmnNames.isEmpty()) {
+                return;
+            }
             String columnJoin = StrUtil.join(",", colmnNames);
             Map<String, Object> record = olapMapper.selectOne(tableName, columnJoin);
             if (Objects.isNull(record)) {

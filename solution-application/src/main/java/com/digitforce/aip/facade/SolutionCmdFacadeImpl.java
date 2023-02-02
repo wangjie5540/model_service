@@ -1,13 +1,17 @@
 package com.digitforce.aip.facade;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
 import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
 import com.digitforce.aip.dto.cmd.SolutionUnPublishCmd;
 import com.digitforce.aip.entity.Solution;
+import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.service.ISolutionService;
+import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.api.exception.BizException;
 import lombok.SneakyThrows;
@@ -27,6 +31,8 @@ import javax.annotation.Resource;
 public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Resource
     private ISolutionService solutionService;
+    @Resource
+    private ISolutionServingService solutionServingService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -54,11 +60,16 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     public Result delete(SolutionDeleteCmd solutionDeleteCmd) {
         Solution solution = solutionService.getById(solutionDeleteCmd.getId());
         if (solution == null) {
-            throw new BizException("方案不存在");
+            throw BizException.of(SolutionErrorCode.SOLUTION_NOT_FOUND);
+        } else if (solution.getStatus() == SolutionStatusEnum.EXECUTING) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_EXECUTING);
+        } else if (solution.getStatus() == SolutionStatusEnum.PUBLISHED) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_PUBLISHED);
         }
-        if (solution.getStatus() == SolutionStatusEnum.EXECUTING
-                || solution.getStatus() == SolutionStatusEnum.PUBLISHED) {
-            throw new BizException("方案正在执行或已发布，不能删除");
+        long count = solutionServingService.count(
+                new LambdaQueryWrapper<SolutionServing>().eq(SolutionServing::getSolutionId, solution.getId()));
+        if (count > 0) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_HAS_SERVING);
         }
         solutionService.removeById(solutionDeleteCmd.getId());
         return Result.success();

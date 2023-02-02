@@ -20,6 +20,9 @@ public enum SolutionErrorCode implements ErrorCode {
     TEMPLATE_NOT_EXIST("TEMPLATE_NOT_EXIST", "模板不存在"),
     SOLUTION_NOT_FOUND("SOLUTION_NOT_FOUND", "方案没有找到"),
     SOLUTION_NOT_PUBLISHED("SOLUTION_NOT_PUBLISHED", "方案未发布"),
+    SOLUTION_PUBLISHED("SOLUTION_PUBLISHED", "方案已发布"),
+    SOLUTION_EXECUTING("SOLUTION_EXECUTING", "方案执行中"),
+    SOLUTION_HAS_SERVING("SOLUTION_HAS_SERVING", "方案已被服务使用"),
     ;
 
     private final String errCode;
