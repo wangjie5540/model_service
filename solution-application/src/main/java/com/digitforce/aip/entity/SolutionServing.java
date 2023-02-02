@@ -103,6 +103,7 @@ public class SolutionServing implements Serializable {
     /**
      * 表单信息
      */
+    @TableField(typeHandler = JacksonTypeHandler.class)
     private Object formInfo;
 
     /**
