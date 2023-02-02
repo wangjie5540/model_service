@@ -77,6 +77,7 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         // 填充预测模板参数
         templateParams.put("result_file_name",
                 ApplicationUtil.generateServingResultFileName(TenantContext.tenantId(), servingInstance.getId()));
+        templateParams.putAll(solution.getTemplateParams());
         String pipelineParams = templateComponent.getPipelineParams(solutionServing.getPipelineTemplate(),
                 templateParams);
         String pRunName = String.format("%s-%s", solution.getPipelineName(), servingInstanceId);

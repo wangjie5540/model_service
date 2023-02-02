@@ -50,7 +50,7 @@ public class KubeflowHelperTest {
                 kubeflowProperties.getHost(),
                 kubeflowProperties.getPort(),
                 kubeflowProperties.getExperimentId(),
-                "6f6da3aa-423c-4104-9d30-6832af2aca2a",
+                "e0e53e2b-4f71-42f1-a675-5eb1f39a1852",
                 "wtg-test-run1",
                 "{}",
                 "TRAIN"

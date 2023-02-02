@@ -2,6 +2,7 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.cmd.SolutionServingAddCmd;
+import com.digitforce.aip.dto.data.SolutionServingDTO;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.enums.SolutionStatusEnum;
@@ -39,7 +40,7 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public Result add(SolutionServingAddCmd solutionServingAddCmd) {
+    public Result<SolutionServingDTO> add(SolutionServingAddCmd solutionServingAddCmd) {
         SolutionServing solutionServing = ConvertTool.convert(solutionServingAddCmd, SolutionServing.class);
         Solution solution = solutionService.getById(solutionServingAddCmd.getSolutionId());
         if (solution == null) {
@@ -61,6 +62,7 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
         solutionServingService.save(solutionServing);
         // 增加统计数量
         sceneMapper.increaseServingCount(solution.getSceneId());
-        return Result.success();
+        SolutionServingDTO solutionServingDTO = ConvertTool.convert(solutionServing, SolutionServingDTO.class);
+        return Result.success(solutionServingDTO);
     }
 }
