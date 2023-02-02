@@ -103,7 +103,7 @@ public class SolutionServing implements Serializable {
     /**
      * 表单信息
      */
-    private String formInfo;
+    private Object formInfo;
 
     /**
      * 创建用户

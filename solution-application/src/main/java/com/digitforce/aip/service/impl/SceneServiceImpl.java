@@ -94,7 +94,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
 
     @Override
     @SneakyThrows
-    public Map<String, Object> getDynamicForm(Long sceneId, StageEnum type) {
+    public Object getDynamicForm(Long sceneId, StageEnum type) {
         Scene scene = super.getById(sceneId);
         SceneVersion sceneVersion = sceneVersionService.getById(scene.getVidInUse());
         ConfigQry configQry = new ConfigQry();
@@ -107,17 +107,21 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
             throw BizException.of(SolutionErrorCode.SCENE_CONFIG_ERROR);
         }
         Yaml yaml = new Yaml();
-        Map<String, Object> dynamicForm = yaml.load(configValue);
-        String dynamicFormStr = objectMapper.writeValueAsString(dynamicForm);
-        Map<String, Object> dynamicFormMap = objectMapper.readValue(dynamicFormStr, new TypeReference<Map<String,
-                Object>>() {
-        });
-        try {
-            mergeDynamicFormDataSource(dynamicFormMap);
-        } catch (Exception e) {
-            throw BizException.of(SolutionErrorCode.SCENE_DATASOURCE_ERROR);
+        if (type == StageEnum.TRAIN || type == StageEnum.AUTOML) {
+            Map<String, Object> dynamicForm = yaml.load(configValue);
+            String dynamicFormStr = objectMapper.writeValueAsString(dynamicForm);
+            Map<String, Object> dynamicFormMap = objectMapper.readValue(dynamicFormStr, new TypeReference<Map<String,
+                    Object>>() {
+            });
+            try {
+                mergeDynamicFormDataSource(dynamicFormMap);
+            } catch (Exception e) {
+                throw BizException.of(SolutionErrorCode.SCENE_DATASOURCE_ERROR);
+            }
+            return dynamicFormMap;
+        } else {
+            return yaml.load(configValue);
         }
-        return dynamicFormMap;
     }
 
     @SuppressWarnings("all")

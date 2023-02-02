@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -66,8 +65,8 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
     }
 
     @Override
-    public Result<Map<String, Object>> getDynamicForm(SceneGetFromQry sceneGetFromQry) {
-        Map<String, Object> form = sceneService.getDynamicForm(sceneGetFromQry.getSceneId(), sceneGetFromQry.getType());
+    public Result<Object> getDynamicForm(SceneGetFromQry sceneGetFromQry) {
+        Object form = sceneService.getDynamicForm(sceneGetFromQry.getSceneId(), sceneGetFromQry.getType());
         return Result.success(form);
     }
 }
