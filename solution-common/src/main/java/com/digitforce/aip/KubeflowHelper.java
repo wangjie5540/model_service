@@ -203,15 +203,10 @@ public class KubeflowHelper {
         paramsMap.put("name", name);
         paramsMap.put("description", "");
         Map<String, Object> pipelineSpecMap = new HashMap<>();
-        // TODO 临时注释掉
+        pipelineSpecMap.put("pipeline_id", pipelineId);
         pipelineSpecMap.put("parameters", pipelineParameters);
         paramsMap.put("pipeline_spec", pipelineSpecMap);
         List<Reference> referenceList = new ArrayList<>();
-        Reference pipelineRef = new Reference();
-        pipelineRef.key.id = pipelineId;
-        pipelineRef.key.type = "PIPELINE_VERSION";
-        pipelineRef.relationship = "CREATOR";
-        referenceList.add(pipelineRef);
         Reference experimentRef = new Reference();
         experimentRef.relationship = "OWNER";
         experimentRef.key.id = experimentId;
