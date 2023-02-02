@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -42,12 +43,18 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
         if (pageView.getCount() == 0) {
             return Result.success(PageView.of(0, Lists.newArrayList()));
         }
-        List<Long> sceneIds = pageView.getList().stream().map(Scene::getVidInUse).collect(Collectors.toList());
-        List<SceneVersion> sceneVersions = sceneVersionService.listByIds(sceneIds);
+        List<Long> versionIds = pageView.getList().stream().map(Scene::getVidInUse).collect(Collectors.toList());
+        List<SceneVersion> sceneVersions = sceneVersionService.listByIds(versionIds);
+        // 将sceneVersions转换为map
+        Map<Long, SceneVersion> sceneVersionMap = sceneVersions.stream()
+                .collect(Collectors.toMap(SceneVersion::getId, sceneVersion -> sceneVersion));
         PageView<SceneDTO> sceneDTOPageView = PageTool.pageView(pageView, SceneDTO.class);
-        for (int i = 0; i < sceneVersions.size(); i++) {
-            SceneVersion sceneVersion = sceneVersions.get(i);
-            SceneDTO sceneDTO = sceneDTOPageView.getList().get(i);
+        // 组织sceneDTO的map
+        Map<Long, SceneDTO> sceneDTOMap = sceneDTOPageView.getList().stream()
+                .collect(Collectors.toMap(SceneDTO::getId, sceneDTO -> sceneDTO));
+        for (Scene scene : pageView.getList()) {
+            SceneVersion sceneVersion = sceneVersionMap.get(scene.getVidInUse());
+            SceneDTO sceneDTO = sceneDTOMap.get(scene.getId());
             SceneVersionDTO sceneVersionDTO = ConvertTool.convert(sceneVersion, SceneVersionDTO.class);
             sceneDTO.setVersionInUse(sceneVersionDTO);
         }
