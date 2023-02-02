@@ -89,6 +89,10 @@ public class SceneCmdFacadeImpl implements SceneCmdFacade {
         if (scene.getStatus() == SceneStatusEnum.OFFLINE) {
             throw new BizException("场景已下线，不能重复下线");
         }
+        long count = solutionService.count(new LambdaQueryWrapper<Solution>().eq(Solution::getSceneId, scene.getId()));
+        if (count > 0) {
+            throw BizException.of(SolutionErrorCode.SCENE_HAS_SOLUTION);
+        }
         scene.setStatus(SceneStatusEnum.OFFLINE);
         scene.setUpdateUser(TenantContext.tenant().getUserAccount());
         sceneService.updateById(scene);
