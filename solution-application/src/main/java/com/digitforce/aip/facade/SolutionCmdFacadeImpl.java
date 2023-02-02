@@ -10,6 +10,7 @@ import com.digitforce.aip.dto.cmd.SolutionUnPublishCmd;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.enums.SolutionStatusEnum;
+import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.framework.api.dto.Result;
@@ -33,6 +34,8 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     private ISolutionService solutionService;
     @Resource
     private ISolutionServingService solutionServingService;
+    @Resource
+    private SceneMapper sceneMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -57,6 +60,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result delete(SolutionDeleteCmd solutionDeleteCmd) {
         Solution solution = solutionService.getById(solutionDeleteCmd.getId());
         if (solution == null) {
@@ -72,6 +76,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
             throw BizException.of(SolutionErrorCode.SOLUTION_HAS_SERVING);
         }
         solutionService.removeById(solutionDeleteCmd.getId());
+        sceneMapper.decreaseSolutionCount(solution.getSceneId());
         return Result.success();
     }
 
