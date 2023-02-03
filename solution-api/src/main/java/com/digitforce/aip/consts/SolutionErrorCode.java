@@ -23,6 +23,7 @@ public enum SolutionErrorCode implements ErrorCode {
     SOLUTION_PUBLISHED("SOLUTION_PUBLISHED", "方案已发布"),
     SOLUTION_EXECUTING("SOLUTION_EXECUTING", "方案执行中"),
     SOLUTION_HAS_SERVING("SOLUTION_HAS_SERVING", "方案已被服务使用"),
+    AUTO_ML_CREATE_TASK_ERROR("AUTO_ML_CREATE_TASK_ERROR", "自动机器学习创建任务失败"),
     ;
 
     private final String errCode;
