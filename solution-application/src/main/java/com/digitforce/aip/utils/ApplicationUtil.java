@@ -53,11 +53,11 @@ public class ApplicationUtil {
     }
 
     public static String generateServingResultFileName(Integer tenantId, Long servingInstanceId) {
-        return StrUtil.format("{}-{}", tenantId.toString(), servingInstanceId.toString());
+        return StrUtil.format("{}-{}.csv", tenantId.toString(), servingInstanceId.toString());
     }
 
     public static String generateServingResultUrl(Integer tenantId, Long servingInstanceId) {
-        String resultFileName = StrUtil.format("{}-{}", tenantId.toString(), servingInstanceId.toString());
+        String resultFileName = StrUtil.format("{}-{}.csv", tenantId.toString(), servingInstanceId.toString());
         return StrUtil.format("{}/{}", CommonConst.COS_BASE_URL, resultFileName);
     }
 }

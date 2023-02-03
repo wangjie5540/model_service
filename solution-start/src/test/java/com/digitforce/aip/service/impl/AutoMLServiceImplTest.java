@@ -28,7 +28,7 @@ public class AutoMLServiceImplTest extends BaseTest {
     public void createTask() {
         String automlParams = "{\n" +
                 "  \"automl_params\": {\n" +
-                "    \"experiment_name\": \"server-test-loss-warning\",\n" +
+                "    \"experiment_name\": \"server-test-lookalike\",\n" +
                 "    \"namespace\": \"kubeflow-user-example-com\",\n" +
                 "    \"algorithm_spec\": {\n" +
                 "      \"algorithm_name\": \"random\"\n" +
@@ -45,62 +45,78 @@ public class AutoMLServiceImplTest extends BaseTest {
                 "      {\n" +
                 "        \"feasible_space\": {\n" +
                 "          \"list\": [\n" +
-                "            \"5\",\n" +
-                "            \"4\",\n" +
-                "            \"3\"\n" +
-                "          ]\n" +
-                "        },\n" +
-                "        \"name\": \"max_depth\",\n" +
-                "        \"parameter_type\": \"categorical\"\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"feasible_space\": {\n" +
-                "          \"list\": [\n" +
                 "            \"128\",\n" +
                 "            \"256\"\n" +
                 "          ]\n" +
                 "        },\n" +
-                "        \"name\": \"n_estimators\",\n" +
+                "        \"name\": \"batch_size\",\n" +
+                "        \"parameter_type\": \"categorical\"\n" +
+                "      },\n" +
+                "      {\n" +
+                "        \"feasible_space\": {\n" +
+                "          \"list\": [\n" +
+                "            \"0.2\",\n" +
+                "            \"0.3\"\n" +
+                "          ]\n" +
+                "        },\n" +
+                "        \"name\": \"dnn_dropout\",\n" +
                 "        \"parameter_type\": \"categorical\"\n" +
                 "      },\n" +
                 "      {\n" +
                 "        \"feasible_space\": {\n" +
                 "          \"list\": [\n" +
                 "            \"0.1\",\n" +
-                "            \"0.05\",\n" +
                 "            \"0.01\"\n" +
                 "          ]\n" +
                 "        },\n" +
-                "        \"name\": \"learning_rate\",\n" +
-                "        \"parameter_type\": \"categorical\"\n" +
-                "      },\n" +
-                "      {\n" +
-                "        \"feasible_space\": {\n" +
-                "          \"list\": [\n" +
-                "            \"0.1\",\n" +
-                "            \"1\",\n" +
-                "            \"100\"\n" +
-                "          ]\n" +
-                "        },\n" +
-                "        \"name\": \"scale_pos_weight\",\n" +
+                "        \"name\": \"lr\",\n" +
                 "        \"parameter_type\": \"categorical\"\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
-                "  \"pipeline_id\": \"298f656a-4f58-4398-8db0-4e3bd7436fc7\",\n" +
+                "  \"pipeline_id\": \"e0e53e2b-4f71-42f1-a675-5eb1f39a1852\",\n" +
                 "  \"pipeline_params\": {\n" +
                 "    \"global_params\": {\n" +
-                "      \"sample_select\": {\n" +
-                "        \"active_before_days\": 3,\n" +
-                "        \"active_after_days\": 5\n" +
+                "      \"sample_select\":\n" +
+                "      {},\n" +
+                "      \"raw_user_feature\":\n" +
+                "      {\n" +
+                "          \"raw_user_feature_table_name\": \"algorithm.tmp_raw_user_feature_table_name\"\n" +
                 "      },\n" +
-                "      \"model\": {\n" +
+                "      \"raw_item_feature\":\n" +
+                "      {\n" +
+                "          \"raw_item_feature_table_name\": \"algorithm.tmp_raw_item_feature_table_name\"\n" +
                 "      },\n" +
-                "      \"feature_create\": {\n" +
-                "        \"active_before_days\": 3,\n" +
-                "        \"active_after_days\": 5\n" +
+                "      \"zq_feature_calculator\":\n" +
+                "      {\n" +
+                "          \"raw_user_feature_table_name\": \"algorithm.tmp_raw_user_feature_table_name\",\n" +
+                "          \"raw_item_feature_table_name\": \"algorithm.tmp_raw_item_feature_table_name\"\n" +
+                "      },\n" +
+                "      \"raw_sample2model_sample\":\n" +
+                "      {\n" +
+                "          \"model_sample_table_name\": \"algorithm.tmp_aip_model_sample\"\n" +
+                "      },\n" +
+                "      \"model_item_feature\":\n" +
+                "      {\n" +
+                "          \"model_item_feature_table_name\": \"algorithm.tmp_model_item_feature_table_name\"\n" +
+                "      },\n" +
+                "      \"model_user_feature\":\n" +
+                "      {\n" +
+                "          \"model_user_feature_table_name\": \"algorithm.tmp_model_user_feature_table_name\"\n" +
+                "      },\n" +
+                "      \"feature_create\":\n" +
+                "      {},\n" +
+                "      \"model\":\n" +
+                "      {\n" +
+                "          \"model_user_feature_table_name\": \"algorithm.tmp_model_user_feature_table_name\",\n" +
+                "          \"user_vec_table_name\": \"algorithm.tmp_user_vec_table_name\",\n" +
+                "      },\n" +
+                "      \"model_predict\":\n" +
+                "      {\n" +
+                "          \"output_file_name\": \"result.csv\",\n" +
+                "          \"user_vec_table_name\": \"algorithm.aip_zq_lookalike_user_vec\"\n" +
                 "      }\n" +
-                "    },\n" +
+                "  },\n" +
                 "    \"flag\": \"AUTOML\"\n" +
                 "  }\n" +
                 "}";
