@@ -35,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.fs.FileStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -78,6 +79,7 @@ public class SchedulerTask {
      * TODO 后续将切换为quartz
      */
     @Scheduled(fixedRate = 20000)
+    @Transactional(rollbackFor = Exception.class)
     public void patrolSolutionRunStatus() {
         List<SolutionRun> solutionRunList = solutionRunMapper.getSomeRunningRecordsWithoutTenant(20);
         solutionRunList.forEach(record -> {
@@ -125,6 +127,7 @@ public class SchedulerTask {
     }
 
     @Scheduled(fixedRate = 20000)
+    @Transactional(rollbackFor = Exception.class)
     public void patrolSolutionAutoMLStatus() {
         List<Solution> solutionList = solutionMapper.getSomeTuningRecordsWithoutTenant(20);
         solutionList.forEach(record -> {
@@ -185,6 +188,7 @@ public class SchedulerTask {
     }
 
     @Scheduled(fixedRate = 20000)
+    @Transactional(rollbackFor = Exception.class)
     public void patrolServingInstanceStatus() {
         List<ServingInstance> servingInstances = servingInstanceMapper.getSomeRunningRecordsWithoutTenant(20);
         servingInstances.forEach(record -> {
