@@ -1,6 +1,8 @@
 package com.digitforce.aip.utils;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
+import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.data.Condition;
 import com.digitforce.aip.dto.data.Filter;
 import com.digitforce.aip.enums.FunctionEnum;
@@ -48,5 +50,14 @@ public class ApplicationUtil {
                 queryWrapper.or(consumer);
             }
         }
+    }
+
+    public static String generateServingResultFileName(Integer tenantId, Long servingInstanceId) {
+        return StrUtil.format("{}-{}.csv", tenantId.toString(), servingInstanceId.toString());
+    }
+
+    public static String generateServingResultUrl(Integer tenantId, Long servingInstanceId) {
+        String resultFileName = StrUtil.format("{}-{}.csv", tenantId.toString(), servingInstanceId.toString());
+        return StrUtil.format("{}/{}", CommonConst.COS_BASE_URL, resultFileName);
     }
 }

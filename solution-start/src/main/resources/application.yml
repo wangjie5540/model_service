@@ -10,12 +10,48 @@ spring:
   profiles:
     active: @profileActive@
   datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://${db.host}:${db.port:3306}/${db.name}?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=UTC
-    username: ${db.username}
-    password: ${db.password}
-    hikari:
-      maximum-pool-size: ${db.max-active:10}
+    dynamic:
+      primary: mysql
+      strict: true
+      datasource:
+        mysql:
+          url: jdbc:mysql://${db.host}:${db.port:3306}/${db.name}?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=UTC
+          username: ${db.username}
+          password: ${db.password}
+          driver-class-name: ${digitforce.mysql.driver:com.mysql.cj.jdbc.Driver}
+          hikari:
+            # 最小空闲的连接数，Hikari默认10
+            min-idle: ${digitforce.mysql.connection.min-idle:10}
+            # 空闲连接存活最大时间，默认600000（10分钟）
+            idle-timeout: 180000
+            # 连接池最大连接数，Hikari默认10
+            max-pool-size: ${digitforce.mysql.connection.max-active:100}
+            # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+            is-auto-commit: true
+            # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+            max-lifetime: 1800000
+            # 数据库连接超时时间,默认30秒，即30000
+            connection-timeout: 30000
+            connection-test-query: SELECT 1
+        olap:
+          url: jdbc:mysql://${digitforce.olap.fe-addr}/information_schema?failOverReadOnly=false
+          username: ${digitforce.olap.username}
+          password: ${digitforce.olap.password}
+          driver-class-name: ${digitforce.olap.driver:com.mysql.cj.jdbc.Driver}
+          hikari:
+            # 最小空闲的连接数，Hikari默认10
+            min-idle: ${digitforce.olap.connection.min-idle:10}
+            # 空闲连接存活最大时间，默认600000（10分钟
+            idle-timeout: 180000
+            # 连接池最大连接数，Hikari默认10
+            max-pool-size: ${digitforce.olap.connection.max-active:100}
+            # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+            is-auto-commit: true
+            # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+            max-lifetime: 1800000
+            # 数据库连接超时时间,默认30秒，即30000
+            connection-timeout: 30000
+            connection-test-query: SELECT 1
   redis:
     cluster:
       nodes: ${redis.server-addr}
@@ -64,8 +100,6 @@ digitforce:
 server:
   port: 7030
 mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
       logic-delete-field: deleted

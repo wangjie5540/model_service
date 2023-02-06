@@ -33,4 +33,6 @@ gen
 hs_err_pid*
 *.lst
 solution-api/target
+**/target
+**/rebel.xml
 

@@ -1,13 +1,10 @@
 package com.digitforce.aip.facade;
 
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.lang.TypeReference;
-import com.digitforce.aip.domain.SolutionServing;
 import com.digitforce.aip.dto.data.SolutionServingDTO;
 import com.digitforce.aip.dto.qry.SolutionServingGetByIdQry;
 import com.digitforce.aip.dto.qry.SolutionServingPageByQry;
-import com.digitforce.aip.service.qry.SolutionServingQryService;
-import com.digitforce.framework.api.dto.PageQuery;
+import com.digitforce.aip.entity.SolutionServing;
+import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
@@ -26,23 +23,19 @@ import javax.annotation.Resource;
 @RestController
 public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
     @Resource
-    private SolutionServingQryService solutionServingQryService;
-
-    @Override
-
-    public Result<SolutionServingDTO> getById(SolutionServingGetByIdQry solutionServingGetByIdQry) {
-        SolutionServing solutionServing = solutionServingQryService.getById(solutionServingGetByIdQry.getId());
-        return Result.success(
-                solutionServing == null ? null : ConvertTool.convert(solutionServing, SolutionServingDTO.class));
-    }
+    private ISolutionServingService solutionServingService;
 
     @Override
     public Result<PageView<SolutionServingDTO>> pageBy(SolutionServingPageByQry solutionServingPageByQry) {
-        PageQuery<SolutionServing> pageQuery = Convert.convert(new TypeReference<PageQuery<SolutionServing>>() {
-        }, solutionServingPageByQry);
-        PageView<SolutionServing> solutionServingPageView = solutionServingQryService.pageBy(pageQuery);
+        PageView<SolutionServing> solutionServingPageView = solutionServingService.page(solutionServingPageByQry);
         PageView<SolutionServingDTO> solutionServingDTOPageView = PageTool.pageView(solutionServingPageView,
                 SolutionServingDTO.class);
         return Result.success(solutionServingDTOPageView);
+    }
+
+    @Override
+    public Result<SolutionServingDTO> getById(SolutionServingGetByIdQry solutionServingGetByIdQry) {
+        SolutionServing solutionServing = solutionServingService.getById(solutionServingGetByIdQry.getId());
+        return Result.success(ConvertTool.convert(solutionServing, SolutionServingDTO.class));
     }
 }

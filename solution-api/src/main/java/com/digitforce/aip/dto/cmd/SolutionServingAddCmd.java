@@ -1,12 +1,9 @@
 package com.digitforce.aip.dto.cmd;
 
-import com.digitforce.aip.dto.data.TableSelection;
-import com.digitforce.aip.enums.ServingTypeEnum;
-import com.digitforce.framework.api.dto.Command;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * 新增方案服务实体类
@@ -15,12 +12,12 @@ import java.util.List;
  * @version 1.0.0
  * @since 2022/05/31 15:41
  */
-@Schema(
-        description = "新增方案服务实体类"
-)
+@Schema(description = "新增方案服务实体类")
 @Data
-public class SolutionServingAddCmd extends Command {
+public class SolutionServingAddCmd {
+    private String title;
+    private Long sceneId;
     private Long solutionId;
-    private List<TableSelection> selection;
-    private ServingTypeEnum servingType;
+    private Object formInfo;
+    private Map<String, Object> templateParams;
 }
