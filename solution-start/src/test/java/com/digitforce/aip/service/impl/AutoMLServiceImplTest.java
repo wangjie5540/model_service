@@ -109,7 +109,7 @@ public class AutoMLServiceImplTest extends BaseTest {
                 "      \"model\":\n" +
                 "      {\n" +
                 "          \"model_user_feature_table_name\": \"algorithm.tmp_model_user_feature_table_name\",\n" +
-                "          \"user_vec_table_name\": \"algorithm.tmp_user_vec_table_name\",\n" +
+                "          \"user_vec_table_name\": \"algorithm.tmp_user_vec_table_name\"\n" +
                 "      },\n" +
                 "      \"model_predict\":\n" +
                 "      {\n" +
