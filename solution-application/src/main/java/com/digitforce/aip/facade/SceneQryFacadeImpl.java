@@ -56,6 +56,8 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
             SceneVersion sceneVersion = sceneVersionMap.get(scene.getVidInUse());
             SceneDTO sceneDTO = sceneDTOMap.get(scene.getId());
             SceneVersionDTO sceneVersionDTO = ConvertTool.convert(sceneVersion, SceneVersionDTO.class);
+            // TODO 目前产品端尚未设计版本的概念，所以这里默认版本为1
+            sceneVersionDTO.setId(1L);
             sceneDTO.setVersionInUse(sceneVersionDTO);
         }
         return Result.success(sceneDTOPageView);
@@ -66,6 +68,8 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
         Scene scene = sceneService.getById(sceneGetByIdQry.getId());
         SceneVersion sceneVersion = sceneVersionService.getById(scene.getVidInUse());
         SceneVersionDTO sceneVersionDTO = ConvertTool.convert(sceneVersion, SceneVersionDTO.class);
+        // TODO 目前产品端尚未设计版本的概念，所以这里默认版本为1
+        sceneVersionDTO.setId(1L);
         SceneDTO sceneDTO = ConvertTool.convert(scene, SceneDTO.class);
         sceneDTO.setVersionInUse(sceneVersionDTO);
         return Result.success(sceneDTO);
