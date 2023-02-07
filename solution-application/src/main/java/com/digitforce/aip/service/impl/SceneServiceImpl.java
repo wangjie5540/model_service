@@ -105,6 +105,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         try {
             configValue = configQryFacade.detail(configQry).getData().getConfigValue();
         } catch (Exception e) {
+            log.error(SolutionErrorCode.SCENE_CONFIG_ERROR.getErrDesc(), e);
             throw BizException.of(SolutionErrorCode.SCENE_CONFIG_ERROR);
         }
         Yaml yaml = new Yaml();
