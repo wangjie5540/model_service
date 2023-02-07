@@ -1,4 +1,4 @@
-package com.digitforce.aip;
+package com.digitforce.aip.utils;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
@@ -6,13 +6,14 @@ import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
-import com.digitforce.aip.model.Pipeline;
-import com.digitforce.aip.model.PipelinePage;
-import com.digitforce.aip.model.TaskDefineExtraDTO;
-import com.digitforce.aip.model.TriggerRunCmd;
-import com.digitforce.aip.utils.CommonUtils;
+import com.digitforce.aip.dto.data.Pipeline;
+import com.digitforce.aip.entity.PipelinePage;
+import com.digitforce.aip.entity.TaskDefineExtraDTO;
+import com.digitforce.aip.entity.TriggerRunCmd;
 import com.digitforce.framework.util.GsonUtil;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Data;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,9 @@ import java.util.Map;
 @UtilityClass
 @Slf4j
 public class KubeflowHelper {
-    private static final Gson gson = CommonUtils.getGson();
+    private static final Gson gson = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create();
     // https://digit-force.coding.net/p/ai-platform/km/spaces/73/pages/K-259
     // TODO 后续将优化kubeflow的账户系统，此处先写死
     public static final String KUBEFLOW_LOGIN_USER = "admin@example.com";

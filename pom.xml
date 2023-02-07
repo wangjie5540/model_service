@@ -25,7 +25,6 @@
         <module>solution-extension</module>
         <module>solution-extension-impl</module>
         <module>solution-start</module>
-        <module>solution-common</module>
     </modules>
 
     <repositories>

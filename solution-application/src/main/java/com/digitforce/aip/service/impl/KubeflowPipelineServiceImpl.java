@@ -1,11 +1,11 @@
 package com.digitforce.aip.service.impl;
 
-import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
+import com.digitforce.aip.dto.data.Pipeline;
+import com.digitforce.aip.entity.PipelinePage;
 import com.digitforce.aip.enums.RunStatusEnum;
-import com.digitforce.aip.model.Pipeline;
-import com.digitforce.aip.model.PipelinePage;
 import com.digitforce.aip.service.KubeflowPipelineService;
+import com.digitforce.aip.utils.KubeflowHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +25,19 @@ public class KubeflowPipelineServiceImpl implements KubeflowPipelineService {
     @Override
     public Pipeline getPipelineById(String pipelineId) {
         return KubeflowHelper.getPipelineDetail(kubeflowProperties.getHost(),
-            kubeflowProperties.getPort(), pipelineId);
+                kubeflowProperties.getPort(), pipelineId);
     }
 
     @Override
     public String createRun(String pipelineId, String runName, String pipelineParams, String flag) {
         return KubeflowHelper.createRun(
-            kubeflowProperties.getHost(),
-            kubeflowProperties.getPort(),
-            kubeflowProperties.getExperimentId(),
-            pipelineId,
-            runName,
-            pipelineParams,
-            flag
+                kubeflowProperties.getHost(),
+                kubeflowProperties.getPort(),
+                kubeflowProperties.getExperimentId(),
+                pipelineId,
+                runName,
+                pipelineParams,
+                flag
         );
     }
 

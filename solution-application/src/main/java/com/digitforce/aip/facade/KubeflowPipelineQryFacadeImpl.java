@@ -1,10 +1,10 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.aip.KubeflowHelper;
 import com.digitforce.aip.config.KubeflowProperties;
+import com.digitforce.aip.dto.data.Pipeline;
 import com.digitforce.aip.dto.qry.PipelineGetByIdQry;
-import com.digitforce.aip.model.Pipeline;
-import com.digitforce.aip.model.PipelinePage;
+import com.digitforce.aip.entity.PipelinePage;
+import com.digitforce.aip.utils.KubeflowHelper;
 import com.digitforce.framework.api.dto.Result;
 import org.springframework.web.bind.annotation.RestController;
 

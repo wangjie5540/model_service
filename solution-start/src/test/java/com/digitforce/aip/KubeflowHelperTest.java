@@ -1,7 +1,8 @@
 package com.digitforce.aip;
 
 import com.digitforce.aip.config.KubeflowProperties;
-import com.digitforce.aip.model.TriggerRunCmd;
+import com.digitforce.aip.entity.TriggerRunCmd;
+import com.digitforce.aip.utils.KubeflowHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

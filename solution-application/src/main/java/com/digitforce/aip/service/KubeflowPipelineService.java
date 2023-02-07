@@ -1,8 +1,8 @@
 package com.digitforce.aip.service;
 
+import com.digitforce.aip.dto.data.Pipeline;
+import com.digitforce.aip.entity.PipelinePage;
 import com.digitforce.aip.enums.RunStatusEnum;
-import com.digitforce.aip.model.Pipeline;
-import com.digitforce.aip.model.PipelinePage;
 
 /**
  * Kubeflow Pipeline Service

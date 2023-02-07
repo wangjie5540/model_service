@@ -1,13 +1,14 @@
-package com.digitforce.aip.model;
+package com.digitforce.aip.dto.data;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class DefaultVersion {
+public class Pipeline {
     private String id;
     private String name;
+    private String description;
     private List<Parameter> parameters;
-    private List<Reference> resourceReferences;
+    private DefaultVersion defaultVersion;
 }
