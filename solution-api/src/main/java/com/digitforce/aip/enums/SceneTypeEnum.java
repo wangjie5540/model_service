@@ -12,16 +12,24 @@ import lombok.Getter;
  */
 @Getter
 public enum SceneTypeEnum {
-    CUSTOMER_AI("CustomerAI");
+    CUSTOMER_AI("CustomerAI", "客户智能"),
+    CONTENT_AI("ContentAI", "内容智能"),
+    ;
 
+    final String name;
     final String cname;
 
     @JsonValue
+    public String getName() {
+        return name;
+    }
+
     public String getCname() {
         return cname;
     }
 
-    SceneTypeEnum(String cname) {
+    SceneTypeEnum(String name, String cname) {
+        this.name = name;
         this.cname = cname;
     }
 }

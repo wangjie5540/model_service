@@ -1,12 +1,14 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.dto.data.SceneDTO;
+import com.digitforce.aip.dto.data.SceneTypeDesc;
 import com.digitforce.aip.dto.data.SceneVersionDTO;
 import com.digitforce.aip.dto.qry.SceneGetByIdQry;
 import com.digitforce.aip.dto.qry.SceneGetFromQry;
 import com.digitforce.aip.dto.qry.ScenePageByQry;
 import com.digitforce.aip.entity.Scene;
 import com.digitforce.aip.entity.SceneVersion;
+import com.digitforce.aip.enums.SceneTypeEnum;
 import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.service.ISceneVersionService;
 import com.digitforce.framework.api.dto.PageView;
@@ -18,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -79,5 +82,12 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
     public Result<Object> getDynamicForm(SceneGetFromQry sceneGetFromQry) {
         Object form = sceneService.getDynamicForm(sceneGetFromQry.getSceneId(), sceneGetFromQry.getType());
         return Result.success(form);
+    }
+
+    @Override
+    public Result<Object> listSceneTypeDesc() {
+        return Result.success(Arrays.stream(SceneTypeEnum.values()).map(
+                sceneTypeEnum -> new SceneTypeDesc(sceneTypeEnum.getName(), sceneTypeEnum.getCname())
+        ).collect(Collectors.toList()));
     }
 }
