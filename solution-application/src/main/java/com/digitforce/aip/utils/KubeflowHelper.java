@@ -8,8 +8,6 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.digitforce.aip.dto.data.Pipeline;
 import com.digitforce.aip.entity.PipelinePage;
-import com.digitforce.aip.entity.TaskDefineExtraDTO;
-import com.digitforce.aip.entity.TriggerRunCmd;
 import com.digitforce.framework.util.GsonUtil;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -102,58 +100,6 @@ public class KubeflowHelper {
         Document parse = Jsoup.parse(html);
         Elements a = parse.select("a");
         return URI.create(a.attr("href")).getQuery();
-    }
-
-    @Deprecated
-    public String triggerRun(String host, int port, String name, String experimentId, String pipelineId,
-                             List<Map<String, Object>> pipelineParameters) {
-        login(host, port);
-        HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs", host, port))
-                .body(generateBody(name, experimentId, pipelineId, pipelineParameters));
-        RunDetail runDetail = GsonUtil.gsonToBean(httpRequest.execute().body(), RunDetail.class);
-        return runDetail.run.getId();
-    }
-
-    @Deprecated
-    public String triggerRun(String host, int port, int instanceId, String extra) {
-        TaskDefineExtraDTO taskDefineExtraDTO = GsonUtil.gsonToBean(extra, TaskDefineExtraDTO.class);
-        return triggerRun(host, port, instanceId, taskDefineExtraDTO.getTriggerRunCmd());
-    }
-
-    @Deprecated
-    public String triggerRun(String host, int port, int instanceId, TriggerRunCmd triggerRunCmd) {
-        login(host, port);
-        List<Map<String, Object>> pipelineParameters = new ArrayList<>();
-        String startDate = getStartDateStr(triggerRunCmd.getTimeRange(), triggerRunCmd.getTimeUnit());
-        String today = DateUtil.format(LocalDateTime.now(), "yyyy-MM-dd");
-        Map<String, Object> parameter = new HashMap<>();
-        parameter.put("name", "train_data_start_date_str");
-        parameter.put("value", startDate);
-        pipelineParameters.add(parameter);
-        parameter = new HashMap<>();
-        parameter.put("name", "train_data_end_date_str");
-        parameter.put("value", today);
-        pipelineParameters.add(parameter);
-        parameter = new HashMap<>();
-        parameter.put("name", "run_datetime_str");
-        parameter.put("value", today);
-        pipelineParameters.add(parameter);
-        parameter = new HashMap<>();
-        parameter.put("name", "solution_id");
-        parameter.put("value", String.valueOf(triggerRunCmd.getSolutionId()));
-        pipelineParameters.add(parameter);
-        parameter = new HashMap<>();
-        parameter.put("name", "instance_id");
-        parameter.put("value", String.valueOf(instanceId));
-        pipelineParameters.add(parameter);
-        log.info("start to request kubeflow.[pipelineParameters={}]", pipelineParameters);
-        HttpRequest httpRequest = HttpRequest.post(String.format("http://%s:%d/pipeline/apis/v1beta1/runs", host, port))
-                .body(generateBody(triggerRunCmd.getName(), triggerRunCmd.getExperimentId(),
-                        triggerRunCmd.getPipelineId(), pipelineParameters));
-        String body = httpRequest.execute().body();
-        log.info("kubeflow response. [body={}]", body);
-        RunDetail runDetail = GsonUtil.gsonToBean(body, RunDetail.class);
-        return runDetail.run.getId();
     }
 
     public String createRun(
@@ -266,27 +212,5 @@ public class KubeflowHelper {
             private String id;
             private String type;
         }
-    }
-
-    public static void main(String[] args) {
-//        HttpCookie cookie = getCookie("172.21.32.143", 30000);
-//        String body = HttpRequest.get(
-//            "http://172.21.32.143:30000/pipeline/apis/v1beta1/pipelines/c4b79a5a-8bf1-429b-b01e-15a0ec992465").cookie(
-//            cookie).execute().body();
-//        System.out.println(body);
-//        System.out.println(GsonUtil.gsonToBean(body, PipelineDTO.class));
-
-        List<Map<String, Object>> pipeParams = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", "data_path");
-        map.put("value", "dataset_fugou_test.csv");
-        pipeParams.add(map);
-        map = new HashMap<>();
-        map.put("name", "model_path");
-        map.put("value", "52");
-        pipeParams.add(map);
-        System.out.println(triggerRun("172.21.32.143", 30000, "run_name_1231", "f56c9dfe-d57d-444a-bc61-01ff9fe03a5d",
-                "2792c130-173d-47f7-b04e-50ece0c127b4", pipeParams));
-//        System.out.println(getStatus("172.21.32.143", 30000, "fbbfd47a-4fa3-4701-878f-94a451f7c4d0"));
     }
 }
