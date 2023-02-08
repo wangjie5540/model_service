@@ -65,6 +65,11 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     private String aRunId;
 
     /**
+     * 方案训练任务的runId
+     */
+    private Long sRunId;
+
+    /**
      * kubeflow pipelineId
      */
     private String pipelineId;

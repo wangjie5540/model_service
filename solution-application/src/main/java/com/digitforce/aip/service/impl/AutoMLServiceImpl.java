@@ -54,12 +54,17 @@ public class AutoMLServiceImpl implements AutoMLService {
                 autoMLProperties.getBaseUrl(), runId);
         HttpResponse httpResponse = HttpRequest.get(url).execute();
         if (httpResponse.getStatus() != 200) {
-            throw new RuntimeException("获取自动机器学习运行状态失败");
+            throw BizException.of(SolutionErrorCode.AUTO_ML_GET_STATUS_ERROR);
         }
         Map<String, Object> result =
                 objectMapper.readValue(httpResponse.body(), new TypeReference<Map<String, Object>>() {
                 });
-        return AutoMLRunStatusEnum.getEnum((Integer) result.get("status"));
+        log.info("getStatus result: {}", result);
+        Integer code = (Integer) result.get("code");
+        if (code == null) {
+            throw BizException.of(SolutionErrorCode.AUTO_ML_GET_STATUS_ERROR);
+        }
+        return AutoMLRunStatusEnum.getEnum(code);
     }
 
     @Override

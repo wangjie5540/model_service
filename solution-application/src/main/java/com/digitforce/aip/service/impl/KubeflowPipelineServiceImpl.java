@@ -46,4 +46,9 @@ public class KubeflowPipelineServiceImpl implements KubeflowPipelineService {
         String status = KubeflowHelper.getStatus(kubeflowProperties.getHost(), kubeflowProperties.getPort(), runId);
         return RunStatusEnum.valueOf(status);
     }
+
+    @Override
+    public void stopRun(String runId) {
+        KubeflowHelper.stopRun(kubeflowProperties.getHost(), kubeflowProperties.getPort(), runId);
+    }
 }
