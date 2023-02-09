@@ -1,6 +1,7 @@
 package com.digitforce.aip.enums;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 自动调参运行状态枚举
@@ -10,6 +11,7 @@ import lombok.Getter;
  * @since 2023/01/09 22:36
  */
 @Getter
+@Slf4j
 public enum AutoMLRunStatusEnum {
     Running(0),
     Success(1),
@@ -24,6 +26,7 @@ public enum AutoMLRunStatusEnum {
     final Integer code;
 
     public static AutoMLRunStatusEnum getEnum(Integer code) {
+        log.info("AutoMLRunStatusEnum getEnum code:{}", code);
         switch (code) {
             case 0:
                 return Running;
@@ -43,6 +46,7 @@ public enum AutoMLRunStatusEnum {
                 return NotExist;
             case 6:
             default:
+                log.warn("unknown code {}", code);
                 return unKnow;
         }
     }

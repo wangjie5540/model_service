@@ -18,7 +18,9 @@ import java.util.Map;
  * @since 2022-12-10
  */
 public interface ISolutionRunService extends IService<SolutionRun> {
-    void createRun(Solution solution, SolutionRunTypeEnum type, Map<String, Object> templateParams);
+    Long createRun(Solution solution, SolutionRunTypeEnum type, Map<String, Object> templateParams);
+
+    void stopRun(Long solutionRunId);
 
     PageView<SolutionRun> page(SolutionRunPageByQry solutionRunPageByQry);
 }

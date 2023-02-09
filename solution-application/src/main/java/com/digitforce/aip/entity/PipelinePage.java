@@ -1,5 +1,6 @@
-package com.digitforce.aip.model;
+package com.digitforce.aip.entity;
 
+import com.digitforce.aip.dto.data.Pipeline;
 import lombok.Data;
 
 import java.util.List;

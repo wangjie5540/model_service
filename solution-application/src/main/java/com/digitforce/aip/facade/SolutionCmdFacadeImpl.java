@@ -3,6 +3,7 @@ package com.digitforce.aip.facade;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionControlCmd;
 import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
 import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
@@ -82,6 +83,12 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
 
     @Override
     public Result modifyById(SolutionModifyCmd solutionModifyCmd) {
+        return Result.success();
+    }
+
+    @Override
+    public Result stopRun(SolutionControlCmd solutionControlCmd) {
+        solutionService.stop(solutionControlCmd.getId());
         return Result.success();
     }
 }

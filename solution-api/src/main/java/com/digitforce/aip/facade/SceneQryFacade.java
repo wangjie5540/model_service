@@ -33,4 +33,8 @@ public interface SceneQryFacade {
     @PostMapping("/solution/scene/getDynamicForm")
     @Operation(summary = "获取动态表单", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
     Result<Object> getDynamicForm(@RequestBody SceneGetFromQry sceneGetFromQry);
+
+    @PostMapping("/solution/scene/listSceneTypeDesc")
+    @Operation(summary = "获取场景类型描述列表", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
+    Result<Object> listSceneTypeDesc();
 }

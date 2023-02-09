@@ -3,7 +3,7 @@ package com.digitforce.aip.consts;
 import com.digitforce.framework.api.exception.ErrorCode;
 
 /**
- * TODO
+ * 方案错误码
  *
  * @author wangtonggui
  * @version 1.0.0
@@ -19,11 +19,13 @@ public enum SolutionErrorCode implements ErrorCode {
     TEMPLATE_PARAMS_ERROR("TEMPLATE_PARAMS_ERROR", "模板参数错误，渲染异常"),
     TEMPLATE_NOT_EXIST("TEMPLATE_NOT_EXIST", "模板不存在"),
     SOLUTION_NOT_FOUND("SOLUTION_NOT_FOUND", "方案没有找到"),
+    SOLUTION_NOT_EXECUTING("SOLUTION_NOT_EXECUTING", "方案没有在执行中"),
     SOLUTION_NOT_PUBLISHED("SOLUTION_NOT_PUBLISHED", "方案未发布"),
     SOLUTION_PUBLISHED("SOLUTION_PUBLISHED", "方案已发布"),
     SOLUTION_EXECUTING("SOLUTION_EXECUTING", "方案执行中"),
     SOLUTION_HAS_SERVING("SOLUTION_HAS_SERVING", "方案已被服务使用"),
-    AUTO_ML_CREATE_TASK_ERROR("AUTO_ML_CREATE_TASK_ERROR", "自动机器学习创建任务失败"),
+    AUTO_ML_CREATE_TASK_ERROR("AUTO_ML_CREATE_TASK_ERROR", "AutoML创建任务失败"),
+    AUTO_ML_GET_STATUS_ERROR("AUTO_ML_GET_STATUS_ERROR", "AutoML获取任务状态失败"),
     ;
 
     private final String errCode;

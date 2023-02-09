@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
 import com.digitforce.aip.dto.cmd.SolutionUnPublishCmd;
@@ -95,7 +96,10 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         // 增加统计数量
         sceneMapper.increaseSolutionCount(solutionAddCmd.getSceneId());
         if (!solutionAddCmd.isAutoml()) {
-            solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG, solutionAddCmd.getTemplateParams());
+            Long solutionRunId = solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG,
+                    solutionAddCmd.getTemplateParams());
+            solution.setSRunId(solutionRunId);
+            super.updateById(solution);
         }
     }
 
@@ -167,5 +171,20 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         Page<Solution> page = PageUtil.page(solutionPageByQry);
         page = super.page(page, queryWrapper);
         return PageTool.pageView(page);
+    }
+
+    @Override
+    public void stop(Long solutionId) {
+        Solution solution = super.getById(solutionId);
+        if (solution == null) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_NOT_FOUND);
+        } else if (solution.getStatus() != SolutionStatusEnum.EXECUTING) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_NOT_EXECUTING);
+        }
+        solutionRunService.stopRun(solution.getSRunId());
+        solution = new Solution();
+        solution.setId(solutionId);
+        solution.setStatus(SolutionStatusEnum.ERROR);
+        super.updateById(solution);
     }
 }

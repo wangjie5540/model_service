@@ -24,4 +24,6 @@ public interface ISolutionService extends IService<Solution> {
     void unPublish(SolutionUnPublishCmd solutionUnPublishCmd);
 
     PageView<Solution> page(SolutionPageByQry solutionPageByQry);
+
+    void stop(Long solutionId);
 }

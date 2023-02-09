@@ -1,8 +1,8 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
+import com.digitforce.aip.dto.data.Pipeline;
 import com.digitforce.aip.dto.qry.PipelineGetByIdQry;
-import com.digitforce.aip.model.Pipeline;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

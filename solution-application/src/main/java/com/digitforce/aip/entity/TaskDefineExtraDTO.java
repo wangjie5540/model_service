@@ -1,4 +1,4 @@
-package com.digitforce.aip.model;
+package com.digitforce.aip.entity;
 
 import lombok.Data;
 

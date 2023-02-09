@@ -9,6 +9,7 @@ import com.digitforce.aip.dto.qry.SolutionRunPageByQry;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionRun;
 import com.digitforce.aip.enums.PipelineRunFlagEnum;
+import com.digitforce.aip.enums.RunStatusEnum;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.mapper.SolutionRunMapper;
 import com.digitforce.aip.service.ISolutionRunService;
@@ -43,7 +44,7 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
     @Override
     @SneakyThrows
     @Transactional(rollbackFor = Exception.class)
-    public void createRun(Solution solution, SolutionRunTypeEnum type, Map<String, Object> templateParams) {
+    public Long createRun(Solution solution, SolutionRunTypeEnum type, Map<String, Object> templateParams) {
         SolutionRun solutionRun = ConvertTool.convert(solution, SolutionRun.class);
         solutionRun.setSolutionId(solution.getId());
         solutionRun.setId(null);
@@ -62,6 +63,20 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
         solutionRun.setPRunId(pRunId);
         solutionRun.setPRunName(pRunName);
         solutionRun.setPipelineParams(pipelineParams);
+        super.updateById(solutionRun);
+        return solutionRunId;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void stopRun(Long solutionRunId) {
+        SolutionRun solutionRun = super.getById(solutionRunId);
+        if (solutionRun == null) {
+            return;
+        }
+        kubeflowPipelineService.stopRun(solutionRun.getPRunId());
+        solutionRun = new SolutionRun();
+        solutionRun.setStatus(RunStatusEnum.Failed);
         super.updateById(solutionRun);
     }
 
