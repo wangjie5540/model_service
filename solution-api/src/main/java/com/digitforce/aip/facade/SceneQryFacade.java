@@ -2,9 +2,11 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.data.SceneDTO;
+import com.digitforce.aip.dto.data.SolutionDTO;
 import com.digitforce.aip.dto.qry.SceneGetByIdQry;
 import com.digitforce.aip.dto.qry.SceneGetFromQry;
 import com.digitforce.aip.dto.qry.ScenePageByQry;
+import com.digitforce.aip.dto.qry.SceneSearchQry;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +14,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 /**
  * 场景查询类
@@ -37,4 +41,8 @@ public interface SceneQryFacade {
     @PostMapping("/solution/scene/listSceneTypeDesc")
     @Operation(summary = "获取场景类型描述列表", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
     Result<Object> listSceneTypeDesc();
+
+    @PostMapping("/solution/scene/searchModelOrServing")
+    @Operation(summary = "分页查询场景", tags = CommonConst.SWAGGER_TAG_SCENE_QRY)
+    Result<List<SolutionDTO>> searchModelOrServing(@RequestBody SceneSearchQry sceneSearchQry);
 }
