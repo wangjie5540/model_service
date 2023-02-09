@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class SolutionDTO {
@@ -34,4 +35,6 @@ public class SolutionDTO {
     private String createUser;
     @Schema(description = "更新人")
     private LocalDateTime createTime;
+    @Schema(description = "模型方案下的服务列表(仅在树形结构下返回)")
+    private List<SolutionServingDTO> servings;
 }
