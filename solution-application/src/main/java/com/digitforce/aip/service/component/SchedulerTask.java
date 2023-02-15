@@ -44,9 +44,6 @@ import java.util.Map;
 @Component
 @Slf4j
 public class SchedulerTask {
-    //    @Resource
-//    // TODO 后续再使用，担心影响全局
-//    private ObjectMapper objectMapper;
     @Resource
     private ISolutionRunService solutionRunService;
     @Resource
