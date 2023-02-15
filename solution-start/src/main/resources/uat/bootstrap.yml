@@ -1,10 +1,18 @@
-#仅用于激活spring cloud nacos config,其他配置项不要在本文件配置，nacos.server-addr地址需要在命令行或者环境变量中指定
+# 仅用于激活spring cloud nacos config, 应用相关配置项不要在本文件配置
 spring:
   cloud:
     nacos:
+      discovery:
+        # https://digit-force.coding.net/km/spaces/47/pages/K-986
+        server-addr: uat-common-nacos-n1.digitforce.com:8848,uat-common-nacos-n2.digitforce.com:8848,uat-common-nacos-n3.digitforce.com:8848
+        username: nacos
+        password: nacos
+        register-enabled: true
+        namespace: public
       config:
-        enabled: ${nacos.config.enabled:${nacos.enabled:true}}
-        server-addr: ${nacos.config.server-addr:${nacos.server-addr}}
-        namespace: ${nacos.config.namespace:}
-#        username: ${nacos.config.username}
-#        password: ${nacos.config.password}
+        enabled: true
+        server-addr: uat-common-nacos-n1.digitforce.com:8848,uat-common-nacos-n2.digitforce.com:8848,uat-common-nacos-n3.digitforce.com:8848
+        namespace: public
+        username: nacos
+        password: nacos
+        file-extension: yaml
