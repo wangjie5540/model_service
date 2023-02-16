@@ -8,11 +8,11 @@ spring:
         username: nacos
         password: nacos
         register-enabled: true
-        namespace: public
+        namespace: uat
       config:
         enabled: true
         server-addr: uat-common-nacos-n1.digitforce.com:8848,uat-common-nacos-n2.digitforce.com:8848,uat-common-nacos-n3.digitforce.com:8848
-        namespace: public
+        namespace: uat
         username: nacos
         password: nacos
         file-extension: yaml
