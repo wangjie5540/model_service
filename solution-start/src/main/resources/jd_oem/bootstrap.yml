@@ -1,0 +1,18 @@
+# 仅用于激活spring cloud nacos config, 应用相关配置项不要在本文件配置
+spring:
+  cloud:
+    nacos:
+      discovery:
+        # https://digit-force.coding.net/km/spaces/47/pages/K-986
+        server-addr: jd-prod-nacos-n1:8848,jd-prod-nacos-n2:8848,jd-prod-nacos-n3:8848
+        username: nacos
+        password: nacos
+        register-enabled: true
+        namespace: public
+      config:
+        enabled: true
+        server-addr: jd-prod-nacos-n1:8848,jd-prod-nacos-n2:8848,jd-prod-nacos-n3:8848
+        namespace: public
+        username: nacos
+        password: nacos
+        file-extension: yaml
