@@ -108,9 +108,9 @@
             </activation>
         </profile>
         <profile>
-            <id>jd_oem</id>
+            <id>jdoem</id>
             <properties>
-                <profileActive>jd_oem</profileActive>
+                <profileActive>jdoem</profileActive>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>
