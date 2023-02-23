@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
 import com.digitforce.aip.entity.ServingInstance;
 import com.digitforce.aip.entity.Solution;
@@ -20,6 +21,7 @@ import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.aip.utils.ApplicationUtil;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
+import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
@@ -55,16 +57,14 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void createAndRun(SolutionServing solutionServing) {
+    public ServingInstance createAndRun(SolutionServing solutionServing) {
         Solution solution = solutionService.getById(solutionServing.getSolutionId());
         if (Objects.isNull(solution)) {
-            log.error("方案不存在");
-            return;
+            throw BizException.of(SolutionErrorCode.SOLUTION_NOT_FOUND);
         }
         SolutionRun solutionRun = solutionRunMapper.getLatestRunBySolutionId(solution.getId());
         if (Objects.isNull(solutionRun)) {
-            log.error("方案执行实例不存在");
-            return;
+            throw BizException.of(SolutionErrorCode.SOLUTION_RUN_NOT_FOUND);
         }
         ServingInstance servingInstance = ConvertTool.convert(solutionServing, ServingInstance.class);
         servingInstance.setId(null);
@@ -83,11 +83,12 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         String pRunName = String.format("%s-%s", solution.getPipelineName(), servingInstanceId);
         String pRunId = kubeflowPipelineService.createRun(solution.getPipelineId(), pRunName, pipelineParams,
                 PipelineRunFlagEnum.PREDICT.name());
-        servingInstance = new ServingInstance();
-        servingInstance.setId(servingInstanceId);
-        servingInstance.setPRunId(pRunId);
-        servingInstance.setPRunName(pRunName);
+        ServingInstance updateServingInstance = new ServingInstance();
+        updateServingInstance.setId(servingInstanceId);
+        updateServingInstance.setPRunId(pRunId);
+        updateServingInstance.setPRunName(pRunName);
         super.updateById(servingInstance);
+        return servingInstance;
     }
 
     @Override
