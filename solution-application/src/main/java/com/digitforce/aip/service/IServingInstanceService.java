@@ -15,7 +15,7 @@ import com.digitforce.framework.api.dto.PageView;
  * @since 2022-12-28
  */
 public interface IServingInstanceService extends IService<ServingInstance> {
-    void createAndRun(SolutionServing solutionServing);
+    ServingInstance createAndRun(SolutionServing solutionServing);
 
     PageView<ServingInstance> page(ServingInstancePageByQry servingInstancePageByQry);
 }
