@@ -223,8 +223,9 @@ public class KubeflowHelper {
         HttpRequest request =
                 HttpRequest.get(String.format("http://%s:%d/pipeline/apis/v1beta1/runs/%s", host, port, jobId))
                         .header(Header.CONTENT_TYPE, "application/json");
-        RunDetail runDetail = GsonUtil.gsonToBean(request.execute().body(), RunDetail.class);
-        log.info("kubeflow response. [runDetail={}]", runDetail);
+        String body = request.execute().body();
+        log.info("kubeflow response. [body={}]", body);
+        RunDetail runDetail = GsonUtil.gsonToBean(body, RunDetail.class);
         String status = runDetail.getRun().getStatus();
         // 在状态为null的时候，说明是刚创建出来的run，自行定义为Created状态
         return status == null ? "Running" : status;
