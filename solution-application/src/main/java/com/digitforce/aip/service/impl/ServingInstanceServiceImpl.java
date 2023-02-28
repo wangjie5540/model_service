@@ -87,7 +87,7 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         updateServingInstance.setId(servingInstanceId);
         updateServingInstance.setPRunId(pRunId);
         updateServingInstance.setPRunName(pRunName);
-        super.updateById(servingInstance);
+        super.updateById(updateServingInstance);
         return servingInstance;
     }
 
