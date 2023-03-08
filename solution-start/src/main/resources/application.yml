@@ -56,7 +56,7 @@ spring:
     auto-startup: true
     job-store-type: jdbc
     scheduler-name: SolutionScheduler
-    startup-delay: 1m
+    startup-delay: 1
     wait-for-jobs-to-complete-on-shutdown: false
     overwrite-existing-jobs: true
     properties:
