@@ -16,6 +16,7 @@ import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.api.exception.BizException;
+import com.digitforce.framework.tool.ConvertTool;
 import lombok.SneakyThrows;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,6 +84,8 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
 
     @Override
     public Result modifyById(SolutionModifyCmd solutionModifyCmd) {
+        Solution solution = ConvertTool.convert(solutionModifyCmd, Solution.class);
+        solutionService.updateById(solution);
         return Result.success();
     }
 
