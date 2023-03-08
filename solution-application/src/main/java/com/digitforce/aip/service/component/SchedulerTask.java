@@ -134,16 +134,20 @@ public class SchedulerTask {
             if (status == AutoMLRunStatusEnum.Success) {
                 List<BestParameter> autoMLResult = autoMLService.getAutoMLResult(record.getARunId());
                 Map<String, Object> templateParams = solutionService.getById(record.getId()).getTemplateParams();
-                autoMLResult.forEach(bestParameter -> {
-                    templateParams.put(StrUtil.format("{}__{}", "model", bestParameter.getName()),
-                            bestParameter.getValue());
-                });
+                autoMLResult.forEach(bestParameter -> templateParams.put(StrUtil.format("{}__{}", "model",
+                                bestParameter.getName()),
+                        bestParameter.getValue()));
                 Solution solution = new Solution();
                 solution.setId(record.getId());
                 solution.setTemplateParams(templateParams);
                 solution.setStatus(SolutionStatusEnum.EXECUTING);
                 solutionService.updateById(solution);
                 solutionRunService.createRun(record, SolutionRunTypeEnum.DEBUG, templateParams);
+            } else if (status == AutoMLRunStatusEnum.Failed || status == AutoMLRunStatusEnum.unKnow) {
+                Solution solution = new Solution();
+                solution.setId(record.getId());
+                solution.setStatus(SolutionStatusEnum.ERROR);
+                solutionService.updateById(solution);
             }
         });
         TenantContext.destroy();
