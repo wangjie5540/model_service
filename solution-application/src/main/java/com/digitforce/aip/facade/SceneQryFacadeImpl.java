@@ -16,6 +16,7 @@ import com.digitforce.aip.entity.SceneVersion;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.enums.SceneTypeEnum;
+import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.service.ISceneVersionService;
 import com.digitforce.aip.service.ISolutionService;
@@ -113,6 +114,8 @@ public class SceneQryFacadeImpl implements SceneQryFacade {
         SolutionDTO solutionLikeClause = new SolutionDTO();
         solutionLikeClause.setTitle(sceneSearchQry.getTitleLike());
         solutionDTOPageQuery.setLikeClause(solutionLikeClause);
+        SolutionDTO solutionClause = new SolutionDTO();
+        solutionClause.setStatus(SolutionStatusEnum.PUBLISHED);
         solutionDTOPageQuery.setPageSize(-1);
         PageView<Solution> solutionDTOPageView = solutionService.page(solutionDTOPageQuery);
         List<SolutionDTO> solutionDTOList = ConvertTool.convert(solutionDTOPageView.getList(), SolutionDTO.class);

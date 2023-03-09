@@ -52,42 +52,33 @@ spring:
             # 数据库连接超时时间,默认30秒，即30000
             connection-timeout: 30000
             connection-test-query: SELECT 1
-  redis:
-    cluster:
-      nodes: ${redis.server-addr}
-    password: ${redis.password}
-    pool:
-      max-active: ${redis.max-active:10}
-  #  cloud:
-  #    nacos:
-  #      discovery:
-  #        server-addr: dev-nacos-n1.digitforce.com:8848
-  #        namespace: dev
-  #        username: nacos
-  #        password: nacos
-  #    stream:
-  #      bindings:
-  #        eventInput:
-  #          destination: mp-event-topic
-  #          group: ${spring.application.name}
-  #        maOutput:
-  #          destination: ma-test-topic
-  #          group: ${spring.application.name}
-  #      rocketmq:
-  #        binder:
-  #          name-server: ${rocketmq.server-addr}
-  #          group: ${spring.application.name}
-  kafka:
-    consumer:
-      group-id: solution
-      # TODO 后续将优化为group
-      auto-offset-reset: latest
-      enable-auto-commit: true
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  quartz:
+    auto-startup: true
+    job-store-type: jdbc
+    scheduler-name: SolutionScheduler
+    startup-delay: 1
+    wait-for-jobs-to-complete-on-shutdown: false
+    overwrite-existing-jobs: true
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: DigitForceScheduler
+            instanceId: AUTO
+        jobStore:
+          class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+          tablePrefix: QRTZ_
+          isClustered: true
+          clusterCheckinInterval: 20000
+          clusterCheckinGracePeriod: 30000
+          misfireThreshold: 60000
+          maxMisfiresToHandleAtATime: 1
+          txIsolationLevelSerializable: true
+        threadPool:
+          class: org.quartz.simpl.SimpleThreadPool
+          threadCount: 20
+          threadPriority: 5
+          threadsInheritContextClassLoaderOfInitializingThread: true
 digitforce:
   swagger:
     #项目信息（必填）
