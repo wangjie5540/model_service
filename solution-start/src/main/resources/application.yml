@@ -71,6 +71,7 @@ spring:
             tablePrefix: QRTZ_
             isClustered: true
             clusterCheckinInterval: 20000
+            dataSource: mysql
           threadPool:
             class: org.quartz.simpl.SimpleThreadPool
             threadCount: 20

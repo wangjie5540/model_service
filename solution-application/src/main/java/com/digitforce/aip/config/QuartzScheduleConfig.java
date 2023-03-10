@@ -65,6 +65,7 @@ public class QuartzScheduleConfig {
     public JobDetail patrolSolutionRunStatusJob() {
         return JobBuilder.newJob(PatrolSolutionRunStatusJob.class)
                 .withIdentity("patrolSolutionRunStatusJob", CommonConst.CUSTOM_JOB_GROUP)
+                .withDescription("巡检方案运行状态定时任务")
                 .storeDurably()
                 .build();
     }
