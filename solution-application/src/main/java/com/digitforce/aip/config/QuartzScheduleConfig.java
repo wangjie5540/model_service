@@ -34,7 +34,6 @@ public class QuartzScheduleConfig {
                                                 ObjectProvider<JobDetail> jobDetails, Map<String, Calendar> calendars
             , ObjectProvider<Trigger> triggers, ApplicationContext applicationContext) {
         SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
-        schedulerFactoryBean.setDataSource(dataSource);
         SpringBeanJobFactory jobFactory = new SpringBeanJobFactory();
         jobFactory.setApplicationContext(applicationContext);
         schedulerFactoryBean.setJobFactory(jobFactory);
@@ -52,6 +51,7 @@ public class QuartzScheduleConfig {
         schedulerFactoryBean.setCalendars(calendars);
         schedulerFactoryBean.setTriggers(triggers.orderedStream().toArray(Trigger[]::new));
         customizers.orderedStream().forEach((customizer) -> customizer.customize(schedulerFactoryBean));
+        schedulerFactoryBean.setDataSource(dataSource);
         return schedulerFactoryBean;
     }
 

@@ -31,10 +31,12 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.List;
 
 @Slf4j
-public class PatrolSolutionRunStatusJob extends QuartzJobBean {
+public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Serializable {
+    private static final long serialVersionUID = -1482286901769302351L;
     @Resource
     private ISolutionRunService solutionRunService;
     @Resource
