@@ -1,8 +1,13 @@
 package com.digitforce.aip.config;
 
+import com.digitforce.aip.consts.CommonConst;
+import com.digitforce.aip.quartz.jobs.PatrolSolutionRunStatusJob;
 import org.quartz.Calendar;
+import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
 import org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer;
@@ -22,7 +27,7 @@ import java.util.Properties;
  * @author ruoyi
  */
 @Configuration
-public class ScheduleConfig {
+public class QuartzScheduleConfig {
     @Bean
     public SchedulerFactoryBean quartzScheduler(QuartzProperties properties, DataSource dataSource,
                                                 ObjectProvider<SchedulerFactoryBeanCustomizer> customizers,
@@ -54,5 +59,25 @@ public class ScheduleConfig {
         Properties properties = new Properties();
         properties.putAll(source);
         return properties;
+    }
+
+    @Bean
+    public JobDetail patrolSolutionRunStatusJob() {
+        return JobBuilder.newJob(PatrolSolutionRunStatusJob.class)
+                .withIdentity("patrolSolutionRunStatusJob", CommonConst.CUSTOM_JOB_GROUP)
+                .storeDurably()
+                .build();
+    }
+
+
+    @Bean
+    public Trigger patrolSolutionRunStatusJobTrigger(JobDetail patrolSolutionRunStatusJob) {
+        return TriggerBuilder.newTrigger()
+                .forJob(patrolSolutionRunStatusJob)
+                .withIdentity("patrolSolutionRunStatusJobTrigger", CommonConst.CUSTOM_JOB_GROUP)
+                .withSchedule(SimpleScheduleBuilder.simpleSchedule()
+                        .withIntervalInSeconds(20)
+                        .repeatForever())
+                .build();
     }
 }
