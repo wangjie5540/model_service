@@ -56,6 +56,7 @@ public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Seriali
     @Resource
     private IModelService modelService;
 
+    @SneakyThrows
     @Override
     @Transactional(rollbackFor = Exception.class)
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {

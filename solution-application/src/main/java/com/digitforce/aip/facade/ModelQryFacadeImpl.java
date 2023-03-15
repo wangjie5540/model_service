@@ -1,5 +1,6 @@
 package com.digitforce.aip.facade;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.digitforce.aip.dto.data.ModelDTO;
 import com.digitforce.aip.dto.data.ModelPackageDTO;
 import com.digitforce.aip.dto.qry.ModelPackagePageByQry;
@@ -10,10 +11,14 @@ import com.digitforce.aip.service.IModelPackageService;
 import com.digitforce.aip.service.IModelService;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 public class ModelQryFacadeImpl implements ModelQryFacade {
@@ -24,10 +29,23 @@ public class ModelQryFacadeImpl implements ModelQryFacade {
 
     @Override
     public Result<PageView<ModelPackageDTO>> modelPackagePageBy(ModelPackagePageByQry modelPackagePageByQry) {
-        PageView<ModelPackage> solutionPageView = modelPackageService.page(modelPackagePageByQry);
-        PageView<ModelPackageDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
+        PageView<ModelPackage> modelPackagePageView = modelPackageService.page(modelPackagePageByQry);
+        if (modelPackagePageView == null || modelPackagePageView.getList() == null) {
+            return Result.success(null);
+        }
+        List<Long> packageIds =
+                modelPackagePageView.getList().stream().map(ModelPackage::getId).collect(Collectors.toList());
+        QueryWrapper<Model> wrapper = new QueryWrapper<>();
+        wrapper.in("package_id", packageIds);
+        List<Model> models = modelService.list(wrapper);
+        Map<Long, List<Model>> modelMap = models.stream().collect(Collectors.groupingBy(Model::getPackageId));
+        PageView<ModelPackageDTO> modelPackageDTOPageView = PageTool.pageView(modelPackagePageView,
                 ModelPackageDTO.class);
-        return Result.success(solutionDTOPageView);
+        modelPackageDTOPageView.getList().forEach(modelPackageDTO -> {
+            List<Model> modelList = modelMap.get(modelPackageDTO.getId());
+            modelPackageDTO.setFittedModelList(ConvertTool.convert(modelList, ModelDTO.class));
+        });
+        return Result.success(modelPackageDTOPageView);
     }
 
     @Override
