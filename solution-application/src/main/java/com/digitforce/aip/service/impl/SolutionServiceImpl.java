@@ -184,7 +184,7 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         solutionRunService.stopRun(solution.getSRunId());
         solution = new Solution();
         solution.setId(solutionId);
-        solution.setStatus(SolutionStatusEnum.ERROR);
+        solution.setStatus(SolutionStatusEnum.STOPPED);
         super.updateById(solution);
     }
 }

@@ -57,8 +57,14 @@ public class SolutionRun extends TenantEntity<Long> implements Serializable {
     private String pipelineParams;
 
     /**
+     * 模型版本
+     */
+    private Long version;
+
+    /**
      * 模型包id
      */
+    @Deprecated
     private Long packageId;
 
     /**

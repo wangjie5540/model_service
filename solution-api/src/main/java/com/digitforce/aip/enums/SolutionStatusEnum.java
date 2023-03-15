@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 public enum SolutionStatusEnum {
     EXECUTING("执行中"),
+    STOPPED("已停止"),
     TUNING("调参中"),
     READY("已就绪"),
     PUBLISHED("已发布"),
