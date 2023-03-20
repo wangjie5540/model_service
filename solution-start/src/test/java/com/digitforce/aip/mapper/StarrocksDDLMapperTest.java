@@ -1,6 +1,7 @@
 package com.digitforce.aip.mapper;
 
 import com.digitforce.aip.test.BaseTest;
+import com.digitforce.aip.utils.OlapHelper;
 import org.junit.Test;
 
 import javax.annotation.Resource;
@@ -12,7 +13,7 @@ public class StarrocksDDLMapperTest extends BaseTest {
 
     @Test
     public void createUserScoreTable() {
-        ddlMapper.createUserScoreTable("model_1");
+        ddlMapper.createUserScoreTable(OlapHelper.getScoreTableName(11L));
     }
 
     @Test

@@ -12,8 +12,10 @@ import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.SceneMapper;
+import com.digitforce.aip.mapper.StarrocksDDLMapper;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.ISolutionServingService;
+import com.digitforce.aip.utils.OlapHelper;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.tool.ConvertTool;
@@ -38,11 +40,14 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     private ISolutionServingService solutionServingService;
     @Resource
     private SceneMapper sceneMapper;
+    @Resource
+    private StarrocksDDLMapper starrocksDDLMapper;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Result add(SolutionAddCmd solutionAddCmd) {
-        solutionService.add(solutionAddCmd);
+        Solution solution = solutionService.add(solutionAddCmd);
+        // 创建starrocks表
+        starrocksDDLMapper.createUserScoreTable(OlapHelper.getScoreTableName(solution.getId()));
         return Result.success();
     }
 

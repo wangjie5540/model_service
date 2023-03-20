@@ -10,7 +10,7 @@ public class StarrocksSqlProvider implements ProviderMethodResolver {
     public String userScoreTable(Map<String, Object> params) {
         String tableName = (String) params.get("tableName");
         String createTableTemplate = "" +
-                "create table if not exists aip.{} (\n" +
+                "create table if not exists {} (\n" +
                 "    serving_id bigint NOT NULL,\n" +
                 "    user_id varchar(256) NOT NULL,\n" +
                 "    score FLOAT NOT NULL\n" +
