@@ -17,7 +17,6 @@ import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.enums.StageEnum;
 import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.mapper.SolutionMapper;
-import com.digitforce.aip.mapper.StarrocksDDLMapper;
 import com.digitforce.aip.quartz.SolutionQuartzJob;
 import com.digitforce.aip.service.AutoMLService;
 import com.digitforce.aip.service.ISceneService;
@@ -25,7 +24,6 @@ import com.digitforce.aip.service.ISceneVersionService;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.component.TemplateComponent;
-import com.digitforce.aip.utils.OlapHelper;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.exception.BizException;
@@ -42,6 +40,7 @@ import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.TriggerBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -71,12 +70,11 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
     private TemplateComponent templateComponent;
     @Resource
     private AutoMLService autoMLService;
-    @Resource
-    private StarrocksDDLMapper starrocksDDLMapper;
 
     @Override
     @SneakyThrows
-    public void add(SolutionAddCmd solutionAddCmd) {
+    @Transactional(rollbackFor = Exception.class)
+    public Solution add(SolutionAddCmd solutionAddCmd) {
         Solution solution = ConvertTool.convert(solutionAddCmd, Solution.class);
         Scene scene = sceneService.getById(solutionAddCmd.getSceneId());
         SceneVersion sceneVersion = sceneVersionService.getById(scene.getVidInUse());
@@ -97,8 +95,6 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
             solution.setARunId(autoMlRunId);
         }
         super.save(solution);
-        // 创建starrocks表
-        starrocksDDLMapper.createUserScoreTable(OlapHelper.getScoreTableName(solution.getId()));
         // 增加统计数量
         sceneMapper.increaseSolutionCount(solutionAddCmd.getSceneId());
         if (!solutionAddCmd.getAutoml()) {
@@ -107,6 +103,7 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
             solution.setSRunId(solutionRunId);
             super.updateById(solution);
         }
+        return solution;
     }
 
     @Override

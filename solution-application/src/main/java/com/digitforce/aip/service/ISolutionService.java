@@ -17,7 +17,7 @@ import com.digitforce.framework.api.dto.PageView;
  * @since 2022-12-10
  */
 public interface ISolutionService extends IService<Solution> {
-    void add(SolutionAddCmd solutionAddCmd);
+    Solution add(SolutionAddCmd solutionAddCmd);
 
     void publish(SolutionPublishCmd solutionPublishCmd);
 
