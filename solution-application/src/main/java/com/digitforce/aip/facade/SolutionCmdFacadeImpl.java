@@ -42,7 +42,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result add(SolutionAddCmd solutionAddCmd) {
-        solutionService.createAndRun(solutionAddCmd);
+        solutionService.add(solutionAddCmd);
         return Result.success();
     }
 

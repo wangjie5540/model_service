@@ -38,7 +38,7 @@ public class SolutionServiceImplTest extends BaseTest {
         map.put("lookalike__batch_size", 256);
         map.put("lookalike__lr", 0.01);
         solutionAddCmd.setTemplateParams(map);
-        solutionService.createAndRun(solutionAddCmd);
+        solutionService.add(solutionAddCmd);
         TimeUnit.SECONDS.sleep(1000);
     }
 
