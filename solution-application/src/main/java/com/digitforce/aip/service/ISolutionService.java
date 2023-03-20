@@ -26,4 +26,6 @@ public interface ISolutionService extends IService<Solution> {
     PageView<Solution> page(SolutionPageByQry solutionPageByQry);
 
     void stop(Long solutionId);
+
+    void delete(Long solutionId);
 }
