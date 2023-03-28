@@ -40,6 +40,8 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
     private KubeflowPipelineService kubeflowPipelineService;
     @Resource
     private TemplateComponent templateComponent;
+    @Resource
+    private SolutionRunMapper solutionRunMapper;
 
     @Override
     @SneakyThrows
@@ -87,5 +89,10 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
         Page<SolutionRun> page = PageUtil.page(solutionRunPageByQry);
         page = super.page(page, queryWrapper);
         return PageTool.pageView(page);
+    }
+
+    @Override
+    public SolutionRun getLatestVersion(Long solutionId) {
+        return solutionRunMapper.getLatestRunBySolutionId(solutionId);
     }
 }
