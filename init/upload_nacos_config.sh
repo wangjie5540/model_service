@@ -1,0 +1,2 @@
+res=`python -c "import urllib.parse; print(urllib.parse.quote(open('solution-dev.yaml').read()))"`
+curl -X POST "http://dev-common-nacos-n1.digitforce.com:8848/nacos/v1/cs/configs" -d "tenant=dev&dataId=solution-dev.yaml&group=DEFAULT_GROUP&content=$res"

@@ -1,6 +1,7 @@
 package com.digitforce.aip.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -12,6 +13,7 @@ import com.digitforce.aip.dto.qry.SolutionPageByQry;
 import com.digitforce.aip.entity.Scene;
 import com.digitforce.aip.entity.SceneVersion;
 import com.digitforce.aip.entity.Solution;
+import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.enums.StageEnum;
@@ -23,6 +25,7 @@ import com.digitforce.aip.service.ISceneService;
 import com.digitforce.aip.service.ISceneVersionService;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.ISolutionService;
+import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
@@ -56,6 +59,8 @@ import java.util.Objects;
  */
 @Service
 public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> implements ISolutionService {
+    @Resource
+    private ISolutionServingService solutionServingService;
     @Resource
     private ISolutionRunService solutionRunService;
     @Resource
@@ -189,5 +194,25 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         solution.setId(solutionId);
         solution.setStatus(SolutionStatusEnum.STOPPED);
         super.updateById(solution);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Long solutionId) {
+        Solution solution = getById(solutionId);
+        if (solution == null) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_NOT_FOUND);
+        } else if (solution.getStatus() == SolutionStatusEnum.EXECUTING) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_EXECUTING);
+        } else if (solution.getStatus() == SolutionStatusEnum.PUBLISHED) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_PUBLISHED);
+        }
+        long count = solutionServingService.count(
+                new LambdaQueryWrapper<SolutionServing>().eq(SolutionServing::getSolutionId, solution.getId()));
+        if (count > 0) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_HAS_SERVING);
+        }
+        removeById(solutionId);
+        sceneMapper.decreaseSolutionCount(solution.getSceneId());
     }
 }

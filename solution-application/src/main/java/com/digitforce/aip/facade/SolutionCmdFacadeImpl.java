@@ -1,7 +1,5 @@
 package com.digitforce.aip.facade;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.cmd.SolutionAddCmd;
 import com.digitforce.aip.dto.cmd.SolutionControlCmd;
 import com.digitforce.aip.dto.cmd.SolutionDeleteCmd;
@@ -9,15 +7,10 @@ import com.digitforce.aip.dto.cmd.SolutionModifyCmd;
 import com.digitforce.aip.dto.cmd.SolutionPublishCmd;
 import com.digitforce.aip.dto.cmd.SolutionUnPublishCmd;
 import com.digitforce.aip.entity.Solution;
-import com.digitforce.aip.entity.SolutionServing;
-import com.digitforce.aip.enums.SolutionStatusEnum;
-import com.digitforce.aip.mapper.SceneMapper;
 import com.digitforce.aip.mapper.StarrocksDDLMapper;
 import com.digitforce.aip.service.ISolutionService;
-import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.aip.utils.OlapHelper;
 import com.digitforce.framework.api.dto.Result;
-import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.tool.ConvertTool;
 import lombok.SneakyThrows;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,10 +29,6 @@ import javax.annotation.Resource;
 public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     @Resource
     private ISolutionService solutionService;
-    @Resource
-    private ISolutionServingService solutionServingService;
-    @Resource
-    private SceneMapper sceneMapper;
     @Resource
     private StarrocksDDLMapper starrocksDDLMapper;
 
@@ -67,23 +56,9 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Result delete(SolutionDeleteCmd solutionDeleteCmd) {
-        Solution solution = solutionService.getById(solutionDeleteCmd.getId());
-        if (solution == null) {
-            throw BizException.of(SolutionErrorCode.SOLUTION_NOT_FOUND);
-        } else if (solution.getStatus() == SolutionStatusEnum.EXECUTING) {
-            throw BizException.of(SolutionErrorCode.SOLUTION_EXECUTING);
-        } else if (solution.getStatus() == SolutionStatusEnum.PUBLISHED) {
-            throw BizException.of(SolutionErrorCode.SOLUTION_PUBLISHED);
-        }
-        long count = solutionServingService.count(
-                new LambdaQueryWrapper<SolutionServing>().eq(SolutionServing::getSolutionId, solution.getId()));
-        if (count > 0) {
-            throw BizException.of(SolutionErrorCode.SOLUTION_HAS_SERVING);
-        }
-        solutionService.removeById(solutionDeleteCmd.getId());
-        sceneMapper.decreaseSolutionCount(solution.getSceneId());
+        solutionService.delete(solutionDeleteCmd.getId());
+        starrocksDDLMapper.dropTable(OlapHelper.getScoreTableName(solutionDeleteCmd.getId()));
         return Result.success();
     }
 

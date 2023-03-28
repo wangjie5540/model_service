@@ -12,9 +12,9 @@ public interface StarrocksDDLMapper {
     @UpdateProvider(type = StarrocksSqlProvider.class, method = "userScoreTable")
     void createUserScoreTable(@Param("tableName") String tableName);
 
-    @Update("ALTER TABLE aip.${tableName} ADD PARTITIONS START (\"${start}\") END (\"${end}\") EVERY (1)")
+    @Update("ALTER TABLE ${tableName} ADD PARTITIONS START (\"${start}\") END (\"${end}\") EVERY (1)")
     void createPartition(@Param("tableName") String tableName, @Param("start") Long start, @Param("end") Long end);
 
-    @Update("drop table if exists `aip`.`${tableName}`")
+    @Update("drop table if exists ${tableName}")
     void dropTable(@Param("tableName") String tableName);
 }
