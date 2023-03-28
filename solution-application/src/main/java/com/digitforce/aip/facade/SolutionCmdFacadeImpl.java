@@ -36,7 +36,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     public Result add(SolutionAddCmd solutionAddCmd) {
         Solution solution = solutionService.add(solutionAddCmd);
         // 创建starrocks表
-        starrocksDDLMapper.createUserScoreTable(OlapHelper.getScoreTableName(solution.getId()));
+        starrocksDDLMapper.createScoreTable(OlapHelper.getScoreTableName(solution.getId()));
         return Result.success();
     }
 

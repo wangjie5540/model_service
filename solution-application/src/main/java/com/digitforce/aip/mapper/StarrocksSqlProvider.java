@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class StarrocksSqlProvider implements ProviderMethodResolver {
 
-    public String userScoreTable(Map<String, Object> params) {
+    public String scoreTable(Map<String, Object> params) {
         String tableName = (String) params.get("tableName");
         String createTableTemplate = "" +
                 "create table if not exists {} (\n" +

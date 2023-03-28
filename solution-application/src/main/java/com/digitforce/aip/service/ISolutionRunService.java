@@ -23,4 +23,6 @@ public interface ISolutionRunService extends IService<SolutionRun> {
     void stopRun(Long solutionRunId);
 
     PageView<SolutionRun> page(SolutionRunPageByQry solutionRunPageByQry);
+
+    SolutionRun getLatestVersion(Long solutionId);
 }

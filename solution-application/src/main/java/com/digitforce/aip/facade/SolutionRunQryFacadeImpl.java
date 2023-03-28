@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.digitforce.aip.dto.data.Coordinate;
 import com.digitforce.aip.dto.data.ModelMetric;
 import com.digitforce.aip.dto.data.SolutionRunDTO;
+import com.digitforce.aip.dto.qry.SolutionRunLatestVersionQry;
 import com.digitforce.aip.dto.qry.SolutionRunPageByQry;
 import com.digitforce.aip.entity.Model;
 import com.digitforce.aip.entity.SolutionRun;
@@ -11,6 +12,7 @@ import com.digitforce.aip.service.IModelService;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -54,6 +56,24 @@ public class SolutionRunQryFacadeImpl implements SolutionRunQryFacade {
             feedMetrics(modelList, solutionRunDTO);
         });
         return Result.success(solutionDTOPageView);
+    }
+
+    @Override
+    public Result<SolutionRunDTO> getLatestVersion(SolutionRunLatestVersionQry solutionRunLatestVersionQry) {
+        SolutionRun solutionRun = solutionRunService.getLatestVersion(solutionRunLatestVersionQry.getSolutionId());
+        if (solutionRun == null) {
+            return Result.success(null);
+        }
+        Long packageId = solutionRun.getPackageId();
+        QueryWrapper<Model> wrapper = new QueryWrapper<>();
+        wrapper.eq("package_id", packageId);
+        List<Model> models = modelService.list(wrapper);
+        SolutionRunDTO solutionRunDTO = ConvertTool.convert(solutionRun, SolutionRunDTO.class);
+        // 计算训练时长
+        Duration duration = Duration.between(solutionRunDTO.getCreateTime(), solutionRunDTO.getUpdateTime());
+        solutionRunDTO.setTrainTime(duration.getSeconds());
+        feedMetrics(models, solutionRunDTO);
+        return Result.success(solutionRunDTO);
     }
 
 
