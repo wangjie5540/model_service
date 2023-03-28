@@ -19,6 +19,7 @@ import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.KubeflowPipelineService;
 import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.aip.utils.ApplicationUtil;
+import com.digitforce.aip.utils.OlapHelper;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.exception.BizException;
@@ -77,6 +78,10 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         // 填充预测模板参数
         templateParams.put("result_file_name",
                 ApplicationUtil.generateServingResultFileName(TenantContext.tenantId(), servingInstance.getId()));
+        // 添加starrocks表名
+        templateParams.put("table_name", OlapHelper.getScoreTableName(solution.getId()));
+        // 添加表分区
+        templateParams.put("partition", servingInstance.getId().toString());
         templateParams.putAll(solution.getTemplateParams());
         String pipelineParams = templateComponent.getPipelineParams(solutionServing.getPipelineTemplate(),
                 templateParams);

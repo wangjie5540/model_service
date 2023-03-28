@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.UpdateProvider;
 @InterceptorIgnore(tenantLine = "true")
 @DS("olap")
 public interface StarrocksDDLMapper {
-    @UpdateProvider(type = StarrocksSqlProvider.class, method = "userScoreTable")
-    void createUserScoreTable(@Param("tableName") String tableName);
+    @UpdateProvider(type = StarrocksSqlProvider.class, method = "scoreTable")
+    void createScoreTable(@Param("tableName") String tableName);
 
     @Update("ALTER TABLE ${tableName} ADD PARTITIONS START (\"${start}\") END (\"${end}\") EVERY (1)")
     void createPartition(@Param("tableName") String tableName, @Param("start") Long start, @Param("end") Long end);

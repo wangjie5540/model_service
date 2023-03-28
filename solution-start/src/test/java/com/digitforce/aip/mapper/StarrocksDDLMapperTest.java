@@ -13,7 +13,7 @@ public class StarrocksDDLMapperTest extends BaseTest {
 
     @Test
     public void createUserScoreTable() {
-        ddlMapper.createUserScoreTable(OlapHelper.getScoreTableName(11L));
+        ddlMapper.createScoreTable(OlapHelper.getScoreTableName(11L));
     }
 
     @Test
