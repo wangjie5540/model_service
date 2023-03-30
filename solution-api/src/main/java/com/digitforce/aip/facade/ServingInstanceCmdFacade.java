@@ -2,6 +2,7 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.cmd.ServingInstanceAddCmd;
+import com.digitforce.aip.dto.data.ServingInstanceDTO;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,5 +21,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface ServingInstanceCmdFacade {
     @PostMapping("/solution/servingInstance/add")
     @Operation(summary = "添加服务实例", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_CMD)
-    Result add(@RequestBody ServingInstanceAddCmd servingInstanceAddCmd);
+    Result<ServingInstanceDTO> add(@RequestBody ServingInstanceAddCmd servingInstanceAddCmd);
 }
