@@ -23,9 +23,13 @@ import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
+import com.digitforce.framework.domain.Tenant;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,9 +58,12 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
     private TemplateComponent templateComponent;
     @Resource
     private SolutionRunMapper solutionRunMapper;
+    @Resource
+    private ObjectMapper objectMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @SneakyThrows
     public ServingInstance createAndRun(SolutionServing solutionServing) {
         Solution solution = solutionService.getById(solutionServing.getSolutionId());
         if (Objects.isNull(solution)) {
@@ -77,9 +84,14 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         // 填充预测模板参数
         templateParams.put("result_file_name",
                 ApplicationUtil.generateServingResultFileName(TenantContext.tenantId(), servingInstance.getId()));
+        String encode = Tenant.encode(TenantContext.tenant());
         templateParams.putAll(solution.getTemplateParams());
         String pipelineParams = templateComponent.getPipelineParams(solutionServing.getPipelineTemplate(),
                 templateParams);
+        Map<String, Object> map = objectMapper.readValue(pipelineParams, new TypeReference<Map<String, Object>>() {
+        });
+        map.put("X_TENANT", encode);
+        pipelineParams = objectMapper.writeValueAsString(map);
         String pRunName = String.format("%s-%s", solution.getPipelineName(), servingInstanceId);
         String pRunId = kubeflowPipelineService.createRun(solution.getPipelineId(), pRunName, pipelineParams,
                 PipelineRunFlagEnum.PREDICT.name());
