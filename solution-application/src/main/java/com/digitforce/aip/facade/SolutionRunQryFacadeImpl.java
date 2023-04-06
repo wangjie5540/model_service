@@ -1,8 +1,8 @@
 package com.digitforce.aip.facade;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.digitforce.aip.dto.data.Coordinate;
 import com.digitforce.aip.dto.data.ModelMetric;
+import com.digitforce.aip.dto.data.Roc;
 import com.digitforce.aip.dto.data.SolutionRunDTO;
 import com.digitforce.aip.dto.qry.SolutionRunLatestVersionQry;
 import com.digitforce.aip.dto.qry.SolutionRunPageByQry;
@@ -106,10 +106,8 @@ public class SolutionRunQryFacadeImpl implements SolutionRunQryFacade {
                         break;
                     case "roc":
                         try {
-                            List<Coordinate> coordinates = objectMapper.readValue(modelMetric.getValue().toString(),
-                                    new TypeReference<List<Coordinate>>() {
-                                    });
-                            solutionRunDTO.setRoc(coordinates);
+                            Roc roc = objectMapper.readValue(modelMetric.getValue().toString(), Roc.class);
+                            solutionRunDTO.setRoc(roc);
                         } catch (JsonProcessingException e) {
                             throw new RuntimeException(e);
                         }

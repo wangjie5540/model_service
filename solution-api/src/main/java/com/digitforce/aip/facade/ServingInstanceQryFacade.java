@@ -2,6 +2,7 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.data.ServingInstanceDTO;
+import com.digitforce.aip.dto.qry.ServingInstanceGetByIdQry;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
@@ -23,4 +24,8 @@ public interface ServingInstanceQryFacade {
     @PostMapping("/solution/servingInstance/pageBy")
     @Operation(summary = "服务实例分页查询", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
     Result<PageView<ServingInstanceDTO>> pageBy(@RequestBody ServingInstancePageByQry servingInstancePageByQry);
+
+    @PostMapping("/solution/servingInstance/getById")
+    @Operation(summary = "通过id查询服务实例", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
+    Result<ServingInstanceDTO> getById(@RequestBody ServingInstanceGetByIdQry servingInstanceGetByIdQry);
 }
