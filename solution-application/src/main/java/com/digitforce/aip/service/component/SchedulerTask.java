@@ -1,8 +1,6 @@
 package com.digitforce.aip.service.component;
 
 import cn.hutool.core.util.StrUtil;
-import com.digitforce.aip.config.HdfsProperties;
-import com.digitforce.aip.config.ModelManagementProperties;
 import com.digitforce.aip.entity.ServingInstance;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.dto.data.BestParameter;
@@ -13,10 +11,7 @@ import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import com.digitforce.aip.mapper.ServingInstanceMapper;
 import com.digitforce.aip.mapper.SolutionMapper;
-import com.digitforce.aip.mapper.SolutionRunMapper;
 import com.digitforce.aip.service.AutoMLService;
-import com.digitforce.aip.service.IModelPackageService;
-import com.digitforce.aip.service.IModelService;
 import com.digitforce.aip.service.IServingInstanceService;
 import com.digitforce.aip.service.ISolutionRunService;
 import com.digitforce.aip.service.ISolutionService;
@@ -40,8 +35,6 @@ public class SchedulerTask {
     @Resource
     private IServingInstanceService servingInstanceService;
     @Resource
-    private SolutionRunMapper solutionRunMapper;
-    @Resource
     private SolutionMapper solutionMapper;
     @Resource
     private ServingInstanceMapper servingInstanceMapper;
@@ -49,16 +42,6 @@ public class SchedulerTask {
     private ISolutionService solutionService;
     @Resource
     private KubeflowPipelineService kubeflowPipelineService;
-    @Resource
-    private HdfsProperties hdfsProperties;
-    @Resource
-    private HdfsComponent hdfsComponent;
-    @Resource
-    private ModelManagementProperties modelManagementProperties;
-    @Resource
-    private IModelPackageService modelPackageService;
-    @Resource
-    private IModelService modelService;
     @Resource
     private AutoMLService autoMLService;
 

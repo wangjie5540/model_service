@@ -4,7 +4,6 @@ import com.digitforce.aip.enums.RunStatusEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 public class SolutionRunDTO {
@@ -21,5 +20,5 @@ public class SolutionRunDTO {
     private Float precision;
     private Float recall;
     private Float f1;
-    private List<Coordinate> roc;
+    private Roc roc;
 }
