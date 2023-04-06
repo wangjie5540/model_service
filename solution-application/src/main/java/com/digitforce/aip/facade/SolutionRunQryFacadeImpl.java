@@ -106,8 +106,8 @@ public class SolutionRunQryFacadeImpl implements SolutionRunQryFacade {
                         break;
                     case "roc":
                         try {
-                            Roc roc = objectMapper.readValue(modelMetric.getValue().toString(), Roc.class);
-                            solutionRunDTO.setRoc(roc);
+                            String rocStr = objectMapper.writeValueAsString(modelMetric.getValue());
+                            solutionRunDTO.setRoc(objectMapper.readValue(rocStr, Roc.class));
                         } catch (JsonProcessingException e) {
                             throw new RuntimeException(e);
                         }
