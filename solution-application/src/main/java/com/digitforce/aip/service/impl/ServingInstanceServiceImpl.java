@@ -95,7 +95,7 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         // 添加starrocks表名
         map.put("predict_table_name", OlapHelper.getScoreTableName(solution.getId()));
         // 添加表分区
-        map.put("partition", servingInstance.getId().toString());
+        map.put("instance_id", servingInstance.getId().toString());
         pipelineParams = objectMapper.writeValueAsString(map);
         String pRunName = String.format("%s-%s", solution.getPipelineName(), servingInstanceId);
         String pRunId = kubeflowPipelineService.createRun(solution.getPipelineId(), pRunName, pipelineParams,
