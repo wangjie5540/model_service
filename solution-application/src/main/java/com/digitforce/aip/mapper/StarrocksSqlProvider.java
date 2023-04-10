@@ -11,11 +11,11 @@ public class StarrocksSqlProvider implements ProviderMethodResolver {
         String tableName = (String) params.get("tableName");
         String createTableTemplate = "" +
                 "create table if not exists {} (\n" +
-                "    serving_id bigint NOT NULL,\n" +
+                "    instance_id bigint NOT NULL,\n" +
                 "    user_id varchar(256) NOT NULL,\n" +
                 "    score FLOAT NOT NULL\n" +
-                ") PRIMARY KEY (serving_id, user_id)\n" +
-                "PARTITION BY RANGE (serving_id) ()\n" +
+                ") PRIMARY KEY (instance_id, user_id)\n" +
+                "PARTITION BY RANGE (instance_id) ()\n" +
                 "DISTRIBUTED BY HASH(user_id) BUCKETS 4\n" +
                 "PROPERTIES(\"replication_num\" = \"1\");";
         return StrUtil.format(createTableTemplate, tableName);
