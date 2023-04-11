@@ -68,6 +68,11 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
                 Double percent = Double.parseDouble(getPredictResultQry.getValues().get(0).toString());
                 map = olapMapper.topPercent(tableName, percent);
                 break;
+            case SCORE_RANGE:
+                Double minScore = Double.parseDouble(getPredictResultQry.getValues().get(0).toString());
+                Double maxScore = Double.parseDouble(getPredictResultQry.getValues().get(1).toString());
+                map = olapMapper.scoreRange(tableName, minScore, maxScore);
+                break;
             default:
                 throw new RuntimeException("不支持的类型");
 
