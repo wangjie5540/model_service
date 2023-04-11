@@ -6,6 +6,11 @@ import lombok.Data;
 public class PredictResultDTO {
     private Long total;
     private Double ratio;
-    private Double minScore;
-    private Double maxScore;
+    private ScoreRange scoreRange;
+
+    @Data
+    public static class ScoreRange {
+        private Double minScore;
+        private Double maxScore;
+    }
 }

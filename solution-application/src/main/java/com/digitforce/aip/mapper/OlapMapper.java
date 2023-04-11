@@ -37,7 +37,7 @@ public interface OlapMapper {
             "       top_n_percent.top_n_percentage AS `ratio`," +
             "       top_n_stats.min_score," +
             "       top_n_stats.max_score" +
-            "FROM top_n_stats, top_n_percent;")
+            " FROM top_n_stats, top_n_percent")
     Map<String, Object> topN(@Param("tableName") String tableName, @Param("n") Long n);
 
     @Select("WITH total_users AS " +
@@ -69,11 +69,11 @@ public interface OlapMapper {
             "    top_n_percent AS " +
             "    (SELECT (top_n_stats.top_n_count * #{percent} / total_users.total_count) AS top_n_percentage" +
             "    FROM top_n_stats, total_users )" +
-            "SELECT top_n_stats.top_n_count AS top_n_users_count," +
-            "       top_n_percent.top_n_percentage AS top_n_users_percentage," +
+            "SELECT top_n_stats.top_n_count AS total," +
+            "       top_n_percent.top_n_percentage AS ratio," +
             "       top_n_stats.min_score," +
             "       top_n_stats.max_score" +
-            "FROM top_n_stats, top_n_percent;")
+            " FROM top_n_stats, top_n_percent;")
     Map<String, Object> topPercent(@Param("tableName") String tableName, @Param("percent") Double percent);
 
     @Select("WITH total_users AS (" +
@@ -96,11 +96,11 @@ public interface OlapMapper {
             "    SELECT (top_n_stats.top_n_count / total_users.total_count) AS top_n_percentage" +
             "    FROM top_n_stats, total_users" +
             ")" +
-            "SELECT top_n_stats.top_n_count AS top_n_users_count," +
-            "       top_n_percent.top_n_percentage AS top_n_users_percentage," +
+            "SELECT top_n_stats.top_n_count AS total," +
+            "       top_n_percent.top_n_percentage AS ratio," +
             "       top_n_stats.min_score," +
             "       top_n_stats.max_score" +
-            "FROM top_n_stats, top_n_percent;")
+            " FROM top_n_stats, top_n_percent;")
     Map<String, Object> scoreRange(@Param("tableName") String tableName, @Param("start") Double start,
                                    @Param("end") Double end);
 }
