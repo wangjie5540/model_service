@@ -18,7 +18,6 @@ public class ModelPackageDTO {
     private String name;
     private String solutionTitle;
     private String algorithm;
-    private String system;
     private Integer liftCycle;
     private LocalDateTime createTime;
     private List<ModelDTO> fittedModelList;

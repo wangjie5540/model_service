@@ -23,8 +23,6 @@ public class SolutionDTO {
     private Long sceneId;
     @Schema(description = "场景名称")
     private String sceneName;
-    @Schema(description = "应用系统")
-    private String system;
     @Schema(description = "时间表达式")
     private String cron;
     @Schema(description = "时间描述，用于前端反显")
