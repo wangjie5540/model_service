@@ -30,8 +30,14 @@ public class OlapMapperTest extends BaseTest {
     }
 
     @Test
+    public void targetScore() {
+        Map<String, Object> total = olapMapper.targetScore("aip.score_241", 0.2, 0.8);
+        System.out.println(total);
+    }
+
+    @Test
     public void scoreRange() {
-        Map<String, Object> total = olapMapper.scoreRange("aip.score_241", 0.2, 0.8);
+        Object total = olapMapper.getBaseRange("aip.score_241");
         System.out.println(total);
     }
 }
