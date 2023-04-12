@@ -19,8 +19,6 @@ public class SolutionServingDTO {
     private String sceneName;
     @Schema(description = "方案标题")
     private String solutionTitle;
-    @Schema(description = "系统")
-    private String system;
     @Schema(description = "创建用户")
     private String createUser;
     @Schema(description = "方案id")

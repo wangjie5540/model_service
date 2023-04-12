@@ -96,11 +96,6 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     private Map<String, Object> templateParams;
 
     /**
-     * 应用系统
-     */
-    private String system;
-
-    /**
      * 方案状态
      */
     private SolutionStatusEnum status;

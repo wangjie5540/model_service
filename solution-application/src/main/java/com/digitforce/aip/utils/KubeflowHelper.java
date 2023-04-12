@@ -2,6 +2,7 @@ package com.digitforce.aip.utils;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -182,8 +183,8 @@ public class KubeflowHelper {
     public PipelinePage pageByPipeline(String host, int port, int pageSize) {
         login(host, port);
         HttpRequest request =
-                HttpRequest.get(String.format("http://%s:%d/pipeline/apis/v1beta1/pipelines?page_size=%d&sort_by" +
-                                "=created_at desc", host, port, pageSize))
+                HttpRequest.get(StrUtil.format("http://{}:{}/pipeline/apis/v1beta1/pipelines?page_size={}&sort_by" +
+                                "=created_at%20desc", host, port, pageSize))
                         .header(Header.CONTENT_TYPE, "application/json");
         return gson.fromJson(request.execute().body(), PipelinePage.class);
     }

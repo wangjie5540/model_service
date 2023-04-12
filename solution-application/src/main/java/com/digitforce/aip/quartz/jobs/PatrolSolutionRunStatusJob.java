@@ -25,8 +25,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.fs.FileStatus;
+import org.jetbrains.annotations.NotNull;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,7 +59,7 @@ public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Seriali
     @SneakyThrows
     @Override
     @Transactional(rollbackFor = Exception.class)
-    protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
+    protected void executeInternal(@NotNull JobExecutionContext context) {
         log.info("PatrolSolutionRunStatusJob");
         List<SolutionRun> solutionRunList = solutionRunMapper.getSomeRunningRecordsWithoutTenant(20);
         solutionRunList.forEach(record -> {
@@ -117,7 +117,7 @@ public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Seriali
         modelPackage.setLifecycle(modelManagementProperties.getDefaultLifecycle());
         String path = StrUtil.format("{}/{}", hdfsProperties.getModelBasePath(), solutionRun.getId().toString());
         modelPackage.setPath(path);
-        modelPackage.setSystem(solution.getSystem());
+//        modelPackage.setSystem(solution.getSystem());
         modelPackageService.save(modelPackage);
         List<FileStatus> fileStatuses = hdfsComponent.listFile(path);
         for (FileStatus fileStatus : fileStatuses) {

@@ -8,6 +8,7 @@ package com.digitforce.aip.enums;
  * @since 2022/12/19 17:15
  */
 public enum ScoreRangeType {
+    ALL,
     TOP_N,
     TOP_PERCENT,
     SCORE_RANGE,
