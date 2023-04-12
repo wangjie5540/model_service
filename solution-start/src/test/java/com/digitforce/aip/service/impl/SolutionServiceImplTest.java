@@ -26,7 +26,6 @@ public class SolutionServiceImplTest extends BaseTest {
         solutionAddCmd.setTitle("lookalike方案");
         solutionAddCmd.setSceneId(6L);
         solutionAddCmd.setSceneName("lookalike测试场景名称");
-        solutionAddCmd.setSystem("CD");
         solutionAddCmd.setDescription("lookalike方案描述");
         solutionAddCmd.setPipelineId("cd9a12b9-8407-42bb-bce3-c5bcf166e2c3");
         solutionAddCmd.setPipelineName("lookalike");
