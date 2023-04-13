@@ -40,4 +40,10 @@ public class OlapMapperTest extends BaseTest {
         Object total = olapMapper.getBaseRange("aip.score_241");
         System.out.println(total);
     }
+
+    @Test
+    public void targetScoreDistribution() {
+        Object total = olapMapper.getTargetScoreDistribution("aip.score_251", 0.15, 0.8);
+        System.out.println(total);
+    }
 }

@@ -15,6 +15,8 @@ import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -84,17 +86,19 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
 
         }
         PredictResultDTO predictResultDTO = new PredictResultDTO();
-        feedInterval(predictResultDTO, getPredictResultQry.getScoreRangeType(), tableName);
         predictResultDTO.setRatio(Double.parseDouble(map.get("ratio").toString()));
         predictResultDTO.setTotal(Long.parseLong(map.get("total").toString()));
         PredictResultDTO.ScoreRange scoreRange = new PredictResultDTO.ScoreRange();
         scoreRange.setMaxScore(Double.parseDouble(map.get("max_score").toString()));
         scoreRange.setMinScore(Double.parseDouble(map.get("min_score").toString()));
+        feedInterval(predictResultDTO, getPredictResultQry.getScoreRangeType(), tableName,
+                getPredictResultQry.getValues());
         predictResultDTO.setScoreRange(scoreRange);
         return Result.success(predictResultDTO);
     }
 
-    private void feedInterval(PredictResultDTO predictResultDTO, ScoreRangeType scoreRangeType, String tableName) {
+    private void feedInterval(PredictResultDTO predictResultDTO, ScoreRangeType scoreRangeType, String tableName,
+                              List<Object> values) {
         List<Map<String, Object>> baseRange = olapMapper.getBaseRange(tableName);
         predictResultDTO.setBaseIntervals(baseRange.stream().map(item -> {
             PredictResultDTO.Interval interval = new PredictResultDTO.Interval();
@@ -102,6 +106,50 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
             interval.setTotal(Long.parseLong(item.get("count").toString()));
             return interval;
         }).collect(Collectors.toList()));
-
+        switch (scoreRangeType) {
+            case ALL:
+            case TOP_N:
+            case TOP_PERCENT:
+                Long remain = predictResultDTO.getTotal();
+                List<PredictResultDTO.Interval> targetIntervals = Lists.newArrayList();
+                for (PredictResultDTO.Interval interval : predictResultDTO.getBaseIntervals()) {
+                    PredictResultDTO.Interval targetInterval = new PredictResultDTO.Interval();
+                    if (remain > interval.getTotal()) {
+                        targetInterval.setCname(interval.getCname());
+                        targetInterval.setTotal(interval.getTotal());
+                        targetIntervals.add(targetInterval);
+                        remain -= interval.getTotal();
+                    } else {
+                        targetInterval.setCname(interval.getCname());
+                        targetInterval.setTotal(remain);
+                        targetIntervals.add(targetInterval);
+                    }
+                }
+                predictResultDTO.setTargetIntervals(targetIntervals);
+                break;
+            case SCORE_RANGE:
+                List<Map<String, Object>> rangeDistribution = olapMapper.getTargetScoreDistribution(tableName,
+                                Double.parseDouble(values.get(0).toString()),
+                                Double.parseDouble(values.get(1).toString()))
+                        .stream().map(item -> {
+                            Map<String, Object> m = Maps.newHashMap();
+                            m.put(item.get("score_range").toString(), item.get("count"));
+                            return m;
+                        }).collect(Collectors.toList());
+                Map<String, Object> reduce = rangeDistribution.stream().reduce(Maps.newHashMap(), (a, b) -> {
+                    a.putAll(b);
+                    return a;
+                });
+                predictResultDTO.setTargetIntervals(baseRange.stream().map(item -> {
+                    PredictResultDTO.Interval interval = new PredictResultDTO.Interval();
+                    String cname = item.get("score_range").toString();
+                    interval.setCname(cname);
+                    interval.setTotal(Long.parseLong(reduce.getOrDefault(cname, 0L).toString()));
+                    return interval;
+                }).collect(Collectors.toList()));
+                break;
+            default:
+                throw new RuntimeException("不支持的类型");
+        }
     }
 }
