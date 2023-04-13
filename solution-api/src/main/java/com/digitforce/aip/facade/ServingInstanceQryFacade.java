@@ -1,9 +1,11 @@
 package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
+import com.digitforce.aip.dto.data.PredictDetailDTO;
 import com.digitforce.aip.dto.data.PredictResultDTO;
 import com.digitforce.aip.dto.data.ServingInstanceDTO;
 import com.digitforce.aip.dto.qry.GetPredictResultQry;
+import com.digitforce.aip.dto.qry.PredictDetailPageByQry;
 import com.digitforce.aip.dto.qry.ServingInstanceGetByIdQry;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
 import com.digitforce.framework.api.dto.PageView;
@@ -31,7 +33,11 @@ public interface ServingInstanceQryFacade {
     @Operation(summary = "通过id查询服务实例", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
     Result<ServingInstanceDTO> getById(@RequestBody ServingInstanceGetByIdQry servingInstanceGetByIdQry);
 
-    @PostMapping("/solution/servingInstance/getPredictResult")
-    @Operation(summary = "通过id查询服务实例", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
-    Result<PredictResultDTO> getPredictResult(@RequestBody GetPredictResultQry getPredictResultQry);
+    @PostMapping("/solution/servingInstance/getPredictStatistics")
+    @Operation(summary = "获取预测结果", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
+    Result<PredictResultDTO> getPredictStatistics(@RequestBody GetPredictResultQry getPredictResultQry);
+
+    @PostMapping("/solution/servingInstance/pageByPredictDetail")
+    @Operation(summary = "获取预测明细", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
+    Result<PageView<PredictDetailDTO>> pageByPredictDetail(@RequestBody PredictDetailPageByQry predictResultPageByQry);
 }
