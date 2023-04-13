@@ -117,7 +117,6 @@ public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Seriali
         modelPackage.setLifecycle(modelManagementProperties.getDefaultLifecycle());
         String path = StrUtil.format("{}/{}", hdfsProperties.getModelBasePath(), solutionRun.getId().toString());
         modelPackage.setPath(path);
-//        modelPackage.setSystem(solution.getSystem());
         modelPackageService.save(modelPackage);
         List<FileStatus> fileStatuses = hdfsComponent.listFile(path);
         for (FileStatus fileStatus : fileStatuses) {

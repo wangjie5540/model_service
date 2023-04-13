@@ -183,7 +183,8 @@ public interface OlapMapper {
             "ON " +
             "    sr.range_label = uc.score_range " +
             "ORDER BY " +
-            "    sr.range_start; ")
+            "    sr.range_start " +
+            "DESC; ")
     List<Map<String, Object>> getBaseRange(@Param("tableName") String tableName);
 
     @Select("WITH score_ranges AS ( " +
@@ -196,7 +197,7 @@ public interface OlapMapper {
             "SELECT " +
             "  CONCAT(CAST(lower_range AS DECIMAL(2, 1)), ' - ', CAST(upper_range AS DECIMAL(2, 1))) AS score_range," +
             " " +
-            "  COUNT(*) AS num_users " +
+            "  COUNT(*) AS `count` " +
             "FROM score_ranges " +
             "GROUP BY lower_range, upper_range " +
             "ORDER BY lower_range, upper_range;")
