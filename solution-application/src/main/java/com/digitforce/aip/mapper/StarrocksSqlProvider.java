@@ -27,7 +27,7 @@ public class StarrocksSqlProvider implements ProviderMethodResolver {
                 "create table if not exists {} (\n" +
                 "    instance_id bigint NOT NULL,\n" +
                 "    user_id varchar(256) NOT NULL,\n" +
-                "    shapley FLOAT NOT NULL\n" +
+                "    shapley varchar(65535) NOT NULL\n" +
                 ") PRIMARY KEY (instance_id, user_id)\n" +
                 "PARTITION BY RANGE (instance_id) ()\n" +
                 "DISTRIBUTED BY HASH(user_id) BUCKETS 4\n" +
