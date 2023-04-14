@@ -37,6 +37,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
         Solution solution = solutionService.add(solutionAddCmd);
         // 创建starrocks表
         starrocksDDLMapper.createScoreTable(OlapHelper.getScoreTableName(solution.getId()));
+        starrocksDDLMapper.createShapleyTable(OlapHelper.getShapleyTableName(solution.getId()));
         return Result.success();
     }
 
@@ -59,6 +60,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     public Result delete(SolutionDeleteCmd solutionDeleteCmd) {
         solutionService.delete(solutionDeleteCmd.getId());
         starrocksDDLMapper.dropTable(OlapHelper.getScoreTableName(solutionDeleteCmd.getId()));
+        starrocksDDLMapper.dropTable(OlapHelper.getShapleyTableName(solutionDeleteCmd.getId()));
         return Result.success();
     }
 

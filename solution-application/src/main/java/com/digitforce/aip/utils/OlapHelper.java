@@ -16,4 +16,14 @@ public class OlapHelper {
     public static String getScoreTableName(Long solutionId) {
         return StrUtil.format("aip.score_{}", solutionId.toString());
     }
+
+    /**
+     * 获取shapley表
+     *
+     * @param solutionId 方案ID
+     * @return shapley表名
+     */
+    public static String getShapleyTableName(Long solutionId) {
+        return StrUtil.format("aip.shapley_{}", solutionId.toString());
+    }
 }

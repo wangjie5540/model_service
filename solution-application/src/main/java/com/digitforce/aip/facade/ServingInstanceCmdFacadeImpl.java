@@ -30,6 +30,8 @@ public class ServingInstanceCmdFacadeImpl implements ServingInstanceCmdFacade {
         ServingInstanceDTO servingInstanceDTO = ConvertTool.convert(servingInstance, ServingInstanceDTO.class);
         starrocksDDLMapper.createPartition(OlapHelper.getScoreTableName(solutionServing.getSolutionId()),
                 servingInstance.getId(), servingInstance.getId() + 1);
+        starrocksDDLMapper.createPartition(OlapHelper.getShapleyTableName(solutionServing.getSolutionId()),
+                servingInstance.getId(), servingInstance.getId() + 1);
         return Result.success(servingInstanceDTO);
     }
 }
