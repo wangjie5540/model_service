@@ -94,7 +94,7 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         map.put("X_TENANT", encode);
         // 添加starrocks表名
         map.put("predict_table_name", OlapHelper.getScoreTableName(solution.getId()));
-        map.put("shapley_table_name", OlapHelper.getScoreTableName(solution.getId()));
+        map.put("shapley_table_name", OlapHelper.getShapleyTableName(solution.getId()));
         // 添加表分区
         map.put("instance_id", servingInstance.getId().toString());
         pipelineParams = objectMapper.writeValueAsString(map);
