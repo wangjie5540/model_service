@@ -1,8 +1,10 @@
 package com.digitforce.aip.facade;
 
+import com.digitforce.aip.dto.data.AleDTO;
 import com.digitforce.aip.dto.data.PredictDetailDTO;
 import com.digitforce.aip.dto.data.PredictResultDTO;
 import com.digitforce.aip.dto.data.ServingInstanceDTO;
+import com.digitforce.aip.dto.qry.GetAleQry;
 import com.digitforce.aip.dto.qry.GetPredictResultQry;
 import com.digitforce.aip.dto.qry.PredictDetailPageByQry;
 import com.digitforce.aip.dto.qry.ServingInstanceGetByIdQry;
@@ -17,10 +19,13 @@ import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -42,6 +47,12 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     private IServingInstanceService servingInstanceService;
     @Resource
     private PredictResultMapper predictResultMapper;
+
+    public static final ObjectMapper objectMapper = new ObjectMapper();
+
+    static {
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+    }
 
     @Override
     public Result<PageView<ServingInstanceDTO>> pageBy(ServingInstancePageByQry servingInstancePageByQry) {
@@ -111,6 +122,17 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
         List<PredictDetailDTO> predictDetailDTOList = ConvertTool.convert(predictDetailList, PredictDetailDTO.class);
         pageView.setList(predictDetailDTOList);
         return Result.success(pageView);
+    }
+
+    @Override
+    @SneakyThrows
+    public Result<AleDTO> getAleByInstanceId(GetAleQry getAleQry) {
+        ServingInstance servingInstance = servingInstanceService.getById(getAleQry.getInstanceId());
+        if (StringUtils.isEmpty(servingInstance.getAle())) {
+            return Result.success(null);
+        }
+        AleDTO aleDTO = objectMapper.readValue(servingInstance.getAle(), AleDTO.class);
+        return Result.success(aleDTO);
     }
 
     private void feedInterval(PredictResultDTO predictResultDTO, ScoreRangeType scoreRangeType, String tableName,
