@@ -1,11 +1,12 @@
 package com.digitforce.aip.facade;
 
-import com.digitforce.aip.dto.data.AleDTO;
+import cn.hutool.core.util.StrUtil;
 import com.digitforce.aip.dto.data.PredictDetailDTO;
 import com.digitforce.aip.dto.data.PredictResultDTO;
 import com.digitforce.aip.dto.data.ServingInstanceDTO;
 import com.digitforce.aip.dto.qry.GetAleQry;
 import com.digitforce.aip.dto.qry.GetPredictResultQry;
+import com.digitforce.aip.dto.qry.GetShapleyQry;
 import com.digitforce.aip.dto.qry.PredictDetailPageByQry;
 import com.digitforce.aip.dto.qry.ServingInstanceGetByIdQry;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
@@ -25,7 +26,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -126,13 +126,27 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
 
     @Override
     @SneakyThrows
-    public Result<AleDTO> getAleByInstanceId(GetAleQry getAleQry) {
+    public Result<Object> getAle(GetAleQry getAleQry) {
         ServingInstance servingInstance = servingInstanceService.getById(getAleQry.getInstanceId());
-        if (StringUtils.isEmpty(servingInstance.getAle())) {
+        if (StrUtil.isEmptyIfStr(servingInstance.getAle())) {
             return Result.success(null);
         }
-        AleDTO aleDTO = objectMapper.readValue(servingInstance.getAle(), AleDTO.class);
-        return Result.success(aleDTO);
+        return Result.success(objectMapper.readValue(servingInstance.getAle(), Object.class));
+    }
+
+    @Override
+    @SneakyThrows
+    public Result<Object> getShapley(GetShapleyQry getShapleyQry) {
+        ServingInstance servingInstance = servingInstanceService.getById(getShapleyQry.getInstanceId());
+        String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
+//        String tableName = OlapHelper.getShapleyTableName(254L);
+
+        String shapely = predictResultMapper.getShapley(tableName, getShapleyQry.getInstanceId(),
+                getShapleyQry.getUserId());
+        if (StrUtil.isEmptyIfStr(shapely)) {
+            return Result.success(null);
+        }
+        return Result.success(objectMapper.readValue(shapely, Object.class));
     }
 
     private void feedInterval(PredictResultDTO predictResultDTO, ScoreRangeType scoreRangeType, String tableName,

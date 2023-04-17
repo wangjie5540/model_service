@@ -225,4 +225,8 @@ public interface PredictResultMapper {
                                              @Param("start") Double start,
                                              @Param("end") Double end,
                                              @Param("limit") Long limit);
+
+    @Select("select `shapley` from ${tableName} where instance_id = #{instanceId} and user_id = #{userId}")
+    String getShapley(@Param("tableName") String tableName, @Param("instanceId") Long instanceId,
+                      @Param("userId") Long userId);
 }

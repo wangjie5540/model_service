@@ -21,7 +21,7 @@ import com.digitforce.aip.service.KubeflowPipelineService;
 import com.digitforce.aip.service.component.HdfsComponent;
 import com.digitforce.framework.context.TenantContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.fs.FileStatus;
@@ -60,7 +60,6 @@ public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Seriali
     @Override
     @Transactional(rollbackFor = Exception.class)
     protected void executeInternal(@NotNull JobExecutionContext context) {
-        log.info("PatrolSolutionRunStatusJob");
         List<SolutionRun> solutionRunList = solutionRunMapper.getSomeRunningRecordsWithoutTenant(20);
         solutionRunList.forEach(record -> {
             TenantContext.init(record.getTenantId());
@@ -126,7 +125,7 @@ public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Seriali
             Model model = new Model();
             String fileData = hdfsComponent.getFileFullDataStr(fileStatus.getPath().toUri().getPath());
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+            objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
             ModelDesc modelDesc = objectMapper.readValue(fileData, ModelDesc.class);
             model.setSolutionId(modelPackage.getSolutionId());
             model.setResourceType(modelDesc.getType().equals("pk") ? ResourceTypeEnum.MODEL :
