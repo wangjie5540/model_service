@@ -1,15 +1,22 @@
 package com.digitforce.aip.utils;
 
 
-import lombok.experimental.UtilityClass;
+import com.digitforce.aip.config.S3Properties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.model.Bucket;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,17 +28,37 @@ import java.util.stream.Collectors;
  * @author wangtonggui
  */
 @Slf4j
-@UtilityClass
+@Component
 public class S3Helper {
-    private final S3Client client = S3Client.builder()
-            .endpointOverride(URI.create("http://172.24.20.91:32222/"))
-            .region(Region.US_EAST_1)
-            .credentialsProvider(
-                    StaticCredentialsProvider.create(AwsBasicCredentials.create("FzaylFbX7h6tte12",
-                            "l2hOAWMweie7UP4MZpxB8icNdGezodel")))
-            .serviceConfiguration(S3Configuration.builder().build())
-            .forcePathStyle(true)
-            .build();
+    private S3Client client;
+    @Resource
+    private S3Properties s3Properties;
+
+    @PostConstruct
+    public void postConstruct() {
+        client = S3Client.builder()
+                .endpointOverride(URI.create(s3Properties.getEndpoint()))
+                .region(Region.of(s3Properties.getRegion()))
+                .credentialsProvider(
+                        StaticCredentialsProvider.create(AwsBasicCredentials.create(s3Properties.getAccessKey(),
+                                s3Properties.getSecretKey())))
+                .serviceConfiguration(S3Configuration.builder().build())
+                .forcePathStyle(true)
+                .build();
+    }
+
+
+    public String getObjectContentAsString(String key) {
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(s3Properties.getBucket())
+                .key(key)
+                .build();
+
+        ResponseBytes<GetObjectResponse> objectBytes = client.getObject(getObjectRequest,
+                ResponseTransformer.toBytes());
+
+        return objectBytes.asUtf8String();
+    }
 
     public void deleteObject(String bucketName, String key) {
         client.deleteObject(builder -> builder.bucket(bucketName).key(key));
