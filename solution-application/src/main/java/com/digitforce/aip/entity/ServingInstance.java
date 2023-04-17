@@ -82,6 +82,11 @@ public class ServingInstance implements Serializable {
     private String result;
 
     /**
+     * ale值
+     */
+    private String ale;
+
+    /**
      * 创建用户
      */
     private String createUser;

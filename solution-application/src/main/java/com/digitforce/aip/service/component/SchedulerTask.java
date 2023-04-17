@@ -1,6 +1,7 @@
 package com.digitforce.aip.service.component;
 
 import cn.hutool.core.util.StrUtil;
+import com.digitforce.aip.config.HdfsProperties;
 import com.digitforce.aip.entity.ServingInstance;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.dto.data.BestParameter;
@@ -44,6 +45,10 @@ public class SchedulerTask {
     private KubeflowPipelineService kubeflowPipelineService;
     @Resource
     private AutoMLService autoMLService;
+    @Resource
+    public HdfsProperties hdfsProperties;
+    @Resource
+    public HdfsComponent hdfsComponent;
 
     @Scheduled(fixedRate = 20000)
     @Transactional(rollbackFor = Exception.class)
@@ -92,6 +97,10 @@ public class SchedulerTask {
                     updateRecord.setStatus(ServingInstanceStatusEnum.FINISHED);
                     updateRecord.setResult(ApplicationUtil.generateServingResultUrl(record.getTenantId(),
                             record.getId()));
+                    String path = StrUtil.format("{}/{}/ale.json", hdfsProperties.getPredictBasePath(),
+                            record.getId().toString());
+                    String ale = hdfsComponent.getFileFullDataStr(path);
+                    updateRecord.setAle(ale);
                     break;
                 case Error:
                 case Failed:

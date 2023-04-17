@@ -4,7 +4,9 @@ import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.data.PredictDetailDTO;
 import com.digitforce.aip.dto.data.PredictResultDTO;
 import com.digitforce.aip.dto.data.ServingInstanceDTO;
+import com.digitforce.aip.dto.qry.GetAleQry;
 import com.digitforce.aip.dto.qry.GetPredictResultQry;
+import com.digitforce.aip.dto.qry.GetShapleyQry;
 import com.digitforce.aip.dto.qry.PredictDetailPageByQry;
 import com.digitforce.aip.dto.qry.ServingInstanceGetByIdQry;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
@@ -40,4 +42,12 @@ public interface ServingInstanceQryFacade {
     @PostMapping("/solution/servingInstance/pageByPredictDetail")
     @Operation(summary = "获取预测明细", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
     Result<PageView<PredictDetailDTO>> pageByPredictDetail(@RequestBody PredictDetailPageByQry predictResultPageByQry);
+
+    @PostMapping("/solution/servingInstance/getAle")
+    @Operation(summary = "获取ale", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
+    Result<Object> getAle(@RequestBody GetAleQry getAleQry);
+
+    @PostMapping("/solution/servingInstance/getShapley")
+    @Operation(summary = "获取shapley值", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
+    Result<Object> getShapley(@RequestBody GetShapleyQry getShapleyQry);
 }

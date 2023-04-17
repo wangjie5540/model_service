@@ -18,4 +18,5 @@ public class HdfsProperties {
     private String uri;
     private String configFile;
     private String modelBasePath;
+    private String predictBasePath = "/user/ai/aip/predict";
 }
