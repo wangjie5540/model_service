@@ -73,7 +73,6 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     public Result<PredictResultDTO> getPredictStatistics(GetPredictResultQry getPredictResultQry) {
         ServingInstance servingInstance = servingInstanceService.getById(getPredictResultQry.getInstanceId());
         String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
-//        String tableName = OlapHelper.getScoreTableName(251L);
         Map<String, Object> map;
         switch (getPredictResultQry.getScoreRangeType()) {
             case ALL:
@@ -166,16 +165,14 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
                 List<PredictResultDTO.Interval> targetIntervals = Lists.newArrayList();
                 for (PredictResultDTO.Interval interval : predictResultDTO.getBaseIntervals()) {
                     PredictResultDTO.Interval targetInterval = new PredictResultDTO.Interval();
+                    targetInterval.setCname(interval.getCname());
                     if (remain > interval.getTotal()) {
-                        targetInterval.setCname(interval.getCname());
                         targetInterval.setTotal(interval.getTotal());
-                        targetIntervals.add(targetInterval);
-                        remain -= interval.getTotal();
                     } else {
-                        targetInterval.setCname(interval.getCname());
                         targetInterval.setTotal(remain);
-                        targetIntervals.add(targetInterval);
                     }
+                    targetIntervals.add(targetInterval);
+                    remain = remain - interval.getTotal() > 0 ? remain - interval.getTotal() : 0;
                 }
                 predictResultDTO.setTargetIntervals(targetIntervals);
                 break;
