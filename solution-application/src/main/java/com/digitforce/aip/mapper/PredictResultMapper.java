@@ -210,21 +210,26 @@ public interface PredictResultMapper {
 
     @Select("select user_id, score from ${tableName} where score between #{start} and #{end} and instance_id = " +
             "#{instanceId} order by score desc limit #{limit}")
-    List<Map<String, Object>> getPredictDetail(@Param("tableName") String tableName,
-                                               @Param("instanceId") Long instanceId,
-                                               @Param("start") Double start,
-                                               @Param("end") Double end,
-                                               @Param("limit") Integer limit);
+    List<Map<String, Object>> getPredictDetail(
+            @Param("tableName") String tableName,
+            @Param("instanceId") Long instanceId,
+            @Param("start") Double start,
+            @Param("end") Double end,
+            @Param("limit") Integer limit
+    );
 
     @Select("select instance_id, user_id, score from ${tableName} where " +
             "instance_id = #{instanceId} and " +
             "score between #{start} and #{end} " +
-            "order by score desc limit #{limit}")
-    List<PredictDetail> getPredictDetailList(@Param("tableName") String tableName,
-                                             @Param("instanceId") Long instanceId,
-                                             @Param("start") Double start,
-                                             @Param("end") Double end,
-                                             @Param("limit") Long limit);
+            "order by score desc limit #{limit} offset #{offset}")
+    List<PredictDetail> getPredictDetailList(
+            @Param("tableName") String tableName,
+            @Param("instanceId") Long instanceId,
+            @Param("start") Double start,
+            @Param("end") Double end,
+            @Param("limit") Integer limit,
+            @Param("offset") Integer offset
+    );
 
     @Select("select `shapley` from ${tableName} where instance_id = #{instanceId} and user_id = #{userId}")
     String getShapley(@Param("tableName") String tableName, @Param("instanceId") Long instanceId,
