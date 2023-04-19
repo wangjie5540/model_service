@@ -10,4 +10,11 @@ ALTER TABLE aip_solution.solution_run CHANGE version version BIGINT DEFAULT 1 NO
 ALTER TABLE aip_solution.serving_instance
     ADD ale TEXT NULL COMMENT 'ale值';
 ALTER TABLE aip_solution.serving_instance CHANGE ale ale TEXT NULL COMMENT 'ale值' AFTER `result`;
-
+-- 在预测实例表增加模型运行id字段
+ALTER TABLE aip_solution.serving_instance
+    ADD run_id BIGINT NULL COMMENT '模型运行id';
+ALTER TABLE aip_solution.serving_instance CHANGE run_id run_id BIGINT NULL COMMENT '模型运行id' AFTER serving_id;
+-- 在预测视力表添加模型版本
+ALTER TABLE aip_solution.serving_instance
+    ADD model_version BIGINT NULL COMMENT '模型版本';
+ALTER TABLE aip_solution.serving_instance CHANGE model_version model_version BIGINT NULL COMMENT '模型版本' AFTER p_run_name;

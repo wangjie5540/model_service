@@ -9,7 +9,11 @@ import java.time.LocalDateTime;
 public class ServingInstanceDTO {
     private Long id;
     private Long servingId;
+    private Long modelVersion;
     private ServingInstanceStatusEnum status;
+    private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private String result;
+    private String createUser;
+    private String updateUser;
 }

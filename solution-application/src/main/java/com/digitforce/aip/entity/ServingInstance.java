@@ -70,6 +70,10 @@ public class ServingInstance implements Serializable {
      * 状态
      */
     private ServingInstanceStatusEnum status;
+    /**
+     * 模型版本
+     */
+    private Long modelVersion;
 
     /**
      * 耗时秒数

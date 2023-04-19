@@ -78,6 +78,7 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         servingInstance.setId(null);
         servingInstance.setServingId(solutionServing.getId());
         servingInstance.setStatus(ServingInstanceStatusEnum.PREDICTING);
+        servingInstance.setModelVersion(solutionRun.getVersion());
         super.save(servingInstance);
         Long servingInstanceId = servingInstance.getId();
         Map<String, Object> templateParams = solutionServing.getTemplateParams() == null ? Maps.newHashMap() :
