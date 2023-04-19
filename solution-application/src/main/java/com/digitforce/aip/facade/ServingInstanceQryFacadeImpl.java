@@ -120,13 +120,20 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
                 predictResultPageByQry.getPageSize());
         ServingInstance servingInstance = servingInstanceService.getById(predictResultPageByQry.getInstanceId());
         PageView<PredictDetailDTO> pageView = new PageView<>();
-        pageView.setCount(Integer.parseInt(predictResultPageByQry.getTotal().toString()));
+        if (predictResultPageByQry.getTotal() == null) {
+            String scoreTableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
+            Long count = predictResultMapper.countPredictDetail(scoreTableName, predictResultPageByQry.getInstanceId());
+            pageView.setCount(count.intValue());
+        } else {
+            pageView.setCount(Integer.parseInt(predictResultPageByQry.getTotal().toString()));
+        }
         String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
         Integer startIndex = (predictResultPageByQry.getPageNum() - 1) * predictResultPageByQry.getPageSize();
         List<PredictDetail> predictDetailList = predictResultMapper.getPredictDetailList(tableName,
                 predictResultPageByQry.getInstanceId(),
                 predictResultPageByQry.getMinScore(), predictResultPageByQry.getMaxScore(),
-                predictResultPageByQry.getPageSize(),
+                predictResultPageByQry.getPageSize() < pageView.getCount() ? predictResultPageByQry.getPageSize() :
+                        pageView.getCount(),
                 startIndex
         );
         List<PredictDetailDTO> predictDetailDTOList = ConvertTool.convert(predictDetailList, PredictDetailDTO.class);
