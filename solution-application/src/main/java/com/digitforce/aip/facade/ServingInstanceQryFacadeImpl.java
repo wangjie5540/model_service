@@ -156,8 +156,7 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     @SneakyThrows
     public Result<Object> getShapley(GetShapleyQry getShapleyQry) {
         ServingInstance servingInstance = servingInstanceService.getById(getShapleyQry.getInstanceId());
-        String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
-//        String tableName = OlapHelper.getShapleyTableName(254L);
+        String tableName = OlapHelper.getShapleyTableName(servingInstance.getSolutionId());
 
         String shapely = predictResultMapper.getShapley(tableName, getShapleyQry.getInstanceId(),
                 getShapleyQry.getUserId());
