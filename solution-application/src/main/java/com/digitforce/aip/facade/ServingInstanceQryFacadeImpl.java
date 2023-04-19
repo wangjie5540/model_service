@@ -109,15 +109,26 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
 
     @Override
     public Result<PageView<PredictDetailDTO>> pageByPredictDetail(PredictDetailPageByQry predictResultPageByQry) {
+        // 给默认值
+        predictResultPageByQry.setMinScore(predictResultPageByQry.getMinScore() == null ? 0 :
+                predictResultPageByQry.getMinScore());
+        predictResultPageByQry.setMaxScore(predictResultPageByQry.getMaxScore() == null ? 1 :
+                predictResultPageByQry.getMaxScore());
+        predictResultPageByQry.setPageNum(predictResultPageByQry.getPageNum() == null ? 1 :
+                predictResultPageByQry.getPageNum());
+        predictResultPageByQry.setPageSize(predictResultPageByQry.getPageSize() == null ? 10 :
+                predictResultPageByQry.getPageSize());
         ServingInstance servingInstance = servingInstanceService.getById(predictResultPageByQry.getInstanceId());
         PageView<PredictDetailDTO> pageView = new PageView<>();
         pageView.setCount(Integer.parseInt(predictResultPageByQry.getTotal().toString()));
         String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
-//        String tableName = OlapHelper.getScoreTableName(251L);
+        Integer startIndex = (predictResultPageByQry.getPageNum() - 1) * predictResultPageByQry.getPageSize();
         List<PredictDetail> predictDetailList = predictResultMapper.getPredictDetailList(tableName,
                 predictResultPageByQry.getInstanceId(),
                 predictResultPageByQry.getMinScore(), predictResultPageByQry.getMaxScore(),
-                predictResultPageByQry.getTotal());
+                predictResultPageByQry.getPageSize(),
+                startIndex
+        );
         List<PredictDetailDTO> predictDetailDTOList = ConvertTool.convert(predictDetailList, PredictDetailDTO.class);
         pageView.setList(predictDetailDTOList);
         return Result.success(pageView);

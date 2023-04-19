@@ -43,7 +43,8 @@ public class PredictDetailMapperTest extends BaseTest {
 
     @Test
     public void getPredictDetailList() {
-        Object total = predictResultMapper.getPredictDetailList("aip.score_251", 1645666375508107265L, 0.15, 0.8, 10L);
+        Object total = predictResultMapper.getPredictDetailList("aip.score_251", 1645666375508107265L, 0.15, 0.8, 10
+                , 0);
         System.out.println(total);
     }
 }
