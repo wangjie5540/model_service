@@ -72,6 +72,12 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
+    public Result startRun(SolutionControlCmd solutionControlCmd) {
+        solutionService.start(solutionControlCmd.getId());
+        return Result.success();
+    }
+
+    @Override
     public Result stopRun(SolutionControlCmd solutionControlCmd) {
         solutionService.stop(solutionControlCmd.getId());
         return Result.success();

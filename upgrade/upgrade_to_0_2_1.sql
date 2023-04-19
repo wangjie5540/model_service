@@ -9,7 +9,7 @@ ALTER TABLE aip_solution.solution_run CHANGE version version BIGINT DEFAULT 1 NO
 -- 添加ale值
 ALTER TABLE aip_solution.serving_instance
     ADD ale TEXT NULL COMMENT 'ale值';
-ALTER TABLE aip_solution.serving_instance CHANGE ale ale TEXT NULL COMMENT 'ale值' AFTER `result`;
+ALTER TABLE aip_solution.serving_instance CHANGE ale ale MEDIUMTEXT NULL COMMENT 'ale值' AFTER `result`;
 -- 在预测实例表增加模型运行id字段
 ALTER TABLE aip_solution.serving_instance
     ADD run_id BIGINT NULL COMMENT '模型运行id';

@@ -182,6 +182,21 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
     }
 
     @Override
+    public void start(Long solutionId) {
+        Solution solution = super.getById(solutionId);
+        if (solution == null) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_NOT_FOUND);
+        } else if (solution.getStatus() == SolutionStatusEnum.EXECUTING) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_EXECUTING);
+        }
+        solutionRunService.startRun(solution.getSRunId());
+        solution = new Solution();
+        solution.setId(solutionId);
+        solution.setStatus(SolutionStatusEnum.EXECUTING);
+        super.updateById(solution);
+    }
+
+    @Override
     public void stop(Long solutionId) {
         Solution solution = super.getById(solutionId);
         if (solution == null) {
