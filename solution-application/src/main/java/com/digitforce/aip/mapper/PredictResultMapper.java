@@ -231,6 +231,9 @@ public interface PredictResultMapper {
             @Param("offset") Integer offset
     );
 
+    @Select("select count(*) from ${tableName} where instance_id = #{instanceId}")
+    Long countPredictDetail(@Param("tableName") String tableName, @Param("instanceId") Long instanceId);
+
     @Select("select `shapley` from ${tableName} where instance_id = #{instanceId} and user_id = #{userId}")
     String getShapley(@Param("tableName") String tableName, @Param("instanceId") Long instanceId,
                       @Param("userId") Long userId);
