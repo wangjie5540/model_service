@@ -5,6 +5,7 @@ import com.digitforce.aip.dto.data.PredictDetailDTO;
 import com.digitforce.aip.dto.data.PredictResultDTO;
 import com.digitforce.aip.dto.data.ServingInstanceDTO;
 import com.digitforce.aip.dto.qry.GetAleQry;
+import com.digitforce.aip.dto.qry.GetPredictDetailByIdQry;
 import com.digitforce.aip.dto.qry.GetPredictResultQry;
 import com.digitforce.aip.dto.qry.GetShapleyQry;
 import com.digitforce.aip.dto.qry.PredictDetailPageByQry;
@@ -142,6 +143,15 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
         List<PredictDetailDTO> predictDetailDTOList = ConvertTool.convert(predictDetailList, PredictDetailDTO.class);
         pageView.setList(predictDetailDTOList);
         return Result.success(pageView);
+    }
+
+    @Override
+    public Result<PredictDetailDTO> getPredictDetailById(GetPredictDetailByIdQry getPredictDetailByIdQry) {
+        ServingInstance servingInstance = servingInstanceService.getById(getPredictDetailByIdQry.getInstanceId());
+        String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
+        PredictDetail predictDetail = predictResultMapper.getPredictDetailByUserId(tableName,
+                getPredictDetailByIdQry.getInstanceId(), getPredictDetailByIdQry.getUserId());
+        return Result.success(ConvertTool.convert(predictDetail, PredictDetailDTO.class));
     }
 
     @Override
