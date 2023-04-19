@@ -57,9 +57,9 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     @Override
     public Result<PageView<ServingInstanceDTO>> pageBy(ServingInstancePageByQry servingInstancePageByQry) {
         PageView<ServingInstance> solutionPageView = servingInstanceService.page(servingInstancePageByQry);
-        PageView<ServingInstanceDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
+        PageView<ServingInstanceDTO> instanceDTOPageView = PageTool.pageView(solutionPageView,
                 ServingInstanceDTO.class);
-        return Result.success(solutionDTOPageView);
+        return Result.success(instanceDTOPageView);
     }
 
     @Override
