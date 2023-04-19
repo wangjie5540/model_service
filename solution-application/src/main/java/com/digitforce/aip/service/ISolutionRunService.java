@@ -20,6 +20,8 @@ import java.util.Map;
 public interface ISolutionRunService extends IService<SolutionRun> {
     Long createRun(Solution solution, SolutionRunTypeEnum type, Map<String, Object> templateParams);
 
+    void startRun(Long solutionRunId);
+
     void stopRun(Long solutionRunId);
 
     PageView<SolutionRun> page(SolutionRunPageByQry solutionRunPageByQry);

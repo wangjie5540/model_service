@@ -45,6 +45,10 @@ public interface SolutionCmdFacade {
     @Operation(summary = "编辑方案", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result modifyById(@RequestBody SolutionModifyCmd solutionModifyCmd);
 
+    @PostMapping("/solution/startRun")
+    @Operation(summary = "开始运行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
+    Result startRun(@RequestBody SolutionControlCmd solutionControlCmd);
+
     @PostMapping("/solution/stopRun")
     @Operation(summary = "停止运行", tags = CommonConst.SWAGGER_TAG_SOLUTION_CMD)
     Result stopRun(@RequestBody SolutionControlCmd solutionControlCmd);

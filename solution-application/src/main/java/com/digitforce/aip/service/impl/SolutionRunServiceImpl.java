@@ -13,6 +13,7 @@ import com.digitforce.aip.enums.RunStatusEnum;
 import com.digitforce.aip.enums.SolutionRunTypeEnum;
 import com.digitforce.aip.mapper.SolutionRunMapper;
 import com.digitforce.aip.service.ISolutionRunService;
+import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.KubeflowPipelineService;
 import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.aip.utils.PageUtil;
@@ -42,6 +43,8 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
     private TemplateComponent templateComponent;
     @Resource
     private SolutionRunMapper solutionRunMapper;
+    @Resource
+    private ISolutionService solutionService;
 
     @Override
     @SneakyThrows
@@ -67,6 +70,23 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
         solutionRun.setPipelineParams(pipelineParams);
         super.updateById(solutionRun);
         return solutionRunId;
+    }
+
+    @Override
+    public void startRun(Long solutionRunId) {
+        SolutionRun solutionRun = super.getById(solutionRunId);
+        Solution solution = solutionService.getById(solutionRun.getSolutionId());
+        Map<String, Object> templateParams = solution.getTemplateParams();
+        templateParams.put("solution_run_id", solutionRunId.toString());
+        String pipelineParams = templateComponent.getPipelineParams(solution.getTrainTemplate(), templateParams);
+        String pRunName = StrUtil.format("{}-{}", solution.getPipelineName(), solutionRunId);
+        String pRunId = kubeflowPipelineService.createRun(solution.getPipelineId(), pRunName, pipelineParams,
+                PipelineRunFlagEnum.TRAIN.name());
+        solutionRun = new SolutionRun();
+        solutionRun.setId(solutionRunId);
+        solutionRun.setPRunId(pRunId);
+        solutionRun.setPipelineParams(pipelineParams);
+        super.updateById(solutionRun);
     }
 
     @Override
