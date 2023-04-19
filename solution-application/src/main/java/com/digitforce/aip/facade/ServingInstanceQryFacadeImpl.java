@@ -99,8 +99,10 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
         predictResultDTO.setRatio(Double.parseDouble(map.get("ratio").toString()));
         predictResultDTO.setTotal(Long.parseLong(map.get("total").toString()));
         PredictResultDTO.ScoreRange scoreRange = new PredictResultDTO.ScoreRange();
-        scoreRange.setMaxScore(Double.parseDouble(map.get("max_score").toString()));
-        scoreRange.setMinScore(Double.parseDouble(map.get("min_score").toString()));
+        scoreRange.setMaxScore(map.get("max_score") == null ? null :
+                Double.parseDouble(map.get("max_score").toString()));
+        scoreRange.setMinScore(map.get("min_score") == null ? null :
+                Double.parseDouble(map.get("min_score").toString()));
         feedInterval(predictResultDTO, getPredictResultQry.getScoreRangeType(), tableName, servingInstance.getId(),
                 getPredictResultQry.getValues());
         predictResultDTO.setScoreRange(scoreRange);
