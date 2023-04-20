@@ -1,5 +1,6 @@
 package com.digitforce.aip.dto.data;
 
+import com.digitforce.aip.enums.SceneTypeEnum;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -25,6 +26,7 @@ public class SolutionDTO {
     private String sceneName;
     @Schema(description = "时间表达式")
     private String cron;
+    private SceneTypeEnum sceneType;
     @Schema(description = "时间描述，用于前端反显")
     private String cronDesc;
     @Schema(description = "状态")
