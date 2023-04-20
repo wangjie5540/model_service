@@ -208,14 +208,12 @@ public interface PredictResultMapper {
                                                          @Param("start") Double start,
                                                          @Param("end") Double end);
 
-    @Select("select user_id, score from ${tableName} where score between #{start} and #{end} and instance_id = " +
-            "#{instanceId} order by score desc limit #{limit}")
-    List<Map<String, Object>> getPredictDetail(
+    @Select("select instance_id, user_id, score from ${tableName} where " +
+            "instance_id = #{instanceId} and user_id = #{userId} ")
+    PredictDetail getPredictDetailByUserId(
             @Param("tableName") String tableName,
             @Param("instanceId") Long instanceId,
-            @Param("start") Double start,
-            @Param("end") Double end,
-            @Param("limit") Integer limit
+            @Param("userId") String userId
     );
 
     @Select("select instance_id, user_id, score from ${tableName} where " +
