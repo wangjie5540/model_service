@@ -2,6 +2,7 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.cmd.SolutionServingAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionServingDeleteCmd;
 import com.digitforce.aip.dto.data.SolutionServingDTO;
 import com.digitforce.framework.api.dto.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,4 +23,8 @@ public interface SolutionServingCmdFacade {
     @PostMapping("/solution/solutionServing/add")
     @Operation(summary = "添加方案服务", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_CMD)
     Result<SolutionServingDTO> add(@RequestBody SolutionServingAddCmd solutionServingAddCmd);
+
+    @PostMapping("/solution/solutionServing/delete")
+    @Operation(summary = "删除服务", tags = CommonConst.SWAGGER_TAG_SOLUTION_SERVING_CMD)
+    Result<Void> delete(@RequestBody SolutionServingDeleteCmd solutionServingDeleteCmd);
 }
