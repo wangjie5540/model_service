@@ -127,6 +127,7 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
                 throw new BizException("方案执行失败");
             case READY:
                 solution.setStatus(SolutionStatusEnum.PUBLISHED);
+                sceneMapper.increaseOnlineModelCount(solution.getSceneId());
                 updateById(solution);
                 scheduleJob(solutionPublishCmd);
                 break;
@@ -164,6 +165,7 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         solution = ConvertTool.convert(solutionUnPublishCmd, Solution.class);
         solution.setStatus(SolutionStatusEnum.READY);
         updateById(solution);
+        sceneMapper.decreaseOnlineModelCount(solution.getSceneId());
         scheduler.deleteJob(JobKey.jobKey(solutionUnPublishCmd.getId().toString(),
                 TenantContext.tenant().getTenantId().toString()));
     }

@@ -33,6 +33,8 @@ public class SceneDTO {
     private SceneTypeEnum sceneType;
     @Schema(description = "方案数量")
     private Integer solutionCount;
+    @Schema(description = "已发布模型数")
+    private Integer onlineModelCount;
     @Schema(description = "服务数量")
     private Integer servingCount;
     @Schema(description = "备注")

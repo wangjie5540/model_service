@@ -18,3 +18,7 @@ ALTER TABLE aip_solution.serving_instance CHANGE run_id run_id BIGINT NULL COMME
 ALTER TABLE aip_solution.serving_instance
     ADD model_version BIGINT NULL COMMENT '模型版本';
 ALTER TABLE aip_solution.serving_instance CHANGE model_version model_version BIGINT NULL COMMENT '模型版本' AFTER p_run_name;
+-- 增加已发布模型数量字段
+ALTER TABLE aip_solution.scene
+    ADD online_model_count INT DEFAULT 0 NULL COMMENT '已发布模型数量';
+ALTER TABLE aip_solution.scene CHANGE online_model_count online_model_count INT DEFAULT 0 NULL COMMENT '已发布模型数量' AFTER solution_count;
