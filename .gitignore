@@ -35,4 +35,5 @@ hs_err_pid*
 solution-api/target
 **/target
 **/rebel.xml
+.fastRequest
 

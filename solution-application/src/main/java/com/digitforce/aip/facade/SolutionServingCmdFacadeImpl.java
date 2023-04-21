@@ -2,6 +2,7 @@ package com.digitforce.aip.facade;
 
 import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.cmd.SolutionServingAddCmd;
+import com.digitforce.aip.dto.cmd.SolutionServingDeleteCmd;
 import com.digitforce.aip.dto.data.SolutionServingDTO;
 import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.entity.SolutionServing;
@@ -64,5 +65,17 @@ public class SolutionServingCmdFacadeImpl implements SolutionServingCmdFacade {
         sceneMapper.increaseServingCount(solution.getSceneId());
         SolutionServingDTO solutionServingDTO = ConvertTool.convert(solutionServing, SolutionServingDTO.class);
         return Result.success(solutionServingDTO);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Result<Void> delete(SolutionServingDeleteCmd solutionServingDeleteCmd) {
+        SolutionServing solutionServing = solutionServingService.getById(solutionServingDeleteCmd.getServingId());
+        if (solutionServing == null) {
+            throw BizException.of(SolutionErrorCode.SOLUTION_SERVING_NOT_FOUND);
+        }
+        solutionServingService.removeById(solutionServingDeleteCmd.getServingId());
+        sceneMapper.increaseServingCount(solutionServing.getSceneId());
+        return Result.success(null);
     }
 }
