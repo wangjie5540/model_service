@@ -9,5 +9,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class SolutionServingPageByQry extends PageQuery<SolutionServingDTO> {
     private static final long serialVersionUID = -2354522192090216154L;
+    private Boolean myOwn;
     private SolutionServingDTO likeClause;
 }

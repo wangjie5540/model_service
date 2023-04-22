@@ -19,7 +19,7 @@ import java.util.List;
 public interface SolutionRunMapper extends BaseMapper<SolutionRun> {
     @InterceptorIgnore(tenantLine = "true")
     @Select("select `id`,`tenant_id`,`solution_id`,`status`,`p_run_id`,`type` from solution_run where status = " +
-        "'Running' limit #{count}")
+            "'Running' limit #{count}")
     List<SolutionRun> getSomeRunningRecordsWithoutTenant(@Param("count") int count);
 
     @Select("select * from solution_run where solution_id = #{solutionId} order by create_time desc limit 1")

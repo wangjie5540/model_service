@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: ${digitforce.application.name:solution}
+  profiles:
+    active: @profileActive@

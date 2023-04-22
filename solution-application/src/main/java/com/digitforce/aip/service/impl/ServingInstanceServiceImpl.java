@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.digitforce.aip.consts.SolutionErrorCode;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
 import com.digitforce.aip.entity.ServingInstance;
 import com.digitforce.aip.entity.Solution;
@@ -18,12 +19,18 @@ import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.KubeflowPipelineService;
 import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.aip.utils.ApplicationUtil;
+import com.digitforce.aip.utils.OlapHelper;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
+import com.digitforce.framework.api.exception.BizException;
 import com.digitforce.framework.context.TenantContext;
+import com.digitforce.framework.domain.Tenant;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,24 +59,26 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
     private TemplateComponent templateComponent;
     @Resource
     private SolutionRunMapper solutionRunMapper;
+    @Resource
+    private ObjectMapper objectMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void createAndRun(SolutionServing solutionServing) {
+    @SneakyThrows
+    public ServingInstance createAndRun(SolutionServing solutionServing) {
         Solution solution = solutionService.getById(solutionServing.getSolutionId());
         if (Objects.isNull(solution)) {
-            log.error("方案不存在");
-            return;
+            throw BizException.of(SolutionErrorCode.SOLUTION_NOT_FOUND);
         }
         SolutionRun solutionRun = solutionRunMapper.getLatestRunBySolutionId(solution.getId());
         if (Objects.isNull(solutionRun)) {
-            log.error("方案执行实例不存在");
-            return;
+            throw BizException.of(SolutionErrorCode.SOLUTION_RUN_NOT_FOUND);
         }
         ServingInstance servingInstance = ConvertTool.convert(solutionServing, ServingInstance.class);
         servingInstance.setId(null);
         servingInstance.setServingId(solutionServing.getId());
         servingInstance.setStatus(ServingInstanceStatusEnum.PREDICTING);
+        servingInstance.setModelVersion(solutionRun.getVersion());
         super.save(servingInstance);
         Long servingInstanceId = servingInstance.getId();
         Map<String, Object> templateParams = solutionServing.getTemplateParams() == null ? Maps.newHashMap() :
@@ -77,17 +86,28 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         // 填充预测模板参数
         templateParams.put("result_file_name",
                 ApplicationUtil.generateServingResultFileName(TenantContext.tenantId(), servingInstance.getId()));
+        String encode = Tenant.encode(TenantContext.tenant());
         templateParams.putAll(solution.getTemplateParams());
         String pipelineParams = templateComponent.getPipelineParams(solutionServing.getPipelineTemplate(),
                 templateParams);
+        Map<String, Object> map = objectMapper.readValue(pipelineParams, new TypeReference<Map<String, Object>>() {
+        });
+        map.put("X_TENANT", encode);
+        // 添加starrocks表名
+        map.put("predict_table_name", OlapHelper.getScoreTableName(solution.getId()));
+        map.put("shapley_table_name", OlapHelper.getShapleyTableName(solution.getId()));
+        // 添加表分区
+        map.put("instance_id", servingInstance.getId().toString());
+        pipelineParams = objectMapper.writeValueAsString(map);
         String pRunName = String.format("%s-%s", solution.getPipelineName(), servingInstanceId);
         String pRunId = kubeflowPipelineService.createRun(solution.getPipelineId(), pRunName, pipelineParams,
                 PipelineRunFlagEnum.PREDICT.name());
-        servingInstance = new ServingInstance();
-        servingInstance.setId(servingInstanceId);
-        servingInstance.setPRunId(pRunId);
-        servingInstance.setPRunName(pRunName);
-        super.updateById(servingInstance);
+        ServingInstance updateServingInstance = new ServingInstance();
+        updateServingInstance.setId(servingInstanceId);
+        updateServingInstance.setPRunId(pRunId);
+        updateServingInstance.setPRunName(pRunName);
+        super.updateById(updateServingInstance);
+        return servingInstance;
     }
 
     @Override

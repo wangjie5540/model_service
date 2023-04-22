@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Data
 public class SolutionServingDTO {
@@ -18,8 +19,6 @@ public class SolutionServingDTO {
     private String sceneName;
     @Schema(description = "方案标题")
     private String solutionTitle;
-    @Schema(description = "系统")
-    private String system;
     @Schema(description = "创建用户")
     private String createUser;
     @Schema(description = "方案id")
@@ -28,6 +27,8 @@ public class SolutionServingDTO {
     private Long sceneId;
     @Schema(description = "表单信息")
     private Object formInfo;
+    @Schema(description = "模板参数")
+    private Map<String, Object> templateParams;
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
 }

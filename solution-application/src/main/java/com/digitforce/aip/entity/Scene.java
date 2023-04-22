@@ -82,6 +82,11 @@ public class Scene implements Serializable {
     private Integer servingCount;
 
     /**
+     * 已发布模型数量
+     */
+    private Integer onlineModelCount;
+
+    /**
      * 备注
      */
     private String remark;

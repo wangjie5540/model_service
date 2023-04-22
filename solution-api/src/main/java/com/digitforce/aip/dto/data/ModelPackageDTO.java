@@ -3,6 +3,7 @@ package com.digitforce.aip.dto.data;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 模型包实体类
@@ -17,7 +18,7 @@ public class ModelPackageDTO {
     private String name;
     private String solutionTitle;
     private String algorithm;
-    private String system;
     private Integer liftCycle;
     private LocalDateTime createTime;
+    private List<ModelDTO> fittedModelList;
 }

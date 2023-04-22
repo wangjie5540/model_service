@@ -65,6 +65,11 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
     private String aRunId;
 
     /**
+     * 方案训练任务的runId
+     */
+    private Long sRunId;
+
+    /**
      * kubeflow pipelineId
      */
     private String pipelineId;
@@ -89,11 +94,6 @@ public class Solution extends AggregateRoot<Long> implements Serializable {
      */
     @TableField(typeHandler = JacksonTypeHandler.class)
     private Map<String, Object> templateParams;
-
-    /**
-     * 应用系统
-     */
-    private String system;
 
     /**
      * 方案状态

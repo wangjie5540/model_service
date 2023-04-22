@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.digitforce.framework</groupId>
         <artifactId>framework-parent</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>2.0.2-SNAPSHOT</version>
     </parent>
 
     <groupId>com.digitforce.aip</groupId>
@@ -25,7 +25,6 @@
         <module>solution-extension</module>
         <module>solution-extension-impl</module>
         <module>solution-start</module>
-        <module>solution-common</module>
     </modules>
 
     <repositories>
@@ -35,9 +34,11 @@
             <url>https://digit-force-maven.pkg.coding.net/repository/nexus/maven-releases/</url>
             <releases>
                 <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
             </releases>
             <snapshots>
                 <enabled>false</enabled>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
         <repository>
@@ -46,9 +47,11 @@
             <url>https://digit-force-maven.pkg.coding.net/repository/nexus/maven-snapshots/</url>
             <releases>
                 <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
             </releases>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
     </repositories>

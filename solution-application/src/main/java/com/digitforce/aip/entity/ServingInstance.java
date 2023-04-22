@@ -70,6 +70,10 @@ public class ServingInstance implements Serializable {
      * 状态
      */
     private ServingInstanceStatusEnum status;
+    /**
+     * 模型版本
+     */
+    private Long modelVersion;
 
     /**
      * 耗时秒数
@@ -80,6 +84,11 @@ public class ServingInstance implements Serializable {
      * 结果
      */
     private String result;
+
+    /**
+     * ale值
+     */
+    private String ale;
 
     /**
      * 创建用户
