@@ -229,6 +229,22 @@ public interface PredictResultMapper {
             @Param("offset") Integer offset
     );
 
+    @Select("select instance_id, user_id, score from ${tableName} where " +
+            "instance_id = #{instanceId} and " +
+            "user_id = #{userId} and " +
+            "score between #{start} and #{end} " +
+            "order by score desc limit #{limit} offset #{offset}")
+    List<PredictDetail> getPredictDetailList(
+            @Param("tableName") String tableName,
+            @Param("instanceId") Long instanceId,
+            @Param("start") Double start,
+            @Param("end") Double end,
+            @Param("limit") Integer limit,
+            @Param("offset") Integer offset,
+            @Param("userId") String userId
+    );
+
+
     @Select("select count(*) from ${tableName} where instance_id = #{instanceId}")
     Long countPredictDetail(@Param("tableName") String tableName, @Param("instanceId") Long instanceId);
 

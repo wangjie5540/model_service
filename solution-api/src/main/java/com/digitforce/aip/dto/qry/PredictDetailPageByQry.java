@@ -10,4 +10,5 @@ public class PredictDetailPageByQry {
     private Integer pageSize;
     private Double minScore;
     private Double maxScore;
+    private String userId;
 }
