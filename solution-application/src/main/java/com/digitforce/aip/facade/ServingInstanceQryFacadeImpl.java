@@ -132,14 +132,27 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
         }
         String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
         Integer startIndex = (predictResultPageByQry.getPageNum() - 1) * predictResultPageByQry.getPageSize();
-        List<PredictDetail> predictDetailList = predictResultMapper.getPredictDetailList(tableName,
-                predictResultPageByQry.getInstanceId(),
-                // TODO 这里涉及到精度问题，需要优化
-                predictResultPageByQry.getMinScore() - 0.0000001, predictResultPageByQry.getMaxScore() + 0.0000001,
-                predictResultPageByQry.getPageSize() < pageView.getCount() ? predictResultPageByQry.getPageSize() :
-                        pageView.getCount(),
-                startIndex
-        );
+        List<PredictDetail> predictDetailList;
+        if (StrUtil.isEmptyIfStr(predictResultPageByQry.getUserId())) {
+            predictDetailList = predictResultMapper.getPredictDetailList(tableName,
+                    predictResultPageByQry.getInstanceId(),
+                    // TODO 这里涉及到精度问题，需要优化
+                    predictResultPageByQry.getMinScore() - 0.0000001, predictResultPageByQry.getMaxScore() + 0.0000001,
+                    predictResultPageByQry.getPageSize() < pageView.getCount() ? predictResultPageByQry.getPageSize() :
+                            pageView.getCount(),
+                    startIndex
+            );
+        } else {
+            predictDetailList = predictResultMapper.getPredictDetailList(tableName,
+                    predictResultPageByQry.getInstanceId(),
+                    // TODO 这里涉及到精度问题，需要优化
+                    predictResultPageByQry.getMinScore() - 0.0000001, predictResultPageByQry.getMaxScore() + 0.0000001,
+                    predictResultPageByQry.getPageSize() < pageView.getCount() ? predictResultPageByQry.getPageSize() :
+                            pageView.getCount(),
+                    startIndex,
+                    predictResultPageByQry.getUserId()
+            );
+        }
         List<PredictDetailDTO> predictDetailDTOList = ConvertTool.convert(predictDetailList, PredictDetailDTO.class);
         pageView.setList(predictDetailDTOList);
         return Result.success(pageView);
