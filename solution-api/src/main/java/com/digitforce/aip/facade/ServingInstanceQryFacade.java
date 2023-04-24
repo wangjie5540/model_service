@@ -44,11 +44,6 @@ public interface ServingInstanceQryFacade {
     @Operation(summary = "获取预测明细分页", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
     Result<PageView<PredictDetailDTO>> pageByPredictDetail(@RequestBody PredictDetailPageByQry predictResultPageByQry);
 
-//    @PostMapping("/solution/servingInstance/streamTargetPredictDetail")
-//    @Operation(summary = "流式获取目标预测明细数据", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
-//    Result<PageView<PredictDetailDTO>> streamTargetPredictDetail(@RequestBody PredictDetailPageByQry
-//    predictResultPageByQry);
-
     @PostMapping("/solution/servingInstance/getPredictDetailById")
     @Operation(summary = "通过用户id获取预测明细", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
     Result<PredictDetailDTO> getPredictDetailById(@RequestBody GetPredictDetailByIdQry getPredictDetailByIdQry);
