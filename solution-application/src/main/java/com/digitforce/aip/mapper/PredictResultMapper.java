@@ -3,11 +3,13 @@ package com.digitforce.aip.mapper;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import com.digitforce.aip.entity.PredictDetail;
+import com.digitforce.aip.entity.UserScore;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @InterceptorIgnore(tenantLine = "true")
 @DS("olap")
@@ -234,7 +236,7 @@ public interface PredictResultMapper {
             "user_id = #{userId} and " +
             "score between #{start} and #{end} " +
             "order by score desc limit #{limit} offset #{offset}")
-    List<PredictDetail> getPredictDetailList(
+    List<PredictDetail> getPredictDetailListByUserId(
             @Param("tableName") String tableName,
             @Param("instanceId") Long instanceId,
             @Param("start") Double start,
@@ -244,6 +246,17 @@ public interface PredictResultMapper {
             @Param("userId") String userId
     );
 
+    @Select("select user_id, score from ${tableName} where " +
+            "instance_id = #{instanceId} and " +
+            "score between #{start} and #{end} " +
+            "order by score desc limit #{total}")
+    Stream<UserScore> getPredictDetailList(
+            @Param("tableName") String tableName,
+            @Param("instanceId") Long instanceId,
+            @Param("start") Double start,
+            @Param("end") Double end,
+            @Param("total") Long total
+    );
 
     @Select("select count(*) from ${tableName} where instance_id = #{instanceId}")
     Long countPredictDetail(@Param("tableName") String tableName, @Param("instanceId") Long instanceId);
@@ -251,4 +264,5 @@ public interface PredictResultMapper {
     @Select("select `shapley` from ${tableName} where instance_id = #{instanceId} and user_id = #{userId}")
     String getShapley(@Param("tableName") String tableName, @Param("instanceId") Long instanceId,
                       @Param("userId") Long userId);
+
 }

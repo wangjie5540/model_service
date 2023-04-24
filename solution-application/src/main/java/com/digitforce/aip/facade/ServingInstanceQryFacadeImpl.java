@@ -1,6 +1,7 @@
 package com.digitforce.aip.facade;
 
 import cn.hutool.core.util.StrUtil;
+import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.data.PredictDetailDTO;
 import com.digitforce.aip.dto.data.PredictResultDTO;
 import com.digitforce.aip.dto.data.ServingInstanceDTO;
@@ -11,11 +12,13 @@ import com.digitforce.aip.dto.qry.GetShapleyQry;
 import com.digitforce.aip.dto.qry.PredictDetailPageByQry;
 import com.digitforce.aip.dto.qry.ServingInstanceGetByIdQry;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
+import com.digitforce.aip.dto.qry.StreamPredictDetailQry;
 import com.digitforce.aip.entity.PredictDetail;
 import com.digitforce.aip.entity.ServingInstance;
 import com.digitforce.aip.enums.ScoreRangeType;
 import com.digitforce.aip.mapper.PredictResultMapper;
 import com.digitforce.aip.service.IServingInstanceService;
+import com.digitforce.aip.service.component.DownloadService;
 import com.digitforce.aip.utils.OlapHelper;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
@@ -25,11 +28,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,6 +55,8 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     private IServingInstanceService servingInstanceService;
     @Resource
     private PredictResultMapper predictResultMapper;
+    @Resource
+    private DownloadService downloadService;
 
     public static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -143,7 +152,7 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
                     startIndex
             );
         } else {
-            predictDetailList = predictResultMapper.getPredictDetailList(tableName,
+            predictDetailList = predictResultMapper.getPredictDetailListByUserId(tableName,
                     predictResultPageByQry.getInstanceId(),
                     // TODO 这里涉及到精度问题，需要优化
                     predictResultPageByQry.getMinScore() - 0.0000001, predictResultPageByQry.getMaxScore() + 0.0000001,
@@ -156,6 +165,22 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
         List<PredictDetailDTO> predictDetailDTOList = ConvertTool.convert(predictDetailList, PredictDetailDTO.class);
         pageView.setList(predictDetailDTOList);
         return Result.success(pageView);
+    }
+
+    @SneakyThrows
+    @PostMapping("/solution/servingInstance/streamTargetPredictDetail")
+    @Operation(summary = "流式获取目标预测明细数据", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
+    public Result<Void> streamTargetPredictDetail(StreamPredictDetailQry streamPredictDetailQry,
+                                                  HttpServletResponse response) {
+        response.setContentType("text/csv; charset=UTF-8");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=user_score.csv");
+
+        ServingInstance servingInstance = servingInstanceService.getById(streamPredictDetailQry.getInstanceId());
+
+        downloadService.downloadResult(response.getOutputStream(), servingInstance.getSolutionId(),
+                servingInstance.getId(), streamPredictDetailQry.getMinScore(), streamPredictDetailQry.getMaxScore(),
+                streamPredictDetailQry.getTotal());
+        return Result.success(null);
     }
 
     @Override
