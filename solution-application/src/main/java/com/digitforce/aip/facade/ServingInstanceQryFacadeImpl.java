@@ -81,42 +81,48 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     @Override
     @SneakyThrows
     public Result<PredictResultDTO> getPredictStatistics(GetPredictResultQry getPredictResultQry) {
-        ServingInstance servingInstance = servingInstanceService.getById(getPredictResultQry.getInstanceId());
-        String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
-        Map<String, Object> map;
-        switch (getPredictResultQry.getScoreRangeType()) {
-            case ALL:
-                map = predictResultMapper.all(tableName, servingInstance.getId());
-                break;
-            case TOP_N:
-                Long n = Long.parseLong(getPredictResultQry.getValues().get(0).toString());
-                map = predictResultMapper.topN(tableName, servingInstance.getId(), n);
-                break;
-            case TOP_PERCENT:
-                Double percent = Double.parseDouble(getPredictResultQry.getValues().get(0).toString());
-                map = predictResultMapper.topPercent(tableName, servingInstance.getId(), percent);
-                break;
-            case SCORE_RANGE:
-                Double minScore = Double.parseDouble(getPredictResultQry.getValues().get(0).toString());
-                Double maxScore = Double.parseDouble(getPredictResultQry.getValues().get(1).toString());
-                map = predictResultMapper.targetScore(tableName, servingInstance.getId(), minScore, maxScore);
-                break;
-            default:
-                throw new RuntimeException("不支持的类型");
+        try {
 
+            ServingInstance servingInstance = servingInstanceService.getById(getPredictResultQry.getInstanceId());
+            String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
+            Map<String, Object> map;
+            switch (getPredictResultQry.getScoreRangeType()) {
+                case ALL:
+                    map = predictResultMapper.all(tableName, servingInstance.getId());
+                    break;
+                case TOP_N:
+                    Long n = Long.parseLong(getPredictResultQry.getValues().get(0).toString());
+                    map = predictResultMapper.topN(tableName, servingInstance.getId(), n);
+                    break;
+                case TOP_PERCENT:
+                    Double percent = Double.parseDouble(getPredictResultQry.getValues().get(0).toString());
+                    map = predictResultMapper.topPercent(tableName, servingInstance.getId(), percent);
+                    break;
+                case SCORE_RANGE:
+                    Double minScore = Double.parseDouble(getPredictResultQry.getValues().get(0).toString());
+                    Double maxScore = Double.parseDouble(getPredictResultQry.getValues().get(1).toString());
+                    map = predictResultMapper.targetScore(tableName, servingInstance.getId(), minScore, maxScore);
+                    break;
+                default:
+                    throw new RuntimeException("不支持的类型");
+
+            }
+            PredictResultDTO predictResultDTO = new PredictResultDTO();
+            predictResultDTO.setRatio(Double.parseDouble(map.get("ratio").toString()));
+            predictResultDTO.setTotal(Long.parseLong(map.get("total").toString()));
+            PredictResultDTO.ScoreRange scoreRange = new PredictResultDTO.ScoreRange();
+            scoreRange.setMaxScore(map.get("max_score") == null ? null :
+                    Double.parseDouble(map.get("max_score").toString()));
+            scoreRange.setMinScore(map.get("min_score") == null ? null :
+                    Double.parseDouble(map.get("min_score").toString()));
+            feedInterval(predictResultDTO, getPredictResultQry.getScoreRangeType(), tableName, servingInstance.getId(),
+                    getPredictResultQry.getValues());
+            predictResultDTO.setScoreRange(scoreRange);
+            return Result.success(predictResultDTO);
+        } catch (Exception e) {
+            log.error("get getPredictStatistics error", e);
+            return Result.success(null);
         }
-        PredictResultDTO predictResultDTO = new PredictResultDTO();
-        predictResultDTO.setRatio(Double.parseDouble(map.get("ratio").toString()));
-        predictResultDTO.setTotal(Long.parseLong(map.get("total").toString()));
-        PredictResultDTO.ScoreRange scoreRange = new PredictResultDTO.ScoreRange();
-        scoreRange.setMaxScore(map.get("max_score") == null ? null :
-                Double.parseDouble(map.get("max_score").toString()));
-        scoreRange.setMinScore(map.get("min_score") == null ? null :
-                Double.parseDouble(map.get("min_score").toString()));
-        feedInterval(predictResultDTO, getPredictResultQry.getScoreRangeType(), tableName, servingInstance.getId(),
-                getPredictResultQry.getValues());
-        predictResultDTO.setScoreRange(scoreRange);
-        return Result.success(predictResultDTO);
     }
 
     @Override
@@ -131,7 +137,6 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
         predictResultPageByQry.setPageSize(predictResultPageByQry.getPageSize() == null ? 10 :
                 predictResultPageByQry.getPageSize());
         try {
-
             ServingInstance servingInstance = servingInstanceService.getById(predictResultPageByQry.getInstanceId());
             PageView<PredictDetailDTO> pageView = new PageView<>();
             if (predictResultPageByQry.getTotal() == null) {
@@ -174,6 +179,7 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
             pageView.setList(predictDetailDTOList);
             return Result.success(pageView);
         } catch (Exception e) {
+            log.error("pageByPredictDetail error", e);
             return Result.success(null);
         }
     }
