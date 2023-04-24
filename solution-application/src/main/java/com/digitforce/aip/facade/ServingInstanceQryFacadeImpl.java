@@ -130,41 +130,52 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
                 predictResultPageByQry.getPageNum());
         predictResultPageByQry.setPageSize(predictResultPageByQry.getPageSize() == null ? 10 :
                 predictResultPageByQry.getPageSize());
-        ServingInstance servingInstance = servingInstanceService.getById(predictResultPageByQry.getInstanceId());
-        PageView<PredictDetailDTO> pageView = new PageView<>();
-        if (predictResultPageByQry.getTotal() == null) {
-            String scoreTableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
-            Long count = predictResultMapper.countPredictDetail(scoreTableName, predictResultPageByQry.getInstanceId());
-            pageView.setCount(count.intValue());
-        } else {
-            pageView.setCount(Integer.parseInt(predictResultPageByQry.getTotal().toString()));
+        try {
+
+            ServingInstance servingInstance = servingInstanceService.getById(predictResultPageByQry.getInstanceId());
+            PageView<PredictDetailDTO> pageView = new PageView<>();
+            if (predictResultPageByQry.getTotal() == null) {
+                String scoreTableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
+                Long count = predictResultMapper.countPredictDetail(scoreTableName,
+                        predictResultPageByQry.getInstanceId());
+                pageView.setCount(count.intValue());
+            } else {
+                pageView.setCount(Integer.parseInt(predictResultPageByQry.getTotal().toString()));
+            }
+            String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
+            Integer startIndex = (predictResultPageByQry.getPageNum() - 1) * predictResultPageByQry.getPageSize();
+            List<PredictDetail> predictDetailList;
+            if (StrUtil.isEmptyIfStr(predictResultPageByQry.getUserId())) {
+                predictDetailList = predictResultMapper.getPredictDetailList(tableName,
+                        predictResultPageByQry.getInstanceId(),
+                        // TODO 这里涉及到精度问题，需要优化
+                        predictResultPageByQry.getMinScore() - 0.0000001,
+                        predictResultPageByQry.getMaxScore() + 0.0000001,
+                        predictResultPageByQry.getPageSize() < pageView.getCount() ?
+                                predictResultPageByQry.getPageSize() :
+                                pageView.getCount(),
+                        startIndex
+                );
+            } else {
+                predictDetailList = predictResultMapper.getPredictDetailListByUserId(tableName,
+                        predictResultPageByQry.getInstanceId(),
+                        // TODO 这里涉及到精度问题，需要优化
+                        predictResultPageByQry.getMinScore() - 0.0000001,
+                        predictResultPageByQry.getMaxScore() + 0.0000001,
+                        predictResultPageByQry.getPageSize() < pageView.getCount() ?
+                                predictResultPageByQry.getPageSize() :
+                                pageView.getCount(),
+                        startIndex,
+                        predictResultPageByQry.getUserId()
+                );
+            }
+            List<PredictDetailDTO> predictDetailDTOList = ConvertTool.convert(predictDetailList,
+                    PredictDetailDTO.class);
+            pageView.setList(predictDetailDTOList);
+            return Result.success(pageView);
+        } catch (Exception e) {
+            return Result.success(null);
         }
-        String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
-        Integer startIndex = (predictResultPageByQry.getPageNum() - 1) * predictResultPageByQry.getPageSize();
-        List<PredictDetail> predictDetailList;
-        if (StrUtil.isEmptyIfStr(predictResultPageByQry.getUserId())) {
-            predictDetailList = predictResultMapper.getPredictDetailList(tableName,
-                    predictResultPageByQry.getInstanceId(),
-                    // TODO 这里涉及到精度问题，需要优化
-                    predictResultPageByQry.getMinScore() - 0.0000001, predictResultPageByQry.getMaxScore() + 0.0000001,
-                    predictResultPageByQry.getPageSize() < pageView.getCount() ? predictResultPageByQry.getPageSize() :
-                            pageView.getCount(),
-                    startIndex
-            );
-        } else {
-            predictDetailList = predictResultMapper.getPredictDetailListByUserId(tableName,
-                    predictResultPageByQry.getInstanceId(),
-                    // TODO 这里涉及到精度问题，需要优化
-                    predictResultPageByQry.getMinScore() - 0.0000001, predictResultPageByQry.getMaxScore() + 0.0000001,
-                    predictResultPageByQry.getPageSize() < pageView.getCount() ? predictResultPageByQry.getPageSize() :
-                            pageView.getCount(),
-                    startIndex,
-                    predictResultPageByQry.getUserId()
-            );
-        }
-        List<PredictDetailDTO> predictDetailDTOList = ConvertTool.convert(predictDetailList, PredictDetailDTO.class);
-        pageView.setList(predictDetailDTOList);
-        return Result.success(pageView);
     }
 
     @SneakyThrows
