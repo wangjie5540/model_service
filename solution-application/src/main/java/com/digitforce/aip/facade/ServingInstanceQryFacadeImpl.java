@@ -12,7 +12,6 @@ import com.digitforce.aip.dto.qry.GetShapleyQry;
 import com.digitforce.aip.dto.qry.PredictDetailPageByQry;
 import com.digitforce.aip.dto.qry.ServingInstanceGetByIdQry;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
-import com.digitforce.aip.dto.qry.StreamPredictDetailQry;
 import com.digitforce.aip.entity.PredictDetail;
 import com.digitforce.aip.entity.ServingInstance;
 import com.digitforce.aip.enums.ScoreRangeType;
@@ -32,7 +31,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -185,19 +185,22 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     }
 
     @SneakyThrows
-    @PostMapping("/solution/servingInstance/streamTargetPredictDetail")
+    @GetMapping("/solution/servingInstance/streamTargetPredictDetail")
     @Operation(summary = "流式获取目标预测明细数据", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
-    public Result<Void> streamTargetPredictDetail(StreamPredictDetailQry streamPredictDetailQry,
-                                                  HttpServletResponse response) {
+    public void streamTargetPredictDetail(
+            @RequestParam Long instanceId,
+            @RequestParam Double minScore,
+            @RequestParam Double maxScore,
+            @RequestParam Long total,
+            HttpServletResponse response
+    ) {
         response.setContentType("text/csv; charset=UTF-8");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=user_score.csv");
 
-        ServingInstance servingInstance = servingInstanceService.getById(streamPredictDetailQry.getInstanceId());
+        ServingInstance servingInstance = servingInstanceService.getById(instanceId);
 
         downloadService.downloadResult(response.getOutputStream(), servingInstance.getSolutionId(),
-                servingInstance.getId(), streamPredictDetailQry.getMinScore(), streamPredictDetailQry.getMaxScore(),
-                streamPredictDetailQry.getTotal());
-        return Result.success(null);
+                servingInstance.getId(), minScore, maxScore, total);
     }
 
     @Override
