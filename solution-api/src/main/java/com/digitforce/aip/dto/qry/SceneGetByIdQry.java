@@ -7,5 +7,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SceneGetByIdQry extends Query {
+    private static final long serialVersionUID = -397810999839582363L;
     private Long id;
 }
