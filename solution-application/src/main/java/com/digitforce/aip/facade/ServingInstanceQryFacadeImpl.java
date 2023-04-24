@@ -33,6 +33,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -187,8 +188,8 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     @SneakyThrows
     @PostMapping("/solution/servingInstance/streamTargetPredictDetail")
     @Operation(summary = "流式获取目标预测明细数据", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
-    public Result<Void> streamTargetPredictDetail(StreamPredictDetailQry streamPredictDetailQry,
-                                                  HttpServletResponse response) {
+    public void streamTargetPredictDetail(@RequestBody StreamPredictDetailQry streamPredictDetailQry,
+                                          HttpServletResponse response) {
         response.setContentType("text/csv; charset=UTF-8");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=user_score.csv");
 
@@ -197,7 +198,6 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
         downloadService.downloadResult(response.getOutputStream(), servingInstance.getSolutionId(),
                 servingInstance.getId(), streamPredictDetailQry.getMinScore(), streamPredictDetailQry.getMaxScore(),
                 streamPredictDetailQry.getTotal());
-        return Result.success(null);
     }
 
     @Override
