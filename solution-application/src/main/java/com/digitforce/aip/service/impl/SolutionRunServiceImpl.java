@@ -56,6 +56,8 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
         solutionRun.setCreateTime(null);
         solutionRun.setUpdateTime(null);
         solutionRun.setType(type);
+        SolutionRun latestVersion = getLatestVersion(solution.getId());
+        solutionRun.setVersion(latestVersion == null ? 1L : latestVersion.getVersion() + 1);
         super.save(solutionRun);
         Long solutionRunId = solutionRun.getId();
         templateParams.put("solution_run_id", solutionRunId.toString());
