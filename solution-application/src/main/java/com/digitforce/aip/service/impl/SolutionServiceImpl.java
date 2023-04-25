@@ -127,7 +127,7 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
                 throw new BizException("方案执行失败");
             case READY:
                 solution.setStatus(SolutionStatusEnum.PUBLISHED);
-                sceneMapper.increaseOnlineModelCount(solution.getSceneId());
+                sceneMapper.increaseOnlineModelCount(savedSolution.getSceneId());
                 updateById(solution);
                 scheduleJob(solutionPublishCmd);
                 break;
