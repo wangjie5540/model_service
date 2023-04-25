@@ -155,17 +155,17 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
     @SneakyThrows
     @Override
     public void unPublish(SolutionUnPublishCmd solutionUnPublishCmd) {
-        Solution solution = getById(solutionUnPublishCmd.getId());
-        if (Objects.isNull(solution)) {
+        Solution savedSolution = getById(solutionUnPublishCmd.getId());
+        if (Objects.isNull(savedSolution)) {
             throw new BizException("方案不存在");
         }
-        if (solution.getStatus() != SolutionStatusEnum.PUBLISHED) {
+        if (savedSolution.getStatus() != SolutionStatusEnum.PUBLISHED) {
             throw new BizException("方案未发布");
         }
-        solution = ConvertTool.convert(solutionUnPublishCmd, Solution.class);
+        Solution solution = ConvertTool.convert(solutionUnPublishCmd, Solution.class);
         solution.setStatus(SolutionStatusEnum.READY);
         updateById(solution);
-        sceneMapper.decreaseOnlineModelCount(solution.getSceneId());
+        sceneMapper.decreaseOnlineModelCount(savedSolution.getSceneId());
         scheduler.deleteJob(JobKey.jobKey(solutionUnPublishCmd.getId().toString(),
                 TenantContext.tenant().getTenantId().toString()));
     }
