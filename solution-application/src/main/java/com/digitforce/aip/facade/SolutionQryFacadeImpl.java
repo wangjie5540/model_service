@@ -7,9 +7,12 @@ import com.digitforce.aip.entity.Solution;
 import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -34,6 +37,12 @@ public class SolutionQryFacadeImpl implements SolutionQryFacade {
 
     @Override
     public Result<PageView<SolutionDTO>> pageBy(SolutionPageByQry solutionPageByQry) {
+        if (Objects.nonNull(solutionPageByQry.getMyOwn()) && solutionPageByQry.getMyOwn()) {
+            SolutionDTO solutionDTO = Objects.isNull(solutionPageByQry.getClause()) ?
+                new SolutionDTO() : solutionPageByQry.getClause();
+            solutionDTO.setCreateUser(TenantContext.tenant().getUserAccount());
+            solutionPageByQry.setClause(solutionDTO);
+        }
         PageView<Solution> solutionPageView = solutionService.page(solutionPageByQry);
         PageView<SolutionDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
             SolutionDTO.class);
