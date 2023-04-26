@@ -18,12 +18,11 @@ public class StarrocksDDLMapperTest extends BaseTest {
 
     @Test
     public void createPartition() {
-        ddlMapper.createPartition("model_1", 2L, 3L);
+        ddlMapper.createPartition("aip.score_263", 15L, 16L);
     }
 
     @Test
     public void dropTable() {
         ddlMapper.dropTable("model_1");
     }
-
 }
