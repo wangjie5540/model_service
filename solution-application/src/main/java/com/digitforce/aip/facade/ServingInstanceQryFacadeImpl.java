@@ -1,10 +1,12 @@
 package com.digitforce.aip.facade;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.digitforce.aip.consts.CommonConst;
 import com.digitforce.aip.dto.data.PredictDetailDTO;
 import com.digitforce.aip.dto.data.PredictResultDTO;
 import com.digitforce.aip.dto.data.ServingInstanceDTO;
+import com.digitforce.aip.dto.data.SolutionServingDTO;
 import com.digitforce.aip.dto.qry.GetAleQry;
 import com.digitforce.aip.dto.qry.GetPredictDetailByIdQry;
 import com.digitforce.aip.dto.qry.GetPredictResultQry;
@@ -14,9 +16,11 @@ import com.digitforce.aip.dto.qry.ServingInstanceGetByIdQry;
 import com.digitforce.aip.dto.qry.ServingInstancePageByQry;
 import com.digitforce.aip.entity.PredictDetail;
 import com.digitforce.aip.entity.ServingInstance;
+import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.enums.ScoreRangeType;
 import com.digitforce.aip.mapper.PredictResultMapper;
 import com.digitforce.aip.service.IServingInstanceService;
+import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.aip.service.component.DownloadService;
 import com.digitforce.aip.utils.OlapHelper;
 import com.digitforce.framework.api.dto.PageView;
@@ -39,6 +43,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -57,6 +62,8 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     private PredictResultMapper predictResultMapper;
     @Resource
     private DownloadService downloadService;
+    @Resource
+    private ISolutionServingService solutionServingService;
 
     public static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -66,9 +73,20 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
 
     @Override
     public Result<PageView<ServingInstanceDTO>> pageBy(ServingInstancePageByQry servingInstancePageByQry) {
-        PageView<ServingInstance> solutionPageView = servingInstanceService.page(servingInstancePageByQry);
-        PageView<ServingInstanceDTO> instanceDTOPageView = PageTool.pageView(solutionPageView,
+        PageView<ServingInstance> instancePageView = servingInstanceService.page(servingInstancePageByQry);
+        List<Long> servingIds = instancePageView.getList().stream().map(ServingInstance::getServingId).collect(Collectors.toList());
+        QueryWrapper<SolutionServing> wrapper = new QueryWrapper<>();
+        wrapper.in("id", servingIds);
+        List<SolutionServing> solutionServings = solutionServingService.list(wrapper);
+        Map<Long, SolutionServing> solutionServingMap = solutionServings.stream().collect(Collectors.toMap(SolutionServing::getId, Function.identity()));
+        PageView<ServingInstanceDTO> instanceDTOPageView = PageTool.pageView(instancePageView,
                 ServingInstanceDTO.class);
+        instanceDTOPageView.getList().forEach(instanceDTO -> {
+            SolutionServing solutionServing = solutionServingMap.get(instanceDTO.getServingId());
+            if (solutionServing != null) {
+                instanceDTO.setSolutionServingDTO(ConvertTool.convert(solutionServing, SolutionServingDTO.class));
+            }
+        });
         return Result.success(instanceDTOPageView);
     }
 

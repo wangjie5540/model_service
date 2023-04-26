@@ -33,6 +33,7 @@ public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
             SolutionServingDTO solutionServingDTO = Objects.isNull(solutionServingPageByQry.getClause()) ?
                     new SolutionServingDTO() : solutionServingPageByQry.getClause();
             solutionServingDTO.setCreateUser(TenantContext.tenant().getUserAccount());
+            solutionServingPageByQry.setClause(solutionServingDTO);
         }
         PageView<SolutionServing> solutionServingPageView = solutionServingService.page(solutionServingPageByQry);
         PageView<SolutionServingDTO> solutionServingDTOPageView = PageTool.pageView(solutionServingPageView,
