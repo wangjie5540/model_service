@@ -10,4 +10,5 @@ import lombok.EqualsAndHashCode;
 public class SolutionPageByQry extends PageQuery<SolutionDTO> {
     private static final long serialVersionUID = -6818806791070376186L;
     private SolutionDTO likeClause;
+    private Boolean myOwn;
 }
