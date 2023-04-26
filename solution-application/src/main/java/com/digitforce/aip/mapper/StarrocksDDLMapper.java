@@ -15,7 +15,7 @@ public interface StarrocksDDLMapper {
     @UpdateProvider(type = StarrocksSqlProvider.class, method = "shapleyTable")
     void createShapleyTable(@Param("tableName") String tableName);
 
-    @Update("ALTER TABLE ${tableName} ADD PARTITIONS START (\"${start}\") END (\"${end}\") EVERY (1)")
+    @Update("ALTER TABLE ${tableName} ADD PARTITION p${start} VALUES [('${start}'),('${end}'))")
     void createPartition(@Param("tableName") String tableName, @Param("start") Long start, @Param("end") Long end);
 
     @Update("drop table if exists ${tableName}")
