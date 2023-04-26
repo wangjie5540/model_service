@@ -35,16 +35,18 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 服务实例查询接口实现类
@@ -74,13 +76,20 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     @Override
     public Result<PageView<ServingInstanceDTO>> pageBy(ServingInstancePageByQry servingInstancePageByQry) {
         PageView<ServingInstance> instancePageView = servingInstanceService.page(servingInstancePageByQry);
-        List<Long> servingIds = instancePageView.getList().stream().map(ServingInstance::getServingId).collect(Collectors.toList());
-        QueryWrapper<SolutionServing> wrapper = new QueryWrapper<>();
-        wrapper.in("id", servingIds);
-        List<SolutionServing> solutionServings = solutionServingService.list(wrapper);
-        Map<Long, SolutionServing> solutionServingMap = solutionServings.stream().collect(Collectors.toMap(SolutionServing::getId, Function.identity()));
+        List<Long> servingIds =
+            instancePageView.getList().stream().map(ServingInstance::getServingId).collect(Collectors.toList());
+        Map<Long, SolutionServing> solutionServingMap;
+        if (CollectionUtils.isEmpty(servingIds)) {
+            solutionServingMap = Maps.newHashMap();
+        } else {
+            QueryWrapper<SolutionServing> wrapper = new QueryWrapper<>();
+            wrapper.in("id", servingIds);
+            List<SolutionServing> solutionServings = solutionServingService.list(wrapper);
+            solutionServingMap =
+                solutionServings.stream().collect(Collectors.toMap(SolutionServing::getId, Function.identity()));
+        }
         PageView<ServingInstanceDTO> instanceDTOPageView = PageTool.pageView(instancePageView,
-                ServingInstanceDTO.class);
+            ServingInstanceDTO.class);
         instanceDTOPageView.getList().forEach(instanceDTO -> {
             SolutionServing solutionServing = solutionServingMap.get(instanceDTO.getServingId());
             if (solutionServing != null) {
@@ -130,11 +139,11 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
             predictResultDTO.setTotal(Long.parseLong(map.get("total").toString()));
             PredictResultDTO.ScoreRange scoreRange = new PredictResultDTO.ScoreRange();
             scoreRange.setMaxScore(map.get("max_score") == null ? null :
-                    Double.parseDouble(map.get("max_score").toString()));
+                Double.parseDouble(map.get("max_score").toString()));
             scoreRange.setMinScore(map.get("min_score") == null ? null :
-                    Double.parseDouble(map.get("min_score").toString()));
+                Double.parseDouble(map.get("min_score").toString()));
             feedInterval(predictResultDTO, getPredictResultQry.getScoreRangeType(), tableName, servingInstance.getId(),
-                    getPredictResultQry.getValues());
+                getPredictResultQry.getValues());
             predictResultDTO.setScoreRange(scoreRange);
             return Result.success(predictResultDTO);
         } catch (Exception e) {
@@ -147,20 +156,20 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     public Result<PageView<PredictDetailDTO>> pageByPredictDetail(PredictDetailPageByQry predictResultPageByQry) {
         // 给默认值
         predictResultPageByQry.setMinScore(predictResultPageByQry.getMinScore() == null ? 0 :
-                predictResultPageByQry.getMinScore());
+            predictResultPageByQry.getMinScore());
         predictResultPageByQry.setMaxScore(predictResultPageByQry.getMaxScore() == null ? 1 :
-                predictResultPageByQry.getMaxScore());
+            predictResultPageByQry.getMaxScore());
         predictResultPageByQry.setPageNum(predictResultPageByQry.getPageNum() == null ? 1 :
-                predictResultPageByQry.getPageNum());
+            predictResultPageByQry.getPageNum());
         predictResultPageByQry.setPageSize(predictResultPageByQry.getPageSize() == null ? 10 :
-                predictResultPageByQry.getPageSize());
+            predictResultPageByQry.getPageSize());
         try {
             ServingInstance servingInstance = servingInstanceService.getById(predictResultPageByQry.getInstanceId());
             PageView<PredictDetailDTO> pageView = new PageView<>();
             if (predictResultPageByQry.getTotal() == null) {
                 String scoreTableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
                 Long count = predictResultMapper.countPredictDetail(scoreTableName,
-                        predictResultPageByQry.getInstanceId());
+                    predictResultPageByQry.getInstanceId());
                 pageView.setCount(count.intValue());
             } else {
                 pageView.setCount(Integer.parseInt(predictResultPageByQry.getTotal().toString()));
@@ -170,30 +179,30 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
             List<PredictDetail> predictDetailList;
             if (StrUtil.isEmptyIfStr(predictResultPageByQry.getUserId())) {
                 predictDetailList = predictResultMapper.getPredictDetailList(tableName,
-                        predictResultPageByQry.getInstanceId(),
-                        // TODO 这里涉及到精度问题，需要优化
-                        predictResultPageByQry.getMinScore() - 0.0000001,
-                        predictResultPageByQry.getMaxScore() + 0.0000001,
-                        predictResultPageByQry.getPageSize() < pageView.getCount() ?
-                                predictResultPageByQry.getPageSize() :
-                                pageView.getCount(),
-                        startIndex
+                    predictResultPageByQry.getInstanceId(),
+                    // TODO 这里涉及到精度问题，需要优化
+                    predictResultPageByQry.getMinScore() - 0.0000001,
+                    predictResultPageByQry.getMaxScore() + 0.0000001,
+                    predictResultPageByQry.getPageSize() < pageView.getCount() ?
+                        predictResultPageByQry.getPageSize() :
+                        pageView.getCount(),
+                    startIndex
                 );
             } else {
                 predictDetailList = predictResultMapper.getPredictDetailListByUserId(tableName,
-                        predictResultPageByQry.getInstanceId(),
-                        // TODO 这里涉及到精度问题，需要优化
-                        predictResultPageByQry.getMinScore() - 0.0000001,
-                        predictResultPageByQry.getMaxScore() + 0.0000001,
-                        predictResultPageByQry.getPageSize() < pageView.getCount() ?
-                                predictResultPageByQry.getPageSize() :
-                                pageView.getCount(),
-                        startIndex,
-                        predictResultPageByQry.getUserId()
+                    predictResultPageByQry.getInstanceId(),
+                    // TODO 这里涉及到精度问题，需要优化
+                    predictResultPageByQry.getMinScore() - 0.0000001,
+                    predictResultPageByQry.getMaxScore() + 0.0000001,
+                    predictResultPageByQry.getPageSize() < pageView.getCount() ?
+                        predictResultPageByQry.getPageSize() :
+                        pageView.getCount(),
+                    startIndex,
+                    predictResultPageByQry.getUserId()
                 );
             }
             List<PredictDetailDTO> predictDetailDTOList = ConvertTool.convert(predictDetailList,
-                    PredictDetailDTO.class);
+                PredictDetailDTO.class);
             pageView.setList(predictDetailDTOList);
             return Result.success(pageView);
         } catch (Exception e) {
@@ -206,11 +215,11 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     @GetMapping("/solution/servingInstance/streamTargetPredictDetail")
     @Operation(summary = "流式获取目标预测明细数据", tags = CommonConst.SWAGGER_TAG_SERVING_INSTANCE_QRY)
     public void streamTargetPredictDetail(
-            @RequestParam Long instanceId,
-            @RequestParam Double minScore,
-            @RequestParam Double maxScore,
-            @RequestParam Long total,
-            HttpServletResponse response
+        @RequestParam Long instanceId,
+        @RequestParam Double minScore,
+        @RequestParam Double maxScore,
+        @RequestParam Long total,
+        HttpServletResponse response
     ) {
         response.setContentType("text/csv; charset=UTF-8");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=user_score.csv");
@@ -218,7 +227,7 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
         ServingInstance servingInstance = servingInstanceService.getById(instanceId);
 
         downloadService.downloadResult(response.getOutputStream(), servingInstance.getSolutionId(),
-                servingInstance.getId(), minScore, maxScore, total);
+            servingInstance.getId(), minScore, maxScore, total);
     }
 
     @Override
@@ -226,7 +235,7 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
         ServingInstance servingInstance = servingInstanceService.getById(getPredictDetailByIdQry.getInstanceId());
         String tableName = OlapHelper.getScoreTableName(servingInstance.getSolutionId());
         PredictDetail predictDetail = predictResultMapper.getPredictDetailByUserId(tableName,
-                getPredictDetailByIdQry.getInstanceId(), getPredictDetailByIdQry.getUserId());
+            getPredictDetailByIdQry.getInstanceId(), getPredictDetailByIdQry.getUserId());
         return Result.success(ConvertTool.convert(predictDetail, PredictDetailDTO.class));
     }
 
@@ -247,7 +256,7 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
         String tableName = OlapHelper.getShapleyTableName(servingInstance.getSolutionId());
 
         String shapely = predictResultMapper.getShapley(tableName, getShapleyQry.getInstanceId(),
-                getShapleyQry.getUserId());
+            getShapleyQry.getUserId());
         if (StrUtil.isEmptyIfStr(shapely)) {
             return Result.success(null);
         }
@@ -255,7 +264,7 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     }
 
     private void feedInterval(PredictResultDTO predictResultDTO, ScoreRangeType scoreRangeType, String tableName,
-                              Long instanceId, List<Object> values) {
+        Long instanceId, List<Object> values) {
         List<Map<String, Object>> baseRange = predictResultMapper.getBaseRange(tableName, instanceId);
         predictResultDTO.setBaseIntervals(baseRange.stream().map(item -> {
             PredictResultDTO.Interval interval = new PredictResultDTO.Interval();
@@ -284,14 +293,14 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
                 break;
             case SCORE_RANGE:
                 List<Map<String, Object>> rangeDistribution = predictResultMapper.getTargetScoreDistribution(tableName,
-                                instanceId,
-                                Double.parseDouble(values.get(0).toString()),
-                                Double.parseDouble(values.get(1).toString()))
-                        .stream().map(item -> {
-                            Map<String, Object> m = Maps.newHashMap();
-                            m.put(item.get("score_range").toString(), item.get("count"));
-                            return m;
-                        }).collect(Collectors.toList());
+                        instanceId,
+                        Double.parseDouble(values.get(0).toString()),
+                        Double.parseDouble(values.get(1).toString()))
+                    .stream().map(item -> {
+                        Map<String, Object> m = Maps.newHashMap();
+                        m.put(item.get("score_range").toString(), item.get("count"));
+                        return m;
+                    }).collect(Collectors.toList());
                 Map<String, Object> reduce = rangeDistribution.stream().reduce(Maps.newHashMap(), (a, b) -> {
                     a.putAll(b);
                     return a;
