@@ -18,4 +18,5 @@ public class ServingInstanceDTO {
     private String result;
     private String createUser;
     private String updateUser;
+    private SolutionServingDTO solutionServingDTO;
 }
