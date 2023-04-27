@@ -7,11 +7,13 @@ import com.digitforce.aip.entity.SolutionServing;
 import com.digitforce.aip.service.ISolutionServingService;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * 方案服务查询接口类
@@ -27,6 +29,12 @@ public class SolutionServingQryFacadeImpl implements SolutionServingQryFacade {
 
     @Override
     public Result<PageView<SolutionServingDTO>> pageBy(SolutionServingPageByQry solutionServingPageByQry) {
+        if (Objects.nonNull(solutionServingPageByQry.getMyOwn()) && solutionServingPageByQry.getMyOwn()) {
+            SolutionServingDTO solutionServingDTO = Objects.isNull(solutionServingPageByQry.getClause()) ?
+                    new SolutionServingDTO() : solutionServingPageByQry.getClause();
+            solutionServingDTO.setCreateUser(TenantContext.tenant().getUserAccount());
+            solutionServingPageByQry.setClause(solutionServingDTO);
+        }
         PageView<SolutionServing> solutionServingPageView = solutionServingService.page(solutionServingPageByQry);
         PageView<SolutionServingDTO> solutionServingDTOPageView = PageTool.pageView(solutionServingPageView,
                 SolutionServingDTO.class);

@@ -1,10 +1,12 @@
 package com.digitforce.aip.dto.data;
 
+import com.digitforce.aip.enums.SceneTypeEnum;
 import com.digitforce.aip.enums.SolutionStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class SolutionDTO {
@@ -22,10 +24,9 @@ public class SolutionDTO {
     private Long sceneId;
     @Schema(description = "场景名称")
     private String sceneName;
-    @Schema(description = "应用系统")
-    private String system;
     @Schema(description = "时间表达式")
     private String cron;
+    private SceneTypeEnum sceneType;
     @Schema(description = "时间描述，用于前端反显")
     private String cronDesc;
     @Schema(description = "状态")
@@ -34,4 +35,6 @@ public class SolutionDTO {
     private String createUser;
     @Schema(description = "更新人")
     private LocalDateTime createTime;
+    @Schema(description = "模型方案下的服务列表(仅在树形结构下返回)")
+    private List<SolutionServingDTO> servings;
 }

@@ -25,10 +25,5 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.digitforce.aip</groupId>
-            <artifactId>solution-common</artifactId>
-            <version>1.0.0</version>
-        </dependency>
     </dependencies>
 </project>

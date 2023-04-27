@@ -19,6 +19,7 @@ import com.digitforce.aip.service.ISolutionService;
 import com.digitforce.aip.service.KubeflowPipelineService;
 import com.digitforce.aip.service.component.TemplateComponent;
 import com.digitforce.aip.utils.ApplicationUtil;
+import com.digitforce.aip.utils.OlapHelper;
 import com.digitforce.aip.utils.PageUtil;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.exception.BizException;
@@ -77,6 +78,7 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         servingInstance.setId(null);
         servingInstance.setServingId(solutionServing.getId());
         servingInstance.setStatus(ServingInstanceStatusEnum.PREDICTING);
+        servingInstance.setModelVersion(solutionRun.getVersion());
         super.save(servingInstance);
         Long servingInstanceId = servingInstance.getId();
         Map<String, Object> templateParams = solutionServing.getTemplateParams() == null ? Maps.newHashMap() :
@@ -91,6 +93,11 @@ public class ServingInstanceServiceImpl extends ServiceImpl<ServingInstanceMappe
         Map<String, Object> map = objectMapper.readValue(pipelineParams, new TypeReference<Map<String, Object>>() {
         });
         map.put("X_TENANT", encode);
+        // 添加starrocks表名
+        map.put("predict_table_name", OlapHelper.getScoreTableName(solution.getId()));
+        map.put("shapley_table_name", OlapHelper.getShapleyTableName(solution.getId()));
+        // 添加表分区
+        map.put("instance_id", servingInstance.getId().toString());
         pipelineParams = objectMapper.writeValueAsString(map);
         String pRunName = String.format("%s-%s", solution.getPipelineName(), servingInstanceId);
         String pRunId = kubeflowPipelineService.createRun(solution.getPipelineId(), pRunName, pipelineParams,

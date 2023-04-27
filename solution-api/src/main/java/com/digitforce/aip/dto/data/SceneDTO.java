@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 场景实体类
@@ -32,6 +33,8 @@ public class SceneDTO {
     private SceneTypeEnum sceneType;
     @Schema(description = "方案数量")
     private Integer solutionCount;
+    @Schema(description = "已发布模型数")
+    private Integer onlineModelCount;
     @Schema(description = "服务数量")
     private Integer servingCount;
     @Schema(description = "备注")
@@ -48,4 +51,6 @@ public class SceneDTO {
     private LocalDateTime createTime;
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+    @Schema(description = "场景下的方案列表(仅在树形结构下返回)")
+    private List<SolutionDTO> solutions;
 }

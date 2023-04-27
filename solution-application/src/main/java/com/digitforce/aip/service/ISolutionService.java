@@ -17,11 +17,17 @@ import com.digitforce.framework.api.dto.PageView;
  * @since 2022-12-10
  */
 public interface ISolutionService extends IService<Solution> {
-    void createAndRun(SolutionAddCmd solutionAddCmd);
+    Solution add(SolutionAddCmd solutionAddCmd);
 
     void publish(SolutionPublishCmd solutionPublishCmd);
 
     void unPublish(SolutionUnPublishCmd solutionUnPublishCmd);
 
     PageView<Solution> page(SolutionPageByQry solutionPageByQry);
+
+    void start(Long solutionId);
+
+    void stop(Long solutionId);
+
+    void delete(Long solutionId);
 }

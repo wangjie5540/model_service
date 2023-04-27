@@ -19,6 +19,12 @@ public interface SceneMapper extends BaseMapper<Scene> {
     @Update("update scene set solution_count = solution_count - 1 where id = #{id}")
     void decreaseSolutionCount(Long id);
 
+    @Update("update scene set online_model_count = online_model_count + 1 where id = #{id}")
+    void increaseOnlineModelCount(Long id);
+
+    @Update("update scene set online_model_count = online_model_count - 1 where id = #{id}")
+    void decreaseOnlineModelCount(Long id);
+
     @Update("update scene set serving_count = serving_count + 1 where id = #{id}")
     void increaseServingCount(Long id);
 

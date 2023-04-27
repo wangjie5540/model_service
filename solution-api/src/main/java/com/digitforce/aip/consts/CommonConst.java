@@ -16,7 +16,10 @@ public class CommonConst {
     public static final String SWAGGER_TAG_SOLUTION_SERVING_QRY = "方案服务查询接口";
     public static final String SWAGGER_TAG_SERVING_INSTANCE_CMD = "服务实例命令接口";
     public static final String SWAGGER_TAG_SERVING_INSTANCE_QRY = "服务实例查询接口";
+    public static final String SWAGGER_TAG_QUARTZ_CMD = "quartz命令接口类";
+    public static final String SWAGGER_TAG_QUARTZ_QRY = "quartz查询接口类";
     public static final String SWAGGER_TAG_ENUM_QRY = "枚举查询接口";
     public static final String SYSTEM_CODE = "aip";
     public static final String COS_BASE_URL = "https://algorithm-1308011215.cos.ap-beijing.myqcloud.com";
+    public static final String CUSTOM_JOB_GROUP = "customGroup";
 }

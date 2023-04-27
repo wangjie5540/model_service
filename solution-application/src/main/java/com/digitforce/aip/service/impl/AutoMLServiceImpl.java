@@ -16,9 +16,10 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 @Service
 @Slf4j
@@ -33,8 +34,8 @@ public class AutoMLServiceImpl implements AutoMLService {
     public String createTask(String templateParams) {
         log.info("创建自动机器学习任务，请求参数：{}", templateParams);
         HttpRequest request = HttpRequest.post(StrUtil.format("{}/create-task", autoMLProperties.getBaseUrl()))
-                .header(Header.CONTENT_TYPE, "application/json")
-                .body(templateParams);
+            .header(Header.CONTENT_TYPE, "application/json")
+            .body(templateParams);
         String body = request.execute().body();
         log.info("创建自动机器学习任务，返回结果：{}", body);
         try {
@@ -51,29 +52,35 @@ public class AutoMLServiceImpl implements AutoMLService {
     @SneakyThrows
     public AutoMLRunStatusEnum getStatus(String runId) {
         String url = StrUtil.format("{}/get-experiment-status?run_id={}",
-                autoMLProperties.getBaseUrl(), runId);
+            autoMLProperties.getBaseUrl(), runId);
         HttpResponse httpResponse = HttpRequest.get(url).execute();
         if (httpResponse.getStatus() != 200) {
-            throw new RuntimeException("获取自动机器学习运行状态失败");
+            throw BizException.of(SolutionErrorCode.AUTO_ML_GET_STATUS_ERROR);
         }
         Map<String, Object> result =
-                objectMapper.readValue(httpResponse.body(), new TypeReference<Map<String, Object>>() {
-                });
-        return AutoMLRunStatusEnum.getEnum((Integer) result.get("status"));
+            objectMapper.readValue(httpResponse.body(), new TypeReference<Map<String, Object>>() {
+            });
+        log.info("getStatus result: {}", result);
+        Integer code = (Integer) result.get("code");
+        if (code == null) {
+            throw BizException.of(SolutionErrorCode.AUTO_ML_GET_STATUS_ERROR);
+        }
+        Integer status = Integer.parseInt(result.get("status").toString());
+        return AutoMLRunStatusEnum.getEnum(status);
     }
 
     @Override
     @SneakyThrows
     public List<BestParameter> getAutoMLResult(String runId) {
         String url = StrUtil.format("{}/get-parameters?run_id={}",
-                autoMLProperties.getBaseUrl(), runId);
+            autoMLProperties.getBaseUrl(), runId);
         HttpResponse httpResponse = HttpRequest.get(url).execute();
         if (httpResponse.getStatus() != 200) {
             throw new RuntimeException("获取自动机器学习运行结果失败");
         }
         Map<String, Object> result =
-                objectMapper.readValue(httpResponse.body(), new TypeReference<Map<String, Object>>() {
-                });
+            objectMapper.readValue(httpResponse.body(), new TypeReference<Map<String, Object>>() {
+            });
         String data = objectMapper.writeValueAsString(result.get("data"));
         return objectMapper.readValue(data, new TypeReference<List<BestParameter>>() {
         });

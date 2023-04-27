@@ -18,7 +18,6 @@ public class SolutionAddCmd {
     private String title;
     private Long sceneId;
     private String sceneName;
-    private String system;
     private String description;
     private Map<String, Object> formInfo;
     private Map<String, Object> templateParams;

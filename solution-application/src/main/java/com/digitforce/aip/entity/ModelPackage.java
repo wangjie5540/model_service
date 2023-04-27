@@ -56,11 +56,6 @@ public class ModelPackage implements Serializable {
     private String solutionTitle;
 
     /**
-     * 来源系统
-     */
-    private String system;
-
-    /**
      * 模型包名称
      */
     private String name;
