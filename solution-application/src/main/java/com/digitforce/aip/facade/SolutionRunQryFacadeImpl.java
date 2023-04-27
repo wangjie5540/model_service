@@ -20,11 +20,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.annotation.Resource;
 
 @RestController
 @Slf4j
@@ -109,7 +110,7 @@ public class SolutionRunQryFacadeImpl implements SolutionRunQryFacade {
                             String rocStr = objectMapper.writeValueAsString(modelMetric.getValue());
                             solutionRunDTO.setRoc(objectMapper.readValue(rocStr, Roc.class));
                         } catch (JsonProcessingException e) {
-                            throw new RuntimeException(e);
+                            log.error("roc序列化失败", e);
                         }
                         break;
                     default:
