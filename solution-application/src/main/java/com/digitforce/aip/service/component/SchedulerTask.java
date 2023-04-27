@@ -24,9 +24,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 @Component
 @Slf4j
@@ -99,8 +100,13 @@ public class SchedulerTask {
                             record.getId()));
                     String path = StrUtil.format("{}/{}/ale.json", hdfsProperties.getPredictBasePath(),
                             record.getId().toString());
-                    String ale = hdfsComponent.getFileFullDataStr(path);
-                    updateRecord.setAle(ale);
+                    try {
+                        String ale = hdfsComponent.getFileFullDataStr(path);
+                        updateRecord.setAle(ale);
+                    } catch (Exception e) {
+                        log.error("get ale.json error", e);
+                        updateRecord.setStatus(ServingInstanceStatusEnum.ERROR);
+                    }
                     break;
                 case Error:
                 case Failed:
