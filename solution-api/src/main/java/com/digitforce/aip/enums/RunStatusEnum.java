@@ -8,6 +8,7 @@ public enum RunStatusEnum {
     Running("训练中"),
     Succeeded("完成"),
     Failed("异常"),
+    Stopped("已停止"),
     Error("错误"),
     ;
     final String cname;
