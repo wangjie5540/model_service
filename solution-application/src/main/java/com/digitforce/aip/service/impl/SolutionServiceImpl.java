@@ -45,9 +45,10 @@ import org.quartz.TriggerBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Objects;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -191,10 +192,15 @@ public class SolutionServiceImpl extends ServiceImpl<SolutionMapper, Solution> i
         } else if (solution.getStatus() == SolutionStatusEnum.EXECUTING) {
             throw BizException.of(SolutionErrorCode.SOLUTION_EXECUTING);
         }
-        solutionRunService.startRun(solution.getSRunId());
-        solution = new Solution();
-        solution.setId(solutionId);
-        solution.setStatus(SolutionStatusEnum.EXECUTING);
+        if (solution.getAutoml()) {
+            solution.setStatus(SolutionStatusEnum.TUNING);
+            String autoMlRunId = autoMLService.createTask(solution.getARunId());
+            solution.setARunId(autoMlRunId);
+        } else {
+            Long solutionRunId = solutionRunService.createRun(solution, SolutionRunTypeEnum.DEBUG,
+                    solution.getTemplateParams());
+            solution.setSRunId(solutionRunId);
+        }
         super.updateById(solution);
     }
 
