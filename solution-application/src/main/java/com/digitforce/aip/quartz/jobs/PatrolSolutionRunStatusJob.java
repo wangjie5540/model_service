@@ -30,9 +30,10 @@ import org.quartz.JobExecutionContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 @Slf4j
 public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Serializable {
@@ -59,7 +60,7 @@ public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Seriali
     @SneakyThrows
     @Override
     @Transactional(rollbackFor = Exception.class)
-    protected void executeInternal(@NotNull JobExecutionContext context) {
+    public void executeInternal(@NotNull JobExecutionContext context) {
         log.info("PatrolSolutionRunStatusJob, {}", context);
         List<SolutionRun> solutionRunList = solutionRunMapper.getSomeRunningRecordsWithoutTenant(20);
         solutionRunList.forEach(record -> {
