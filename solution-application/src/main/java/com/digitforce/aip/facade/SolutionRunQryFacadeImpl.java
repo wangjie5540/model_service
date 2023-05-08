@@ -17,15 +17,16 @@ import com.digitforce.framework.tool.PageTool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
 
 @RestController
 @Slf4j
@@ -42,9 +43,14 @@ public class SolutionRunQryFacadeImpl implements SolutionRunQryFacade {
         PageView<SolutionRun> solutionPageView = solutionRunService.page(solutionRunPageByQry);
         List<Long> packageIds =
                 solutionPageView.getList().stream().map(SolutionRun::getPackageId).collect(Collectors.toList());
-        QueryWrapper<Model> wrapper = new QueryWrapper<>();
-        wrapper.in("package_id", packageIds);
-        List<Model> models = modelService.list(wrapper);
+        List<Model> models;
+        if (!CollectionUtils.isEmpty(packageIds)) {
+            QueryWrapper<Model> wrapper = new QueryWrapper<>();
+            wrapper.in("package_id", packageIds);
+            models = modelService.list(wrapper);
+        } else {
+            models = Lists.newArrayList();
+        }
         Map<Long, List<Model>> modelMap = models.stream().collect(Collectors.groupingBy(Model::getPackageId));
         PageView<SolutionRunDTO> solutionDTOPageView = PageTool.pageView(solutionPageView,
                 SolutionRunDTO.class);
