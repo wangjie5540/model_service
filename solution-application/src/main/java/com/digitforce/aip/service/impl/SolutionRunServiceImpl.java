@@ -24,8 +24,9 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -100,7 +101,7 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
         }
         kubeflowPipelineService.stopRun(solutionRun.getPRunId());
         solutionRun = new SolutionRun();
-        solutionRun.setStatus(RunStatusEnum.Failed);
+        solutionRun.setStatus(RunStatusEnum.Stopped);
         super.updateById(solutionRun);
     }
 
