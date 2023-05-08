@@ -78,6 +78,7 @@ public class SolutionCmdFacadeImpl implements SolutionCmdFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Result stopRun(SolutionControlCmd solutionControlCmd) {
         solutionService.stop(solutionControlCmd.getId());
         return Result.success();

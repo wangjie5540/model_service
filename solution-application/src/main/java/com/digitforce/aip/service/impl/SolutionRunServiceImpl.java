@@ -101,6 +101,7 @@ public class SolutionRunServiceImpl extends ServiceImpl<SolutionRunMapper, Solut
         }
         kubeflowPipelineService.stopRun(solutionRun.getPRunId());
         solutionRun = new SolutionRun();
+        solutionRun.setId(solutionRunId);
         solutionRun.setStatus(RunStatusEnum.Stopped);
         super.updateById(solutionRun);
     }
