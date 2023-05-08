@@ -1,6 +1,7 @@
 package com.digitforce.aip.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -25,7 +26,8 @@ public class JacksonObjectMapperCustomizer implements BeanPostProcessor {
     private String dateTimeFormat;
 
     @Override
-    public Object postProcessBeforeInitialization(@NotNull Object bean, @NotNull String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(@NotNull Object bean, @NotNull String beanName)
+            throws BeansException {
         if (bean instanceof ObjectMapper) {
             ObjectMapper objectMapper = (ObjectMapper) bean;
             SimpleModule module = new SimpleModule();
@@ -39,6 +41,7 @@ public class JacksonObjectMapperCustomizer implements BeanPostProcessor {
             objectMapper.registerModule(new JavaTimeModule()); //默认的Java 8 Time库支持
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             objectMapper.registerModule(module);
+            objectMapper.enable(JsonReadFeature.ALLOW_NON_NUMERIC_NUMBERS.mappedFeature());
             // TODO 后续考虑去掉注释，使用驼峰
 //            objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         }
