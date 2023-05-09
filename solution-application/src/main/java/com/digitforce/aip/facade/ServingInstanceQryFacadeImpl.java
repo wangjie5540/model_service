@@ -25,6 +25,7 @@ import com.digitforce.aip.service.component.DownloadService;
 import com.digitforce.aip.utils.OlapHelper;
 import com.digitforce.framework.api.dto.PageView;
 import com.digitforce.framework.api.dto.Result;
+import com.digitforce.framework.context.TenantContext;
 import com.digitforce.framework.tool.ConvertTool;
 import com.digitforce.framework.tool.PageTool;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
@@ -41,13 +42,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 服务实例查询接口实现类
@@ -77,6 +78,12 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
 
     @Override
     public Result<PageView<ServingInstanceDTO>> pageBy(ServingInstancePageByQry servingInstancePageByQry) {
+        if (Objects.nonNull(servingInstancePageByQry.getMyOwn()) && servingInstancePageByQry.getMyOwn()) {
+            ServingInstanceDTO servingInstanceDTO = Objects.isNull(servingInstancePageByQry.getClause()) ?
+                    new ServingInstanceDTO() : servingInstancePageByQry.getClause();
+            servingInstanceDTO.setCreateUser(TenantContext.tenant().getUserAccount());
+            servingInstancePageByQry.setClause(servingInstanceDTO);
+        }
         PageView<ServingInstance> instancePageView = servingInstanceService.page(servingInstancePageByQry);
         List<Long> servingIds =
                 instancePageView.getList().stream().map(ServingInstance::getServingId).collect(Collectors.toList());
@@ -272,7 +279,7 @@ public class ServingInstanceQryFacadeImpl implements ServingInstanceQryFacade {
     }
 
     private void feedInterval(PredictResultDTO predictResultDTO, ScoreRangeType scoreRangeType, String tableName,
-            Long instanceId, List<Object> values) {
+                              Long instanceId, List<Object> values) {
         List<Map<String, Object>> baseRange = predictResultMapper.getBaseRange(tableName, instanceId);
         predictResultDTO.setBaseIntervals(baseRange.stream().map(item -> {
             PredictResultDTO.Interval interval = new PredictResultDTO.Interval();
