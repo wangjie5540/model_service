@@ -66,7 +66,7 @@ public interface PredictResultMapper {
             "       top_n_stats.max_score" +
             " FROM top_n_stats, top_n_percent")
     Map<String, Object> topN(@Param("tableName") String tableName, @Param("instanceId") Long instanceId,
-            @Param("n") Long n);
+                             @Param("n") Long n);
 
     @Select("WITH total_users AS " +
             "    (SELECT COUNT(*) AS total_count" +
@@ -102,7 +102,7 @@ public interface PredictResultMapper {
             "       top_n_stats.max_score" +
             " FROM top_n_stats, top_n_percent;")
     Map<String, Object> topPercent(@Param("tableName") String tableName, @Param("instanceId") Long instanceId,
-            @Param("percent") Double percent);
+                                   @Param("percent") Double percent);
 
     @Select("WITH total_users AS (" +
             "    SELECT COUNT(*) AS total_count" +
@@ -130,11 +130,11 @@ public interface PredictResultMapper {
             "       top_n_stats.max_score" +
             " FROM top_n_stats, top_n_percent;")
     Map<String, Object> targetScore(@Param("tableName") String tableName, @Param("instanceId") Long instanceId,
-            @Param("start") Double start, @Param("end") Double end);
+                                    @Param("start") Double start, @Param("end") Double end);
 
 
     @Select("WITH score_ranges AS ( " +
-            "    SELECT '0 - 0.1' AS range_label, 0 AS range_start, 0.1 AS range_end " +
+            "    SELECT '0.0 - 0.1' AS range_label, 0 AS range_start, 0.1 AS range_end " +
             "    UNION ALL " +
             "    SELECT '0.1 - 0.2', 0.1, 0.2 " +
             "    UNION ALL " +
@@ -152,13 +152,13 @@ public interface PredictResultMapper {
             "    UNION ALL " +
             "    SELECT '0.8 - 0.9', 0.8, 0.9 " +
             "    UNION ALL " +
-            "    SELECT '0.9 - 1', 0.9, 1 " +
+            "    SELECT '0.9 - 1.0', 0.9, 1.0 " +
             "), " +
             "user_counts AS ( " +
             "    SELECT " +
             "        COUNT(*) AS user_count, " +
             "        CASE " +
-            "            WHEN score >= 0 AND score < 0.1 THEN '0 - 0.1' " +
+            "            WHEN score >= 0.0 AND score < 0.1 THEN '0.0 - 0.1' " +
             "            WHEN score >= 0.1 AND score < 0.2 THEN '0.1 - 0.2' " +
             "            WHEN score >= 0.2 AND score < 0.3 THEN '0.2 - 0.3' " +
             "            WHEN score >= 0.3 AND score < 0.4 THEN '0.3 - 0.4' " +
@@ -167,7 +167,7 @@ public interface PredictResultMapper {
             "            WHEN score >= 0.6 AND score < 0.7 THEN '0.6 - 0.7' " +
             "            WHEN score >= 0.7 AND score < 0.8 THEN '0.7 - 0.8' " +
             "            WHEN score >= 0.8 AND score < 0.9 THEN '0.8 - 0.9' " +
-            "            WHEN score >= 0.9 AND score <= 1 THEN '0.9 - 1' " +
+            "            WHEN score >= 0.9 AND score <= 1.0 THEN '0.9 - 1.0' " +
             "        END AS score_range " +
             "    FROM " +
             "        ${tableName} WHERE instance_id = #{instanceId}" +
@@ -187,7 +187,7 @@ public interface PredictResultMapper {
             "    sr.range_start " +
             "DESC; ")
     List<Map<String, Object>> getBaseRange(@Param("tableName") String tableName,
-            @Param("instanceId") Long instanceId);
+                                           @Param("instanceId") Long instanceId);
 
     @Select("WITH score_ranges AS ( " +
             "  SELECT " +
@@ -205,9 +205,9 @@ public interface PredictResultMapper {
             "GROUP BY lower_range, upper_range " +
             "ORDER BY lower_range, upper_range;")
     List<Map<String, Object>> getTargetScoreDistribution(@Param("tableName") String tableName,
-            @Param("instanceId") Long instanceId,
-            @Param("start") Double start,
-            @Param("end") Double end);
+                                                         @Param("instanceId") Long instanceId,
+                                                         @Param("start") Double start,
+                                                         @Param("end") Double end);
 
     @Select("select instance_id, user_id, score from ${tableName} where " +
             "instance_id = #{instanceId} and user_id = #{userId} ")
@@ -250,5 +250,5 @@ public interface PredictResultMapper {
 
     @Select("select `shapley` from ${tableName} where instance_id = #{instanceId} and user_id = #{userId}")
     String getShapley(@Param("tableName") String tableName, @Param("instanceId") Long instanceId,
-            @Param("userId") Long userId);
+                      @Param("userId") Long userId);
 }
