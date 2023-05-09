@@ -30,10 +30,9 @@ import org.quartz.JobExecutionContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
-
-import javax.annotation.Resource;
 
 @Slf4j
 public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Serializable {
@@ -94,14 +93,15 @@ public class PatrolSolutionRunStatusJob extends QuartzJobBean implements Seriali
                 switch (status) {
                     case Succeeded:
                         updateSolution.setStatus(SolutionStatusEnum.READY);
+                        solutionService.updateById(updateSolution);
                         break;
                     case Failed:
                         updateSolution.setStatus(SolutionStatusEnum.ERROR);
+                        solutionService.updateById(updateSolution);
                         break;
                     default:
                         log.error("unknown solutionRun status.[status={}]", record.getStatus());
                 }
-                solutionService.updateById(updateSolution);
             }
         });
         TenantContext.destroy();
