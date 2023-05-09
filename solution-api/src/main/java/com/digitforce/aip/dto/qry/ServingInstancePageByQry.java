@@ -10,4 +10,5 @@ import lombok.EqualsAndHashCode;
 public class ServingInstancePageByQry extends PageQuery<ServingInstanceDTO> {
     private static final long serialVersionUID = -4913074952006696804L;
     private ServingInstanceDTO likeClause;
+    private Boolean myOwn;
 }
